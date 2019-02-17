@@ -1,5 +1,5 @@
 """
-CoreColumn object for manipulating and combining single columns of core.
+CoreColumn object representing single column images of core material.
 
 TODO:
     - do we really need 'slice_depth', or can we do something more clever?
@@ -7,25 +7,7 @@ TODO:
 import numpy as np
 import pandas as pd
 
-
-def stack_images(imgA, imgB)
-    """
-    Stack `imgA` and `imgB` vertically after zero-padding the narrower one.
-    """
-    dw = imgA.shape[1] - imgB.shape[1]
-
-    if dw == 0:
-        return np.concatenate([self.img, other.img])
-    else:
-        pads = ((0,0), (0, abs(dw)), (0,0))
-    
-    if dw < 0:
-        paddedA = np.pad(imgA, pads, 'constant')
-        return np.concatenate([paddedA, imgB])
-    else:
-        paddedB = np.pad(imgB, pads, 'constant')
-        return np.concatenate([imgA, paddedB])
-
+from corebreakout.utils import vstack_images
 
 
 class CoreColumn:
@@ -46,7 +28,7 @@ class CoreColumn:
     base : float, optional
         The base depth. If not given and `depths` is, will be taken as depth of last row.
     add_tol : float, optional
-        Maximum allowed depth gap between columns when adding. Default use `2*dd`,
+        Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
         where `dd` is the median difference in depth between adjacent column row depths.
     add_mode : one of {'fill', 'collapse'}, optional
         How to add to this column. Both methods enforce depth ordering:
@@ -54,7 +36,7 @@ class CoreColumn:
             - 'collapse' will simply concatenate `img` and `depths` arrays.
         Default is 'fill'. 
     """
-    def __init__(self, img, depths=None, top=None, base=None, add_tol=None, add_mode='safe'):
+    def __init__(self, img, depths=None, top=None, base=None, add_tol=None, add_mode='fill'):
 
         self.img = img    # img.setter called
 
@@ -148,10 +130,10 @@ class CoreColumn:
 
         # check that there's a difference, and that it isn't a superset of current range
         if [top, base] != [self.top, self.base] and (top > self.top or base < self.base):
-
-            in_new_range = np.logical_and(self.depths >= top, self.depths <= new_bottom)
-            self.img = self.img[in_new_range]
-            self.depths = self.depths[in_new_range]
+            select_idxs = np.logical_and(self.depths >= top, self.depths <= new_bottom)
+            self.img = self.img[select_idxs]
+            self.depths = self.depths[select_idxs]
+            self.top, self.base = top, base
 
         return self
 
@@ -191,17 +173,16 @@ class CoreColumn:
 
 
         if self.add_mode is 'fill':
-
             fill_dd = (self.dd + other.dd) / 2
             fill_rows = depth_diff // fill_dd
             fill_depths = np.linspace(self.depths[-1]+fill_dd, other.depths[0]-fill_dd, num=fill_rows)
             fill_img = np.zeros((fill_rows, self.width, self.channels), dtype=self.img.dtype)
 
-            self.img = stack_images(self.img, fill_img)
+            self.img = vstack_images(self.img, fill_img)
             self.depths = np.concatenate(self.depths, fill_depths)
 
 
-        return CoreColumn(stack_images(self.img, other.img),
+        return CoreColumn(vstack_images(self.img, other.img),
                          depths = np.concatenate([self.depths, other.depths]),
                          top = self.top, base = other.base,
                          add_tol = max(self.add_tol, other.add_tol),
