@@ -17,9 +17,8 @@ from math import ceil
 import mrcnn.model as modellib
 from mrcnn.visualize import display_instances
 
+from corebreakout import CoreColumn
 from corebreakout.models import mrcnn_model
-
-from corebreakout.corecolumn import CoreColumn
 from corebreakout.utils.viz_utils import show_images
 
 # There seem to be two slightly different offsets
@@ -60,32 +59,29 @@ class CoreSegmenter:
 
     Parameters
     ----------
-    model_dir : str
+    model_dir : str or Path
         Path to saved MRCNN model directory
-    weights_path : str
+    weights_path : str or Path
         Path to saved weights file of corresponding model
-    model_config : CoreConfig, optional
+    model_config : mrcnn.Config, optional
         MRCNN configuration object, default=core_mcrnn.CoreConfig().
     """
     def __init__(self, model_dir, weights_path, model_config=None):
 
-        if model_config is None:
-            self.model_config = mrcnn_model.CoreConfig()
-        else:
-            self.model_config = model_config
+        self.model_config = model_config or mrcnn_model.CoreConfig()
 
-        print('building model')
+        print('Building MRCNN model...')
         self.mrcnn = modellib.MaskRCNN(mode='inference',
                                        config=self.model_config,
                                        model_dir=model_dir)
 
-        print('loading weights')
+        print('Loading model weights...')
         self.mrcnn.load_weights(weights_path, by_name=True)
 
 
     def segment(self, img, depth_range, col_height=1.0, add_tol=0.0, add_mode='fill', layout='A', show=False):
         """
-        Segment core_column detections in `img`, return.
+        Detect and segment core columns in `img`, return stacked CoreColumn instance.
 
         Parameters
         ----------

@@ -1,12 +1,60 @@
 # `corebreakout`
 
-Mask-RCNN based segmentation of geological core images and assembly of depth-labeled image datasets. 
+Package for segmentation, stacking, and depth alignment of geological core image datasets.
 
-Include a general pretrained model and tools for (re-)training with novel datasets.
+- Include a general pretrained model and tools for (re-)training with novel datasets.
+- **other features**
 
-Moving from "BlueLabel" painting-based labeling utilities to more common `COCO` format. Less room for user error and frustration that way, and lots of resources for `COCO` stuff.
 
-*Question*: should processed core labeling tools (XML scripts, `striplog` figure tracks, etc.) be part of this package, or `coremdlr`?
+## Target Platform
+
+This package was developed and tested under Linux (Ubuntu). It may work on other platforms, but probably requires adjustment of some configuration file parameters (e.g., file system conventions for Windows).
+
+
+## Requirements
+
+The following packages are required with installation:
+
+- numpy
+- matplotlib
+- scikit-image
+- tensorflow
+- matterport/Mask\_RCNN
+- pycocotools
+
+Other tools are necessary for labeling new training images. Any segmentation annotation format should be workable if the user is willing to write their own `Dataset` class. There is built-in support for the `COCO` format, which we generate using `labelme`.
+
+**Post-labeling tools?**
+
+
+## Installation
+
+**Download:**
+
+```
+$ git clone https://github.com/rgmyr/corebreakout.git
+```
+
+**Install:**
+
+```
+$ cd corebreakout
+```
+And then use `pip`:
+```
+$ pip install -e .
+```
+**or** run setup:
+```
+$ python setup.py install
+```
+
+Develop mode installation (`pip install -e .`) is recommended, since users may want to change some parameters in the source code to suit their particular dataset of interest without having to reinstall, but it is not required.
+
+
+## Tutorial
+
+See the `tutorial` folder for notebooks demonstrating model training and usage.
 
 
 ### Additional object types for detection
