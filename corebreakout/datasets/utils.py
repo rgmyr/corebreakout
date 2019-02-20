@@ -3,6 +3,26 @@ import numpy as np
 from skimage import io, measure, morphology
 from itertools import combinations
 
+
+###---------------------###
+### Region Manipulation ###
+###---------------------###
+
+def v_overlapping(r0, r1):
+    """
+    Check if regions `r0` & `r1` are *vertically* overlapping.
+    """
+    return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
+
+
+def h_overlapping(r0, r1):
+    """
+    Check if regions `r0` & `r1` are *horizontally* overlapping.
+    """
+    return (r0.bbox[1] < r1.bbox[3] and r0.bbox[3] > r1.bbox[1])
+
+
+
 #--------------------------#
 # Raw BlueLabel processing #
 #--------------------------#
@@ -85,20 +105,6 @@ def clean_blue(image):
     image = morphology.remove_small_holes(image, area_threshold=500)
     image = morphology.remove_small_objects(image, min_size=250)
     return image
-
-
-def v_overlapping(r0, r1):
-    """
-    Check if regions `r0` & `r1` are *vertically* overlapping.
-    """
-    return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
-
-
-def h_overlapping(r0, r1):
-    """
-    Check if regions `r0` & `r1` are *horizontally* overlapping.
-    """
-    return (r0.bbox[1] < r1.bbox[3] and r0.bbox[3] > r1.bbox[1])
 
 
 def make_labels(blue_img, masking_color=(2,0,251), show=False):
