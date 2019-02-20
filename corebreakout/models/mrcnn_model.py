@@ -8,7 +8,7 @@ from mrcnn.utils import Dataset
 from mrcnn.config import Config
 import mrcnn.model as modellib
 
-from corebreakout.segmentation.datasets.util import make_labels
+from corebreakout.datasets.utils import make_labels
 
 DROPBOX_DIR = '/home/'+os.environ['USER']+'/Dropbox/core_data/'
 #DROPBOX_DIR = '/home/ross/Dropbox/core_data/'

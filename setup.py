@@ -15,7 +15,7 @@ PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 setup(name='corebreakout',
       version='0.1',
-      description='Tools for segmentation and labeling of core sample images',
+      description='Mask-RCNN tool for segmentation, stacking, and alignment of core sample images',
       url='https://github.com/rgmyr/corebreakout',
       author='Ross Meyer',
       author_email='ross.meyer@utexas.edu',

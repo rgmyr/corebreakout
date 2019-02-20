@@ -4,6 +4,10 @@ Configuration of best models for current usage.
 import os
 from pathlib import Path
 
+
+DEFAULT_CLASSES = ['col', 'box', 'scale']
+
+
 # Current best Mask RCNN model
 model_dir = Path('/home/'+os.environ['USER']+'/Dropbox/core_data/saved_models/mrcnn/latest')
 
@@ -16,4 +20,3 @@ weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
 def current_best_mrcnn():
     '''Return loaded instance of best Mask RCNN.'''
     pass
-
