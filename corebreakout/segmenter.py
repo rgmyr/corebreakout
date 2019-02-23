@@ -18,7 +18,7 @@ import mrcnn.model as modellib
 from mrcnn.visualize import display_instances
 
 from corebreakout import CoreColumn
-from corebreakout.models import mrcnn_model
+from corebreakout import mrcnn_model
 from corebreakout.utils.viz_utils import show_images
 
 # There seem to be two slightly different offsets
