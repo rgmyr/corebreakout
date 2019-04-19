@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 from functools import reduce
 from operator import add
 
-from coremdlr.coresegmenter import CoreSegmenter
-from coremdlr.corecolumn import CoreColumn
+from corebreakout import CoreSegmenter
+from corebreakout import CoreColumn
 
-from coremdlr.models_config import mrcnn_model_dir, mrcnn_weights_path
+from corebreakout.config import model_dir, weights_path
 
 
 default_base_path = '/home/'+os.environ['USER']+'/Dropbox/core_data/well_core_data/wos_data/schiehallion-complex/'
@@ -26,7 +26,7 @@ default_save_dir = '/home/'+os.environ['USER']+'/Dropbox/core_data/facies/train_
 
 
 def load_segmenter():
-    return CoreSegmenter(mrcnn_model_dir, mrcnn_weights_path)
+    return CoreSegmenter(model_dir, weights_path)
 
 
 def is_good_dir(d):
