@@ -7,34 +7,35 @@ TODO:
 import numpy as np
 import pandas as pd
 
-from corebreakout.utils import vstack_images
+from corebreakout import utils
 
 
 class CoreColumn:
     """
-    Handles combining of depth labeled columns via the __add__ operator. 
-    
-    Either `depths` or `top` and `base` must be given.
-    
+    Container for depth-registered, single-column images of core material.
+    `CoreColumn`s can be stacked via the __add__ operator, using `add_mode` from LHS instance,
+    and padding the width of the narrower of the two images with zeros if necessary.
+    Either `depths` array or scalar `top` and `base` values must be provided to constructor.
+
     Parameters
     ----------
     img : array
         2D (grayscale) or 3D (color) image array representing a single column of core material
     depths : array, optional
-        An array of depths (one value for each row in `img`). 
-        If not given, will be computed with np.linspace from `top` and `base`.
+        1D array of depths with `size=img.shape[0]` (one value for each row).
+        If not provided, depths are computed as `np.linspace(top, base, num=img.shape[0])`.
     top : array, optional
-        The top depth. If not given and `depths` is, will be taken as depth of first row.
+        The top depth. If not given and `depths` is, assumed to be depth of first row.
     base : float, optional
-        The base depth. If not given and `depths` is, will be taken as depth of last row.
+        The base depth. If not given and `depths` is, assumed to be depth of last row.
     add_tol : float, optional
         Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
-        where `dd` is the median difference in depth between adjacent column row depths.
+        where `@property dd` is the median difference in depth between adjacent `img` rows.
     add_mode : one of {'fill', 'collapse'}, optional
-        How to add to this column. Both methods enforce depth ordering:
-            - 'fill' will fill in "missing" depth gap with a black image.
+        How to add to this column. Both methods enforce depth ordering (LHS.base <= RHS.top):
+            - 'fill' is the default. Fills any depth gap with zero `img` and interpolated depths.
             - 'collapse' will simply concatenate `img` and `depths` arrays.
-        Default is 'fill'. 
+        Default is 'fill'.
     """
     def __init__(self, img, depths=None, top=None, base=None, add_tol=None, add_mode='fill'):
 
@@ -57,8 +58,8 @@ class CoreColumn:
             self.top, self.base, self.depths = top, base, depths
 
         assert self.base > self.top, '`top` and `base` must be depth ordered'
-        assert np.all(self.depths >= self.top), 'no `depths` allowed above `top`'
-        assert np.all(self.depths <= self.base), 'no `depths` allowed below `base`'
+        assert np.all(self.depths >= self.top), 'no `depths` can be above `top`'
+        assert np.all(self.depths <= self.base), 'no `depths` can be below `base`'
 
         # settings for column addition
         self.add_mode = add_mode
@@ -93,7 +94,7 @@ class CoreColumn:
     @property
     def dd(self):
         """An approximate value for the size of each row in depth units."""
-        return np.median(np.diff(self.depths)) 
+        return np.median(np.diff(self.depths))
 
     @property
     def depth_range(self):
@@ -104,7 +105,7 @@ class CoreColumn:
     def add_tol(self):
         return self._add_tol
 
-    @add_tol.setter 
+    @add_tol.setter
     def add_tol(self, value):
         assert value >= 0.0, '`add_tol` cannot be negative'
         self._add_tol = value
@@ -130,9 +131,9 @@ class CoreColumn:
 
         # check that there's a difference, and that it isn't a superset of current range
         if [top, base] != [self.top, self.base] and (top > self.top or base < self.base):
-            select_idxs = np.logical_and(self.depths >= top, self.depths <= new_bottom)
-            self.img = self.img[select_idxs]
-            self.depths = self.depths[select_idxs]
+            idxs = np.logical_and(self.depths >= top, self.depths <= new_bottom)
+            self.img = self.img[idxs]
+            self.depths = self.depths[idxs]
             self.top, self.base = top, base
 
         return self
@@ -153,38 +154,36 @@ class CoreColumn:
 
     def __add__(self, other):
         """
-        Adding two CoreSampleColumn objects should append RHS below LHS.
-        `img` and `depths` are concatenated, `top` and `base` passed through.
-
-        If `add_mode` is 'collapse', things are just naively stacked. 
-        If `add_mode` is 'fill', an black image appended to self to fill the gap.
+        Adding two CoreColumn objects appends RHS below LHS and returns new CoreColumn instance.
+            - `img` and `depths` are concatenated:
+                - If `add_mode` is 'collapse', arrays are naively stacked.
+                - If `add_mode` is 'fill', a zero image + interpolated depths are added b/t LHS & RHS.
+            - `LHS.top`, `RHS.base` and `LHS.add_mode` are passed through to new instance
+            - `add_tol` is propagated by `max(LHS.add_tol, RHS.add_tol)`.
         """
-        if self.channels != other.channels:
-            raise UserWarning(f'Cant add columns ({self} \n\t+\n {other})!')
-
         depth_diff = other.top - self.base
         print(self.depth_range, other.depth_range, depth_diff)
-            
+
         if depth_diff < 0:
             raise UserWarning(f'Cant add shallower {other} below deeper {self}!')
 
         elif depth_diff > self.add_tol:
             raise UserWarning(f'Gap of {depth_diff} greater than `add_tol`: {self.add_tol}!')
 
-
+        # if 'fill', extend `self.img` and `self.depths` to fill the gap
         if self.add_mode is 'fill':
             fill_dd = (self.dd + other.dd) / 2
             fill_rows = depth_diff // fill_dd
+
             fill_depths = np.linspace(self.depths[-1]+fill_dd, other.depths[0]-fill_dd, num=fill_rows)
             fill_img = np.zeros((fill_rows, self.width, self.channels), dtype=self.img.dtype)
 
-            self.img = vstack_images(self.img, fill_img)
+            self.img = utils.vstack_images(self.img, fill_img)
             self.depths = np.concatenate(self.depths, fill_depths)
 
 
-        return CoreColumn(vstack_images(self.img, other.img),
+        return CoreColumn(utils.vstack_images(self.img, other.img),
                          depths = np.concatenate([self.depths, other.depths]),
                          top = self.top, base = other.base,
                          add_tol = max(self.add_tol, other.add_tol),
                          add_mode = self.add_mode)
-
