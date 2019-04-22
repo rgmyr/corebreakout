@@ -1,14 +1,7 @@
 """
-Image and segmentation utility functions.
+Utility functions. Mostly image + mask + region manipulation.
 """
 import numpy as np
-
-# need to test out some orientation options
-example_orientation = {
-    'sort_axis' : 0,
-    'sort_order' : +1,
-
-}
 
 
 def v_overlapping(r0, r1):
@@ -27,7 +20,7 @@ def h_overlapping(r0, r1):
 
 def masks_to_labels(masks):
     """
-    Convert boolean (H,W,N) array for N instances to integer (H,W) in range(0,N+1).
+    Convert boolean (H,W,N) `masks` array for N instances to integer (H,W) in range(0,N+1).
     """
     labels = np.zeros(masks.shape[0:-1])
     for i in range(masks.shape[-1]):
@@ -35,19 +28,33 @@ def masks_to_labels(masks):
     return labels.astype(int)
 
 
-def region_crop(img, labels, region, endpts=endpts['A']):
+def region_crop(img, labels, region, axis=0, endpts=(815, 6775)):
     """
-    Adjust region bbox and return cropped mask.
+    Adjust region bbox and return cropped region * mask.
 
-    TODO: make this handle both vertical and horizontal orientations.
+    Parameters
+    ----------
+    img : array
+        The image to crop
+    labels : array
+        Mask of integer labels, same shape in first 2 dims as `img`
+    region : skimage.RegionProperties
+        Region instance corresponding to column to crop around
+    axis : int, optional
+        Which axis to change endpts along, default=0 (y-axis)
+    endpts : tuple(int)
+        Most extereme endpoint coordinates for `axis`
     """
-    x0, y0, x1, y1 = region.bbox
-    if y0 > endpts[0]:
-        y0 = endpts[0]
-    if y1 < endpts[1]:
-        y1 = endpts[1]
+    r0, c0, r1, c1 = region.bbox
+
+    if axis is 0:
+        c0, c1 = min(c0, endpts[0]), max(c1, endpts[1])
+    elif axis is 1:
+        r0, r1 = min(r0, endpts[0]), max(r1, endpts[1])
+
     region_img = img * np.expand_dims(labels==region.label, -1)
-    return region_img[x0:x1,y0:y1,:]
+
+    return region_img[r0:r1,c0:c1,:]
 
 
 def vstack_images(imgA, imgB):

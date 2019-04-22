@@ -1,0 +1,8 @@
+[
+  "tests/test_column.py::test_column",
+  "tests/test_column.py::test_column_addition",
+  "tests/test_column.py::test_column_slice",
+  "tests/test_segmenter.py::test_segmenter_construction",
+  "tests/test_segmenter.py::test_segmenter_tuning",
+  "tests/test_segmenter.py::test_segmenter_segmentation"
+]
