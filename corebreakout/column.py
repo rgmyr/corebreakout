@@ -13,14 +13,16 @@ from corebreakout import utils
 class CoreColumn:
     """
     Container for depth-registered, single-column images of core material.
+
     `CoreColumn`s can be stacked via the __add__ operator, using `add_mode` from LHS instance,
-    and padding the width of the narrower of the two images with zeros if necessary.
+    and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.
+
     Either `depths` array or scalar `top` and `base` values must be provided to constructor.
 
     Parameters
     ----------
     img : array
-        2D (grayscale) or 3D (color) image array representing a single column of core material
+        2D (grayscale) or 3D (RGB) image array representing a single column of core material
     depths : array, optional
         1D array of depths with `size=img.shape[0]` (one value for each row).
         If not provided, depths are computed as `np.linspace(top, base, num=img.shape[0])`.
@@ -33,7 +35,7 @@ class CoreColumn:
         where `@property dd` is the median difference in depth between adjacent `img` rows.
     add_mode : one of {'fill', 'collapse'}, optional
         How to add to this column. Both methods enforce depth ordering (LHS.base <= RHS.top):
-            - 'fill' is the default. Fills any depth gap with zero `img` and interpolated depths.
+            - 'fill' is the default. Fills any depth gap with zero image and interpolated depths.
             - 'collapse' will simply concatenate `img` and `depths` arrays.
         Default is 'fill'.
     """
@@ -92,14 +94,15 @@ class CoreColumn:
         self._depths = arr
 
     @property
-    def dd(self):
-        """An approximate value for the size of each row in depth units."""
-        return np.median(np.diff(self.depths))
-
-    @property
     def depth_range(self):
         return (self.top, self.base)
 
+    @property
+    def dd(self):
+        """
+        An approximate value for the size of each row in depth units.
+        """
+        return np.median(np.diff(self.depths))
 
     @property
     def add_tol(self):
@@ -117,13 +120,13 @@ class CoreColumn:
 
     @add_mode.setter
     def add_mode(self, mode):
-        assert mode in ('safe', 'collapse', 'fill'), f'{mode} not a valid `add_mode`'
+        assert mode in ('collapse', 'fill'), f'{mode} not a valid `add_mode`'
         self._add_mode = mode
 
 
     def slice_depth(self, top=None, base=None):
         """
-        Slice the core column between top and base, if possible to do so.
+        Slice the CoreColumn between `top` and `base`, if possible to do so.
         """
         top = top or self.top
         base = base or self.base
@@ -131,7 +134,7 @@ class CoreColumn:
 
         # check that there's a difference, and that it isn't a superset of current range
         if [top, base] != [self.top, self.base] and (top > self.top or base < self.base):
-            idxs = np.logical_and(self.depths >= top, self.depths <= new_bottom)
+            idxs = np.logical_and(self.depths >= top, self.depths <= base)
             self.img = self.img[idxs]
             self.depths = self.depths[idxs]
             self.top, self.base = top, base
@@ -168,7 +171,7 @@ class CoreColumn:
             raise UserWarning(f'Cant add shallower {other} below deeper {self}!')
 
         elif depth_diff > self.add_tol:
-            raise UserWarning(f'Gap of {depth_diff} greater than `add_tol`: {self.add_tol}!')
+            raise UserWarning(f'Gap of {depth_diff} greater than `LHS.add_tol`: {self.add_tol}!')
 
         # if 'fill', extend `self.img` and `self.depths` to fill the gap
         if self.add_mode is 'fill':

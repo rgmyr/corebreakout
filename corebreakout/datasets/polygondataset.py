@@ -48,10 +48,9 @@ class PolygonDataset(Dataset):
             image_matches = list(data_dir.glob(ann_path.stem + '*.jp*g'))
             try:
                 img_path = image_matches[0]
+                self.add_image('cb', image_id=ann_path.stem, path=img_path, ann_path=ann_path)
             except IndexError:
                 raise UserWarning(f'Matching .jpg/.jpeg not found for {ann_path}')
-
-            self.add_image('cb', image_id=ann_path.stem, path=img_path, ann_path=ann_path)
 
 
     def load_mask(self, image_id):
@@ -73,13 +72,12 @@ class PolygonDataset(Dataset):
         Assumes that some classes may have multiple instances ('col1', 'col2', etc.),
         and that each labeled instance may be composed of multiple polygons.
         """
-        h, w = ann['imageHeight'], ann['imageWidth']
-
         unique_labels = list(set([p['label'] for p in ann['shapes']]))
 
-        masks = np.zeros((h, w, len(unique_labels)), dtype=np.bool)
-
         class_ids = np.array([self.label_to_class_id(l) for l in unique_labels])
+
+        h, w = ann['imageHeight'], ann['imageWidth']
+        masks = np.zeros((h, w, len(unique_labels)), dtype=np.bool)
 
         for polygon in ann['shapes']:
             boundary = np.array(polygon['points'])
@@ -115,7 +113,7 @@ class PolygonDataset(Dataset):
     def __repr__(self):
         return(
             f'\n PolygonDataset\n'
-            f'Image count : {self.num_images}\n'
+            f'Image count : {len(self.image_ids)}\n'
             f'Class count : {self.num_classes}\n'
-            '\n'.join(['{:3}. {:50}'.format(i, info['name']) for i, info in enumerate(self.class_info))
+            '\n'.join(['{:3}. {:50}'.format(i, info['name']) for i, info in enumerate(self.class_info)])
         )

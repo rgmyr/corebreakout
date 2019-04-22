@@ -6,6 +6,8 @@ Mask-RCNN implementation from `mrcnn` package: github/matterport/Mask_RCNN
 TODO:
     - allow other orientations + object classes in `segment` method
 """
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, morphology, measure
@@ -49,12 +51,12 @@ class CoreSegmenter:
         self.model_config = model_config or mrcnn_model.CoreConfig()
 
         print(f'Building MRCNN model from directory: {str(model_dir)}')
-        self.mrcnn = modellib.MaskRCNN(mode='inference',
-                                       config=self.model_config,
-                                       model_dir=model_dir)
+        self.model = modellib.MaskRCNN(mode='inference',
+                                      config=self.model_config,
+                                      model_dir=model_dir)
 
         print(f'Loading model weights from file: {str(weights_path)}')
-        self.mrcnn.load_weights(weights_path, by_name=True)
+        self.model.load_weights(weights_path, by_name=True)
 
 
     def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout='A', show=False):
@@ -88,7 +90,7 @@ class CoreSegmenter:
         if min(depth_range) == 0.0 or depth_range[1]-depth_range[0] == 0.0:
             raise UserWarning(f'depth_range {depth_range} is suspect... make you are passing valid depths.')
 
-        if isinstance(img, str):
+        if isinstance(img, (str, Path)):
             print(f'Reading file: {img}')
             img = io.imread(img)
 
@@ -98,7 +100,7 @@ class CoreSegmenter:
         col_bots = [top+col_height for top in col_tops]
 
         # Get MRCNN column predictions
-        preds = self.mrcnn.detect([img], verbose=0)[0]
+        preds = self.model.detect([img], verbose=0)[0]
         if show:
             display_instances(img, preds['rois'], preds['masks'], preds['class_ids'],
                              ['BG', 'core_column'], preds['scores'], figsize=(10,10))
