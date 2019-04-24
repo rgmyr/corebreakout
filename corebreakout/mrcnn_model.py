@@ -7,8 +7,8 @@ from skimage import io
 from mrcnn.utils import Dataset
 from mrcnn.config import Config
 import mrcnn.model as modellib
-
-from corebreakout.datasets.utils import make_labels
+"""
+from corebreakout.utils import make_labels
 
 DROPBOX_DIR = '/home/'+os.environ['USER']+'/Dropbox/core_data/'
 #DROPBOX_DIR = '/home/ross/Dropbox/core_data/'
@@ -104,3 +104,4 @@ def load_model(model_path, weights_path):
                               model_dir=model_path)
     model.load_weights(weights_path, by_name=True)
     return model
+"""

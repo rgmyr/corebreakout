@@ -63,6 +63,8 @@ class CoreSegmenter:
         """
         Detect and segment core columns in `img`, return stacked CoreColumn instance.
 
+        TODO: add 'column_class' and 'measure_class' args (for multi-class datasets)?
+
         Parameters
         ----------
         img : str or array
@@ -103,13 +105,13 @@ class CoreSegmenter:
         preds = self.model.detect([img], verbose=0)[0]
         if show:
             display_instances(img, preds['rois'], preds['masks'], preds['class_ids'],
-                             ['BG', 'core_column'], preds['scores'], figsize=(10,10))
+                             ['BG', 'core_column'], preds['scores'], figsize=(15,15))
 
         labels = utils.masks_to_labels(preds['masks'])
 
         regions = measure.regionprops(labels)
 
-        # TODO: support for other orientations?
+        # TODO: support for other orientations
         regions.sort(key=lambda x: x.bbox[0])
 
         crops = [np.rot90(utils.region_crop(img, labels, region, endpts[layout]), k=3) for region in regions]
