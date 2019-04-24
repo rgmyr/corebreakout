@@ -2,15 +2,15 @@
 Dataset class for COCO format segmentation labels
 """
 import os
-import glob
+import json
+from pathlib import Path
+
 import skimage
 import numpy as np
 
 from mrcnn.utils import Dataset
-from mrcnn.config import Config
-import mrcnn.model as modellib
 
-from corebreakout.config import DEFAULT_CLASSES
+from corebreakout.defaults import DEFAULT_CLASSES
 
 
 class PolygonDataset(Dataset):
@@ -114,6 +114,6 @@ class PolygonDataset(Dataset):
         return(
             f'\n PolygonDataset\n'
             f'Image count : {len(self.image_ids)}\n'
-            f'Class count : {self.num_classes}\n'
+            f'Class count : {self.num_classes}\n' +
             '\n'.join(['{:3}. {:50}'.format(i, info['name']) for i, info in enumerate(self.class_info)])
         )

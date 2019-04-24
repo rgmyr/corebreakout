@@ -13,20 +13,15 @@ subset = 'train'               # subdirectory to read from
 dataset = PolygonDataset(classes=DEFAULT_CLASSES)
 dataset.collect_annotated_images(data_dir, subset)
 dataset.prepare()
-
-print("Image Count: {}".format(dataset.num_images))
-print("Class Count: {}".format(dataset.num_classes))
-for i, info in enumerate(dataset.class_info):
-    print("{:3}. {:50}".format(i, info['name']))
+print(dataset)
 ```
-
 
 ## Writing your own custom `Dataset`
 
-We hope that classes provided are sufficient for most use of `corebreakout`, but some users may want to write custom `Dataset` classes. Typically this will require inheriting from the base `mrcnn.utils.Dataset` class and overriding a few of its methods:
+We hope that classes provided are sufficient for most use of `corebreakout`, but some users may want to write custom `Dataset` classes, particularly if they have additional labeled images with a different annotation format. Typically this will require inheriting from the base `mrcnn.utils.Dataset` class and overriding a few of its methods:
 
 - `collect_annotated_images(data_dir, subset)`
-  - Add all of images from a directory and subset (subdirectory) to the `Dataset` via the `add_image()` method. We also choose to add the classes within this function via the `add_class()` method, although one could also customize `__init__` if they preferred. Since only the user needs to call this method, the arguments and logic can be made different than ours.    
+  - Add all of images from a directory and subset (subdirectory) to the `Dataset` via the `add_image()` method.    
 - `load_mask(image_id)`
   - Given an `image_id`, load (and compute, if necessary) the corresponding mask. For a mask with `N` object instances (not including the background), the return value from this function is `(mask, class_ids)`, where `mask` is boolean array of shape `(H,W,N)` and `class_ids` is an 1D integer array of size `N` with one `class_id` for each of the instance channels in `mask`.
 - `image_reference(image_id)`
