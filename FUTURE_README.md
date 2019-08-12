@@ -22,7 +22,7 @@ The following packages are required with installation:
 - matterport/Mask\_RCNN
 - pycocotools
 
-Other tools are necessary for labeling new training images. Any segmentation annotation format should be workable if the user is willing to write their own `Dataset` class. There is built-in support for the `COCO` format, which we generate using `labelme`.
+Third party tools are necessary for labeling new training images. There is built-in support for the polygonal JSON format of `labelme`, but any instance segmentation annotation format should be workable if the user is willing to write their own `Dataset` class.
 
 **Post-labeling tools?**
 
@@ -73,10 +73,8 @@ It wouldn't be too hard to include these as options, especially since `box` and 
 
 ### Other TODO
 
-- Support for `COCO` annotation format
-    - Write a new `Dataset` class (utilize `pycocotools`)
-    - Label some varied data from `pretrained/data/` (use `labelme` for polygon annotations)
-    - Visualize some of the labels, make sure it comes out looking right
+- Write a new `Dataset` class (utilize `pycocotools`)
+- Label some varied data from `pretrained/data/` (use `labelme` for polygon annotations)
 
 - Build `train` and `test` sets with new data, train some new models on it
 
