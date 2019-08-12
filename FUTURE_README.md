@@ -1,6 +1,6 @@
 # `corebreakout`
 
-Package for segmentation, stacking, and depth alignment of geological core image datasets.
+Python package built on `matterport/Mask\_RCNN` for segmentation, stacking, and depth alignment of geological core image datasets.
 
 - Include a general pretrained model and tools for (re-)training with novel datasets.
 - **other features**

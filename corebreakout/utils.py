@@ -37,13 +37,13 @@ def region_crop(img, labels, region, axis=0, endpts=(815, 6775)):
     img : array
         The image to crop
     labels : array
-        Mask of integer labels, same shape in first 2 dims as `img`
-    region : skimage.RegionProperties
-        Region instance corresponding to column to crop around
+        Mask of integer labels, same height and width as `img`
+    region : skimage.RegionProperties instance
+        Region object corresponding to column to crop around
     axis : int, optional
-        Which axis to change endpts along, default=0 (y-axis)
+        Which axis to change `endpts` along, default=0 (y-coordinates)
     endpts : tuple(int)
-        Most extereme endpoint coordinates for `axis`
+        Most extreme endpoint coordinates allowed along `axis`
     """
     r0, c0, r1, c1 = region.bbox
 
