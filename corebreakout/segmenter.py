@@ -21,7 +21,7 @@ from mrcnn.visualize import display_instances
 
 from corebreakout import CoreColumn
 from corebreakout import mrcnn_model
-from corebreakout import utils
+from corebreakout import utils, defaults
 
 # There seem to be two slightly different offsets
 endpts = {
@@ -44,11 +44,11 @@ class CoreSegmenter:
     weights_path : str or Path
         Path to saved weights file of corresponding model
     model_config : mrcnn.Config, optional
-        MRCNN configuration object, default=corebreakout.mrcnn_model.CoreConfig().
+        MRCNN configuration object, default=corebreakout.defaults.CoreConfig().
     """
-    def __init__(self, model_dir, weights_path, model_config=None):
+    def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig):
 
-        self.model_config = model_config or mrcnn_model.CoreConfig()
+        self.model_config = model_config
 
         print(f'Building MRCNN model from directory: {str(model_dir)}')
         self.model = modellib.MaskRCNN(mode='inference',
@@ -72,7 +72,7 @@ class CoreSegmenter:
         depth_range : list(float)
             Top and bottom depths of set of columns in image
         col_height : float, optional
-            Expected height of a full column in `depth_range` units, default=1.0.
+            Expected height of a full column in same units as `depth_range`, default=1.0.
         add_tol : float, optional
             Tolerance for adding discontinuous columns. Default=None results in tolerance ~ image resolution.
         add_mode : one of {'fill', 'collapse'}, optional
@@ -107,6 +107,7 @@ class CoreSegmenter:
             display_instances(img, preds['rois'], preds['masks'], preds['class_ids'],
                              ['BG', 'core_column'], preds['scores'], figsize=(15,15))
 
+        # TODO: deal with overlapping/seperated single columns?
         labels = utils.masks_to_labels(preds['masks'])
 
         regions = measure.regionprops(labels)

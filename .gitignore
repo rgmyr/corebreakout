@@ -1,4 +1,8 @@
 *.ipynb_checkpoints*
 *__pycache__*
 
+# exclude pretrained COCO mrcnn model
+include/pretrain/models/*
+!include/pretrain/models/.gitkeep
+
 *.h5 

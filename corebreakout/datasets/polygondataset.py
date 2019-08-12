@@ -42,7 +42,7 @@ class PolygonDataset(Dataset):
         assert data_dir.is_dir(), f'Directory {data_dir} must exist.'
 
         annotations = sorted(data_dir.glob('*.json'))
-        assert len(annotations), 'Must be at least one annotation file in `data_dir`'
+        assert len(annotations), 'There must be at least one annotation file in `data_dir`'
 
         for ann_path in annotations:
             image_matches = list(data_dir.glob(ann_path.stem + '*.jp*g'))
@@ -111,8 +111,7 @@ class PolygonDataset(Dataset):
 
 
     def __repr__(self):
-        return(
-            f'\n PolygonDataset\n'
+        return(f'\n PolygonDataset\n'
             f'Image count : {len(self.image_ids)}\n'
             f'Class count : {self.num_classes}\n' +
             '\n'.join(['{:3}. {:50}'.format(i, info['name']) for i, info in enumerate(self.class_info)])
