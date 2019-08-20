@@ -15,14 +15,20 @@ class ImageLayout:
     """
     # The axis to sort columns along
     # 0 :
-    # 1 :
+    # 1
     SORT_AXIS = 1
 
     #
     SORT_ORDER = 1
 
-    #
+    # Height of a single (full) column in depth units
     COL_HEIGHT = 1.0
 
-    #
-    ENDPTS
+    # Name of class to use for setting column endpoints (e.g., 'tray', 'scale')
+    # or hardcoded endpoints in pixel coordinates (lower_idx, upper_idx)
+    ENDPTS = 'tray'
+
+    def __init__(self, **params):
+        for k, v in params:
+            if hasattr(self, k.upper()):
+                setattr()
