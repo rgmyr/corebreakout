@@ -14,18 +14,17 @@ from corebreakout import __file__ as PKG_FILE
 ####+++++++++++++++####
 
 INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'include'
-
-COCO_MODEL_DIR = INCLUDE_DIR / 'pretrained/models'
-COCO_MODEL_PATH = COCO_MODEL_DIR / 'mask_rcnn_coco.h5'
-
-DATASET_DIR = INCLUDE_DIR / 'pretrained/data'
+DATASET_DIR = INCLUDE_DIR / 'pretrain/data'
 
 
-# Current best Mask RCNN model
-model_dir = Path('/home/'+os.environ['USER']+'/Dropbox/core_data/saved_models/mrcnn/latest')
+MODEL_DIR = Path('/home/'+os.environ['USER']+'/Dropbox/models/corebreakout')
+COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 
-weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
+# Current Mask RCNN experiments
+TRAIN_DIR = MODEL_DIR / 'pretrain'
 
+
+#weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
 # Original:
 # mrcnn_weights_path = os.path.join(mrcnn_model_dir, 'core20180801T1515/mask_rcnn_core_0066.h5')
 
@@ -48,6 +47,8 @@ DEFAULT_LAYOUT = {
 class DefaultConfig(Config):
     """
     Override some default Mask_RCNN `Config` values.
+
+    See: https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
     """
     NAME = 'cb_default'
 
@@ -57,7 +58,7 @@ class DefaultConfig(Config):
     NUM_CLASSES = 1 + len(DEFAULT_CLASSES)
     BACKBONE = 'resnet101'
     RPN_ANCHOR_SCALES = (64, 128, 192, 320, 352)
-    RPN_ANCHOR_RATIOS = [1, 4, 7] # [0.5, 1, 2]
+    RPN_ANCHOR_RATIOS = [0.1, 0.5, 1]
     RPN_NMS_THRESHOLD = 0.7
 
     # May need to increase?
