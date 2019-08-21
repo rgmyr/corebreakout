@@ -3,13 +3,21 @@ Utility functions. Mostly image + mask + region manipulation.
 """
 import numpy as np
 
+from mrcnn.visualize import display_instances
+
+
+def show_preds(img, preds, dataset, figsize=(15,15)):
+    """
+    Less verbose wrapper for `mrcnn.visualize.display_instances`
+    """
+    display_instances(img, preds['rois'], preds['masks'], preds['class_ids'], dataset.class_names, preds['scores'], figsize=figsize)
+
 
 def v_overlapping(r0, r1):
     """
     Check if skimage regions `r0` & `r1` are *vertically* overlapping.
     """
     return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
-
 
 def h_overlapping(r0, r1):
     """

@@ -1,4 +1,5 @@
 
+import numpy as np
 
 # Should `Layout` be a class?
 DEFAULT_LAYOUT = {
@@ -8,27 +9,24 @@ DEFAULT_LAYOUT = {
     'endpts' : (815, 6775)  # can also be name of a class for object-based column endpoints
 }
 
+ORIENTATIONS = ['t2b', 'l2r'] # 'b2t'? 'r2l'?
 
-class ImageLayout:
+def sort_regions(regions, order):
     """
-    Parameters necessary for consistent cropping and sorting of column regions.
+    Sort `skimage` regions (core columns), given the column `order` orientation
     """
-    # The axis to sort columns along
-    # 0 :
-    # 1
-    SORT_AXIS = 1
+    assert order in ORIENTATIONS, f'order {order} must be one of {ORIENTATIONS}'
+    idx = 0 if order is 't2b' else 1
+    regions.sort(key=lambda x: x.bbox[idx])
+    return regions
 
-    #
-    SORT_ORDER = 1
 
-    # Height of a single (full) column in depth units
-    COL_HEIGHT = 1.0
-
-    # Name of class to use for setting column endpoints (e.g., 'tray', 'scale')
-    # or hardcoded endpoints in pixel coordinates (lower_idx, upper_idx)
-    ENDPTS = 'tray'
-
-    def __init__(self, **params):
-        for k, v in params:
-            if hasattr(self, k.upper()):
-                setattr()
+def transform_region(region, orientation):
+    """
+    Transform individual cropped `region` (core column), given the depth orientation
+    """
+    assert orientation in ORIENTATIONS, f'orientation {orientation} must be one of {ORIENTATIONS}'
+    if orientation is 't2b':
+        return region
+    elif orientation is 'l2r':
+        return np.rot90(region, k=-1)

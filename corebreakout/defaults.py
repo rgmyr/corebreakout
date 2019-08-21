@@ -54,11 +54,18 @@ class DefaultConfig(Config):
 
     # TODO: STD_DEVs?
 
-    # Config model head
+    # Number of classes, including background
     NUM_CLASSES = 1 + len(DEFAULT_CLASSES)
+
     BACKBONE = 'resnet101'
+
+    # Length of square anchor side in pixels
     RPN_ANCHOR_SCALES = (64, 128, 192, 320, 352)
-    RPN_ANCHOR_RATIOS = [0.1, 0.5, 1]
+
+    # < 1 : wide anchor, > 1 : tall anchor
+    RPN_ANCHOR_RATIOS = [0.1, 0.4, 0.7, 1]
+
+    # Non-max suppresion threshold. Increasing generates more proposals.
     RPN_NMS_THRESHOLD = 0.7
 
     # May need to increase?
@@ -66,8 +73,17 @@ class DefaultConfig(Config):
     DETECTION_MIN_CONFIDENCE = 0.95
 
     # Number of train/test images, respectively
-    STEPS_PER_EPOCH = 76
-    VALIDATION_STEPS = 5
+    STEPS_PER_EPOCH = 17
+    VALIDATION_STEPS = 3
+
+    # Modify loss weights for more precise optimization
+    LOSS_WEIGHTS = {
+        "rpn_class_loss": 1.,
+        "rpn_bbox_loss": 1.,
+        "mrcnn_class_loss": 1.,
+        "mrcnn_bbox_loss": 1.,
+        "mrcnn_mask_loss": 1.
+    }
 
     # Conservative batch size. Assumes single GPU.
     GPU_COUNT = 1
