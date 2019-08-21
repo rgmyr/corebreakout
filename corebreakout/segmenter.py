@@ -21,7 +21,7 @@ from mrcnn.visualize import display_instances
 
 from corebreakout import CoreColumn
 from corebreakout import mrcnn_model
-from corebreakout import utils, defaults
+from corebreakout import utils, defaults, layout
 
 # There seem to be two slightly different offsets
 endpts = {
@@ -112,7 +112,7 @@ class CoreSegmenter:
         # TODO: deal with overlapping/seperated single columns?
         labels = utils.masks_to_labels(preds['masks'])
 
-        regions = measure.regionprops(labels)
+        #regions = layout.sort_regions(measure.regionprops(labels), 't2b')
 
         # TODO: support for other orientations
         regions.sort(key=lambda x: x.bbox[0])
