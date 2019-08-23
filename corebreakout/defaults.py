@@ -33,14 +33,12 @@ TRAIN_DIR = MODEL_DIR / 'pretrain'
 #### Default Dataset Params ####
 ####++++++++++++++++++++++++####
 
-DEFAULT_CLASSES = ['col', 'tray']
+CLASSES = ['col', 'tray']
 
-# Should `Layout` be a class?
-DEFAULT_LAYOUT = {
-    'sort_axis' : 1,        # columns laid out vertically, ordered horizontally (0 for the inverse)
-    'sort_order' : +1,      # +1 for left-to-right or top-to-bottom (-1 for right-to-left or bottom to top)
+LAYOUT_ARGS = {
+    'order' : 't2b',
+    'orientation' : 'l2r',
     'col_height' : 1.0,
-    'endpts' : (815, 6775)  # can also be name of a class for object-based column endpoints
 }
 
 
@@ -52,10 +50,8 @@ class DefaultConfig(Config):
     """
     NAME = 'cb_default'
 
-    # TODO: STD_DEVs?
-
     # Number of classes, including background
-    NUM_CLASSES = 1 + len(DEFAULT_CLASSES)
+    NUM_CLASSES = 1 + len(CLASSES)
 
     BACKBONE = 'resnet101'
 
@@ -68,6 +64,8 @@ class DefaultConfig(Config):
     # Non-max suppresion threshold. Increasing generates more proposals.
     RPN_NMS_THRESHOLD = 0.7
 
+    # TODO: STD_DEVs?
+
     # May need to increase?
     DETECTION_MAX_INSTANCES = 6
     DETECTION_MIN_CONFIDENCE = 0.95
@@ -77,6 +75,7 @@ class DefaultConfig(Config):
     VALIDATION_STEPS = 3
 
     # Modify loss weights for more precise optimization
+    # Should we lower 'class' losses perhaps?
     LOSS_WEIGHTS = {
         "rpn_class_loss": 1.,
         "rpn_bbox_loss": 1.,

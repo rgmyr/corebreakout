@@ -10,12 +10,12 @@ import numpy as np
 
 from mrcnn.utils import Dataset
 
-from corebreakout.defaults import DEFAULT_CLASSES
+from corebreakout import defaults
 
 
 class PolygonDataset(Dataset):
     """
-    Subclass of `mrcnn.utils.Dataset` for polygonal JSON annotations in `labelme` format.
+    Subclass of `mrcnn.utils.Dataset` for polygonal JSON annotations in default `labelme` format.
     See `wkentaro/labelme` to get the GUI. Outputs a JSON file with list of polygon 'shapes'.
 
     Labels must start with a unique class name, but instances can be differentiated afterward
@@ -24,7 +24,7 @@ class PolygonDataset(Dataset):
 
     The only restriction on classes is that no class name can a substring of any other class name.
     """
-    def __init__(self, classes=DEFAULT_CLASSES):
+    def __init__(self, classes=defaults.CLASSES):
         super().__init__()
 
         for i, cls_name in zip(range(len(classes)), classes):
