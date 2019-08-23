@@ -44,7 +44,7 @@ class CoreSegmenter:
     weights_path : str or Path
         Path to saved weights file of corresponding model
     model_config : mrcnn.Config, optional
-        MRCNN configuration object, default=corebreakout.defaults.CoreConfig().
+        MRCNN configuration object, default=corebreakout.defaults.DefaultConfig.
     column_order :
     column_top :
     """
@@ -61,7 +61,7 @@ class CoreSegmenter:
         self.model.load_weights(weights_path, by_name=True)
 
 
-    def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout='A', show=False):
+    def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout_args=defauls.LAYOUT_ARGS, show=False):
         """
         Detect and segment core columns in `img`, return stacked CoreColumn instance.
 
@@ -99,6 +99,7 @@ class CoreSegmenter:
             img = io.imread(img)
 
         # Set up expected num_cols and depths
+        col_height = layout_args['col_height']
         num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
         col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
         col_bots = [top+col_height for top in col_tops]
@@ -106,7 +107,9 @@ class CoreSegmenter:
         # Get MRCNN column predictions
         preds = self.model.detect([img], verbose=0)[0]
         if show:
-            display_instances(img, preds['rois'], preds['masks'], preds['class_ids'],
+            # TODO: call without `Dataset` object?
+            # ... need class_ids and label names somehow
+            utils.display_preds(img, preds['rois'], preds['masks'], preds['class_ids'],
                              ['BG', 'core_column'], preds['scores'], figsize=(15,15))
 
         # TODO: deal with overlapping/seperated single columns?
@@ -129,10 +132,3 @@ class CoreSegmenter:
         img_col = reduce(add, cols)
 
         return img_col
-
-
-    def _extract_horizontal_crops(self, regions):
-        pass
-
-    def _extract_vertical_crops(self, regions):
-        pass
