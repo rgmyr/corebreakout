@@ -1,86 +1,62 @@
 ---
-title: 'Corebreakout: '
+title: 'Corebreakout: Raw Core Images to Structured Datasets'
 tags:
   - Python
   - geology
   - geoscience
+  - image processing
 authors:
-  - name: Adrian M. Price-Whelan
+  - name: Ross G. Meyer
     orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
+    affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Author 2
     orcid: 0000-0000-0000-0000
     affiliation: 2
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: Chevron Center of Research Excellence, Colorado School of Mines
    index: 1
  - name: Institution 2
    index: 2
-date: 13 August 2017
+date: 31 August 2019
 bibliography: paper.bib
 ---
 
 # Summary
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+In the field of geology, slabbed core samples are routinely used to study (answer?)
+a variety of questions related to geologic history and processes. Unlike other
+common sources of data, core preserves true subsurface heterogeneity and conditions
+with no (minimal?) loss of resolution. However, logging core is a time consuming,
+subjective, and still largely analog process. The digitization and structuring of
+core image data allows for the development of automated and semi-automated workflows,
+which can in turn facilitate large scale analysis of the hundreds of thousands of
+meters of core stored in public and private repositories around the world.          
 
-``Gala`` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for ``Gala`` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. ``Gala`` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the ``Astropy`` package [@astropy] (``astropy.units`` and
-``astropy.coordinates``).
+``corebreakout`` is a Python package for transforming raw images of geological core
+sample material into structured data for analysis and modeling. It uses the Mask R-CNN
+algorithm [@He:2017], and is built around the TensorFlow and Keras implementation
+released by Matterport, Inc. [@Abdulla:2017]. We provide a labeled example dataset
+courtesy of the British Geological Survey [citation, specific name], and make
+it simple for geologists to add their own training images, build new models, and
+subsequently process their own image datasets. It supports any image orientation,
+and provides several options for measuring and assigning depths to core sample
+columns, including by labeling arbitrary "measuring stick" objects, or by specifying
+hard-coded column endpoint coordinates.
 
-``Gala`` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in ``Gala`` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
-
-# Mathematics
-
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+``corebreakout`` is currently in use for ongoing work in image-based lithology
+modeling, and is designed to be usable by geologists with a minimal background
+in computation. The package is set up for standard command line and notebook use,
+but may be extended to include a GUI in the future, which would enable a higher
+degree of accuracy in depth assignment, and make the package usable even by those
+with no programming experience.
 
 # Figures
 
-Figures can be included like this: ![Example figure.](figure.png)
+Include some example image processing figures: ![Example figure.](figure.png)
 
 # Acknowledgements
 
-We acknowledge contributions of data from BGS...
+We would like to acknowledge the contribution of open source image data from the BGS,
+financial support from Chevron, etc...
 
 # References
