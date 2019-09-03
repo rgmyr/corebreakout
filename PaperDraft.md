@@ -38,7 +38,7 @@ algorithm [@He:2017], and is built around the TensorFlow and Keras implementatio
 released by Matterport, Inc. [@Abdulla:2017]. We provide a labeled example dataset
 courtesy of the British Geological Survey [citation, specific name], and make
 it simple for geologists to add their own training images, build new models, and
-subsequently process their own image datasets. It supports any image orientation,
+subsequently process their own image datasets. It supports standard image layouts,
 and provides several options for measuring and assigning depths to core sample
 columns, including by labeling arbitrary "measuring stick" objects, or by specifying
 hard-coded column endpoint coordinates.

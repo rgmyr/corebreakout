@@ -126,7 +126,7 @@ class CoreColumn:
 
     def slice_depth(self, top=None, base=None):
         """
-        Slice the CoreColumn between `top` and `base`, if possible to do so.
+        Slice the CoreColumn between `top` and `base`, if it would have an effect and is possible to do so.
         """
         top = top or self.top
         base = base or self.base
