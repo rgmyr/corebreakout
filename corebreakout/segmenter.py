@@ -45,8 +45,6 @@ class CoreSegmenter:
         Path to saved weights file of corresponding model
     model_config : mrcnn.Config, optional
         MRCNN configuration object, default=corebreakout.defaults.DefaultConfig.
-    column_order :
-    column_top :
     """
     def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig):
 
