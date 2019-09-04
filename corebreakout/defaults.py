@@ -24,7 +24,7 @@ COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 TRAIN_DIR = MODEL_DIR / 'pretrain'
 
 
-#weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
+# weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
 # Original:
 # mrcnn_weights_path = os.path.join(mrcnn_model_dir, 'core20180801T1515/mask_rcnn_core_0066.h5')
 
@@ -35,16 +35,16 @@ TRAIN_DIR = MODEL_DIR / 'pretrain'
 
 CLASSES = ['col', 'tray']
 
-LAYOUT_ARGS = {
-    'order' : 't2b',
-    'orientation' : 'l2r',
-    'col_height' : 1.0,
+LAYOUT_PARAMS = {
+    'order' : 't2b',            # depth order by which to sort set of columns
+    'orientation' : 'l2r',      # depth orientation of each individual column
+    'col_height' : 1.0,         # standard height of each column, or tray, etc.
 }
 
 
 class DefaultConfig(Config):
     """
-    Override some default Mask_RCNN `Config` values.
+    Override some default Mask_RCNN `Config` values. Also add layout
 
     See: https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
     """
@@ -70,12 +70,12 @@ class DefaultConfig(Config):
     DETECTION_MAX_INSTANCES = 6
     DETECTION_MIN_CONFIDENCE = 0.95
 
-    # Number of train/test images, respectively
+    # Default number of train/test images, respectively
     STEPS_PER_EPOCH = 17
     VALIDATION_STEPS = 3
 
     # Modify loss weights for more precise optimization
-    # Should we lower 'class' losses perhaps?
+    # Few classes present, so we lower `class` losses
     LOSS_WEIGHTS = {
         "rpn_class_loss": 0.1,
         "rpn_bbox_loss": 1.,
