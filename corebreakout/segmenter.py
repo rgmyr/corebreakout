@@ -44,11 +44,13 @@ class CoreSegmenter:
     weights_path : str or Path
         Path to saved weights file of corresponding model
     model_config : mrcnn.Config, optional
-        MRCNN configuration object, default=corebreakout.defaults.DefaultConfig.
+        MRCNN configuration object, default=`corebreakout.defaults.DefaultConfig`.
     """
-    def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig):
+    def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig, classes=defaults.CLASSES, layout_params={}):
 
         self.model_config = model_config
+
+        self.layout_params = {**defaults.LAYOUT_PARAMS, **layout_params}
 
         print(f'Building MRCNN model from directory: {str(model_dir)}')
         self.model = modellib.MaskRCNN(mode='inference',
@@ -111,6 +113,7 @@ class CoreSegmenter:
                              ['BG', 'core_column'], preds['scores'], figsize=(15,15))
 
         # TODO: deal with overlapping/seperated single columns?
+        # Also need to differntiate `column`s from other classes
         labels = utils.masks_to_labels(preds['masks'])
 
         #regions = layout.sort_regions(measure.regionprops(labels), 't2b')
