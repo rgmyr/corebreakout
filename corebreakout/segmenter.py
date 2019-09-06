@@ -61,7 +61,7 @@ class CoreSegmenter:
         self.model.load_weights(weights_path, by_name=True)
 
 
-    def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout_args=defauls.LAYOUT_ARGS, show=False):
+    def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout_args=defaults.LAYOUT_PARAMS, show=False):
         """
         Detect and segment core columns in `img`, return stacked CoreColumn instance.
 

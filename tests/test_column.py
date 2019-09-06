@@ -8,9 +8,9 @@ from skimage import io, color
 from corebreakout import CoreColumn
 
 # Example (unmasked) single-column images
-img1 = io.imread('data/column1.jpeg')       # shape = (6070, 782, 3)
-img2 = io.imread('data/column2.jpeg')       # shape = (5917, 779, 3)
-img3 = io.imread('data/column3.jpeg')       # shape = (4469, 803, 3)
+img1 = io.imread('tests/data/column1.jpeg')       # shape = (6070, 782, 3)
+img2 = io.imread('tests/data/column2.jpeg')       # shape = (5917, 779, 3)
+img3 = io.imread('tests/data/column3.jpeg')       # shape = (4469, 803, 3)
 
 
 def test_construction():
