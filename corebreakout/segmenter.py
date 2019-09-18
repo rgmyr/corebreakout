@@ -24,11 +24,12 @@ from corebreakout import mrcnn_model
 from corebreakout import utils, defaults, layout
 
 # There seem to be two slightly different offsets
+# Eventually we should get away from this, maybe by also detecting core box boundaries
+
 endpts = {
     'A': (815, 6775),
     'B': (325, 6600)
 }
-# Eventually we should get away from this, maybe by also detecting core box boundaries
 
 
 class CoreSegmenter:
@@ -78,8 +79,8 @@ class CoreSegmenter:
         add_tol : float, optional
             Tolerance for adding discontinuous columns. Default=None results in tolerance ~ image resolution.
         add_mode : one of {'fill', 'collapse'}, optional
-            Add mode for generated CoreColumn instances (see CoreColumn docs)
-            For columns with a gap <= add_tol, an empty column will be inserted between them.
+            Add mode for generated `CoreColumn` instances (see `CoreColumn` docs)
+            For columns with a gap <= `add_tol`, an empty column will be inserted between them.
         layout : char, one of {'A', 'B'}, optional
             Character specifying which "layout" to assume. Key in dictionary containing
             tuples of (L, R) column endpts as values, default='A'.

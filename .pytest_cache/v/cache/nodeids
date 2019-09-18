@@ -1,5 +1,0 @@
-[
-  "tests/test_column.py::test_construction",
-  "tests/test_column.py::test_addition",
-  "tests/test_column.py::test_slicing"
-]

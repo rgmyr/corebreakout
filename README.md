@@ -1,12 +1,74 @@
 # `corebreakout`
 
-Mask-RCNN based segmentation of geological core images and assembly of depth-labeled image datasets.
+Python package built on `matterport/Mask\_RCNN` for segmentation, stacking, and depth alignment of geological core image datasets.
 
-Will include a general pre-trained model and tools for (re-)training with novel datasets.
+- Include a general pretrained model and tools for (re-)training with novel datasets.
+- **other features**
 
-Moving from "BlueLabel" painting-based labeling utilities to the more common polygon annotation format. Plenty of resources for polygons out there, and it's less finicky about exact colors and things. Probably should have just done it that way to begin with, but oh well.
+### TODO
 
-*Question*: should processed core labeling tools (XML scripts, `striplog` figure tracks, etc.) be part of this package, or `coremdlr`?
+- Label an additional ~10 images
+
+- Finish image layout + manipulation utilities, fully integrate into `CoreSegmenter` (do slight refactoring of methods)
+
+- Move `CorePlotter` or parts of it into this package (check tick generation though -- make sure it works with `mode='collapse'`)
+
+- Write tutorials: one for building/training models, one for performing inference and processing datasets
+
+- Clean up `scripts/` and `notebooks` directories
+
+- Finishing writing `pytest` files
+
+
+## Target Platform
+
+This package was developed and tested under Linux (Ubuntu). It may work on other platforms, but probably requires adjustment of some configuration file parameters (e.g., file system conventions for Windows).
+
+
+## Requirements
+
+The following packages are required with installation:
+
+- numpy
+- matplotlib
+- scikit-image
+- tensorflow
+- matterport/Mask\_RCNN
+- pycocotools
+
+Third party tools are necessary for labeling new training images. There is built-in support for the default polygonal JSON annotation format of `labelme`, but any instance segmentation annotation format should be workable if the user is willing to write their own subclass of `mrcnn.utils.Dataset`.
+
+**Post-labeling tools?**
+
+
+## Installation
+
+**Download:**
+
+```
+$ git clone https://github.com/rgmyr/corebreakout.git
+```
+
+**Install:**
+
+```
+$ cd corebreakout
+```
+And then use `pip`:
+```
+$ pip install -e .
+```
+**or** run setup:
+```
+$ python setup.py install
+```
+
+Develop mode installation (`pip install -e .`) is recommended, since most users will want to change some parameters in the source code to suit their particular dataset of interest without having to reinstall, but it is not required.
+
+
+## Tutorial
+
+See the `tutorial` folder for notebooks demonstrating model training and usage.
 
 
 ### Additional object types for detection
@@ -16,21 +78,17 @@ One feature that could make this package more generally useful would be to have 
 I can see four basic options, each of which may work better or worse for any particular dataset:
 
 - The hard-coded way we do it now. User specifies "layout(s)" that define the start/end of the core trays. This is a bit more of a hassle and probably sub-optimal, but it works well enough when the camera and tray positions are consistent.
-- Taking the min/max of all the detected columns in an image. This would probably work well for times where you're pretty certain that at least one tray in each image will contain a full column worth of core, and there aren't shadows from tray edges.
-- Detecting the core `box` as a separate object, and using its bounding box to set the limits. This would work well for datasets with distinctive whole boxes (rather than e.g., partially occluded single trays), and where the core doesn't run over the edges of the boxes/trays too much.
-- Detecting `scale` objects. This would similarly work well for datasets with distinctive scales that have relatively good contrast against the background (and that actually line up with the core trays).
+- Taking the min/max of all the detected columns in an image. This would probably work well for times where you're pretty certain that at least one tray in each image will contain a full column worth of core.
+- Detecting the core `box` as a seperate object, and using its bounding box to set the limits. This would work well for datasets with distinctive whole boxes (rather than e.g., partially occluded single trays), and where the core doesn't run over the edges of the boxes/trays too much.
+- Detecting `scale` objects. This would similarly work well for datasets with distinctive scales that have relatively good constrast against the background (and that line up well with the actual core trays).
 
-It wouldn't be too hard to include these as options, especially since `box` and `scale` would use pretty much (if not exactly) the same logic. Ultimately then it would be up to the user to decide which option is best for their dataset and whether they want to spend time labeling those extra objects.
+It wouldn't be too hard to include these as options, especially since `box` and `scale` would use pretty much (if not exactly) the same logic. Ultimately then it would be up to the user to decide which option is best for their dataset and whether they want to spend time labeling extra objects.
 
 
 ### Other TODO
 
-- Label some  more varied data from `pretrained/data/` (using `labelme`) and test out the new `PolygonDataset` class
+- Label some varied data from `pretrained/data/` (use `labelme` for polygon annotations)
 
-- Build small `train` and `test` sets with new data
+- Build `train` and `test` sets with new data, train some new models on it
 
-- Put (re-)training utilities into a script, test it out with the new data
-
-- Move (parts of) `CorePlotter` into this package for viz (check tick generation -- make sure it works with `mode='collapse'`)
-
-- Start on a write up for JOSS submission (?)
+- Move `CorePlotter` or parts of it into this package (check tick generation though -- make sure it works with `mode='collapse'`)
