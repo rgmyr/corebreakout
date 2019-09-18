@@ -1,5 +1,6 @@
 *.ipynb_checkpoints*
 *__pycache__*
+*pytest_cache*
 
 # exclude pretrained COCO mrcnn model
 include/pretrain/models/*

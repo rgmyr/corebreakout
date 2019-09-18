@@ -1,18 +1,23 @@
-import glob
+"""
+Script utilizing `pytesseract` to extract top + base depths from image text.
+"""
 import os
 import re
+import glob
 import argparse
+
+import pytesseract
+from skimage import io
+import pandas as pd
 import matplotlib.pyplot as plt
 
-from skimage import io
-import pytesseract
-import pandas as pd
-
+# Tesseract arguments
 tesseract_config = '-psm 6'
 
+text_bbox = (200, 400)
 
 def truncate(f, n):
-    '''Truncates/pads a float f to n decimal places without rounding'''
+    """Truncates or pads a float `f` to `n` decimal places without rounding."""
     if isinstance(f, float):
         s = '{}'.format(f)
     else:
@@ -25,16 +30,17 @@ def truncate(f, n):
 
 def depth_range_from_img(img, inspect):
     # defaults for now, seems to work for both layouts in schiehallion
-    cropper = lambda x: x[200:400,2200:2800]
+    crop_fn = lambda x: x[200:400,2200:2800]
 
     if isinstance(img, str):
         img = io.imread(img)
 
-    chars = pytesseract.image_to_string(cropper(img), config=tesseract_config)
+    chars = pytesseract.image_to_string(crop_fn(img), config=tesseract_config)
     numbers = [truncate(number,2) for number in re.findall('\d+\.\d+', chars)]
+
     if len(numbers) < 2:
         if inspect:
-            print("PROBLEM WITH THIS FILE, filling in 0's")
+            print('PROBLEM WITH THIS FILE, filling in 0\'s')
             print(chars)
             plt.imshow(cropper(img))
             plt.show()
@@ -78,7 +84,7 @@ if __name__ == '__main__':
         '--force',
         dest='force',
         action='store_true',
-        help="Flag for forcing overwrite of any existing auto_depths.csv files"
+        help="Flag to force overwrite of any existing auto_depths.csv files"
     )
     parser.add_argument(
         '--inspect',

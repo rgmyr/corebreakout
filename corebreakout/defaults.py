@@ -41,12 +41,17 @@ LAYOUT_PARAMS = {
     'col_height' : 1.0,         # standard height of each column, or tray, etc.
 }
 
+####++++++++++++++++++++++####
+#### Default Model Config ####
+####++++++++++++++++++++++####
 
 class DefaultConfig(Config):
-    """
+    """M-RCNN model configuration.
+
     Override some default Mask_RCNN `Config` values. Also add layout
 
-    See: https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
+    For available parameters and explanations, see:
+        https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
     """
     NAME = 'cb_default'
 
