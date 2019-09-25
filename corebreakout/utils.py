@@ -52,6 +52,11 @@ def region_crop(img, labels, region, axis=0, endpts=(815, 6775)):
         Which axis to change `endpts` along, default=0 (y-coordinates)
     endpts : tuple(int)
         Most extreme endpoint coordinates allowed along `axis`
+
+    Returns
+    -------
+    region : array
+        Masked image region, cropped in (adjusted) bounding box
     """
     r0, c0, r1, c1 = region.bbox
 
@@ -67,7 +72,7 @@ def region_crop(img, labels, region, axis=0, endpts=(815, 6775)):
 
 def vstack_images(imgA, imgB):
     """
-    Stack `imgA` and `imgB` arrays, after RHS zero-padding the narrower of the two, if necessary.
+    Stack `imgA` and `imgB` arrays vertically, after RHS zero-padding the narrower if necessary.
     """
     dimA, dimB = imgA.ndim, imgB.ndim
     assert dimA == dimB, f'Cannot vstack images of different dimensions: {(dimA, dimB)}'

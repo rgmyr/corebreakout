@@ -38,7 +38,8 @@ CLASSES = ['col', 'tray']
 LAYOUT_PARAMS = {
     'order' : 't2b',            # depth order by which to sort set of columns
     'orientation' : 'l2r',      # depth orientation of each individual column
-    'col_height' : 1.0,         # standard height of each column, or tray, etc.
+    'col_height' : 1.0,         # assumed height of each column, or tray, etc.
+    'endpts' : 'tray'           # name of class, or 2-tuple of explicit pixel rows/cols
 }
 
 ####++++++++++++++++++++++####
@@ -64,6 +65,7 @@ class DefaultConfig(Config):
     RPN_ANCHOR_SCALES = (64, 128, 192, 320, 352)
 
     # < 1 : wide anchor, > 1 : tall anchor
+    # These defaults assume horizontal (wide) columns
     RPN_ANCHOR_RATIOS = [0.1, 0.4, 0.7, 1]
 
     # Non-max suppresion threshold. Increasing generates more proposals.

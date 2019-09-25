@@ -7,14 +7,13 @@ TODO:
     - allow other orientations + object classes in `segment` method
 """
 from pathlib import Path
+from functools import reduce
+from operator import add
+from math import ceil
 
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, morphology, measure
-
-from functools import reduce
-from operator import add, mul
-from math import ceil
 
 import mrcnn.model as modellib
 from mrcnn.visualize import display_instances
@@ -33,22 +32,27 @@ endpts = {
 
 
 class CoreSegmenter:
-    """
-    Mask-RCNN model container for extraction and stacking of columns from core images.
+    """Mask-RCNN model container for extraction and aggregation of columns from core images.
 
     `model_dir` and `weights_path` must be passed to constructor.
-
-    Parameters
-    ----------
-    model_dir : str or Path
-        Path to saved MRCNN model directory
-    weights_path : str or Path
-        Path to saved weights file of corresponding model
-    model_config : mrcnn.Config, optional
-        MRCNN configuration object, default=`corebreakout.defaults.DefaultConfig`.
     """
     def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig, classes=defaults.CLASSES, layout_params={}):
-
+        """
+        Parameters
+        ----------
+        model_dir : str or Path
+            Path to saved MRCNN model directory
+        weights_path : str or Path
+            Path to saved weights file of corresponding model
+        model_config : mrcnn.Config, optional
+            MRCNN configuration object, default=`corebreakout.defaults.DefaultConfig`.
+        classes : list, optional
+            List of class names. Should be in same order as the `Dataset` that the model
+            was trained on, default=`corebreakout.defaults.CLASSES`.
+        layout_params : dict, optional
+            Any layout parameters to override, default=`corebreakout.defaults.LAYOUT_PARAMS`.
+            See `defaults.py` for an explanation and options for each parameter.
+        """
         self.model_config = model_config
 
         self.layout_params = {**defaults.LAYOUT_PARAMS, **layout_params}
@@ -62,7 +66,7 @@ class CoreSegmenter:
         self.model.load_weights(weights_path, by_name=True)
 
 
-    def segment(self, img, depth_range, col_height=1.0, add_tol=None, add_mode='fill', layout_args=defaults.LAYOUT_PARAMS, show=False):
+    def segment(self, img, depth_range, add_tol=None, add_mode='fill', layout_params={}, show=False):
         """
         Detect and segment core columns in `img`, return stacked CoreColumn instance.
 
@@ -80,10 +84,8 @@ class CoreSegmenter:
             Tolerance for adding discontinuous columns. Default=None results in tolerance ~ image resolution.
         add_mode : one of {'fill', 'collapse'}, optional
             Add mode for generated `CoreColumn` instances (see `CoreColumn` docs)
-            For columns with a gap <= `add_tol`, an empty column will be inserted between them.
-        layout : char, one of {'A', 'B'}, optional
-            Character specifying which "layout" to assume. Key in dictionary containing
-            tuples of (L, R) column endpts as values, default='A'.
+        layout : dict, optional
+            Any layout parameters to override.
         show : boolean, optional
             Set to True to show images/masks at each step
 
@@ -134,3 +136,20 @@ class CoreSegmenter:
         img_col = reduce(add, cols)
 
         return img_col
+
+
+    def _check_layout_params(self):
+        """Make sure all values in `self.layout_params` are valid."""
+        lp = self.layout_params
+
+        # Check `order` and `orientation` validity
+        assert lp['order'] in layout.ORIENTATIONS, f'{lp['order']} not a valid layout `order`.'
+        assert lp['orientation'] in layout.ORIENTATIONS, f'{lp['orientation']} not a valid layout `orientation`.'
+        assert lp['order'] != lp['orientation'], 'layout `order` and `orientation` cannot be the same.'
+
+        # Check `endpts` validity
+        endpts = lp['endpts']
+        if type(endpts) is str:
+            assert endpts in self.CLASSES, f'{endpts} is not in {self.CLASSES}.'
+        elif type(endpts) is tuple:
+            assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
