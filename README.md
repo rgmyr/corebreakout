@@ -58,12 +58,12 @@ And then use `pip`:
 ```
 $ pip install -e .
 ```
-**or** run setup:
+**OR** run `setup.py`:
 ```
 $ python setup.py install
 ```
 
-Develop mode installation (`pip install -e .`) is recommended, since most users will want to change some parameters in the source code to suit their particular dataset of interest without having to reinstall, but it is not required.
+Develop mode installation (`pip install -e .`) is recommended, since most users will want to change some parameters in the source code to suit their particular dataset of interest without having to reinstall afterward -- but it is not required.
 
 
 ## Tutorial
