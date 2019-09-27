@@ -39,6 +39,7 @@ LAYOUT_PARAMS = {
     'order' : 't2b',            # depth order by which to sort set of columns
     'orientation' : 'l2r',      # depth orientation of each individual column
     'col_height' : 1.0,         # assumed height of each column, or tray, etc.
+    'col_class' : 'col',        # name of class for sample material columns
     'endpts' : 'tray'           # name of class, or 2-tuple of explicit pixel rows/cols
 }
 
@@ -49,7 +50,7 @@ LAYOUT_PARAMS = {
 class DefaultConfig(Config):
     """M-RCNN model configuration.
 
-    Override some default Mask_RCNN `Config` values. Also add layout
+    Override some default Mask_RCNN `Config` values.
 
     For available parameters and explanations, see:
         https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py

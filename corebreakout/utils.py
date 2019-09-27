@@ -6,11 +6,11 @@ import numpy as np
 from mrcnn.visualize import display_instances
 
 
-def show_preds(img, preds, dataset, figsize=(15,15)):
+def show_preds(img, preds, class_names, figsize=(15,15)):
     """
     Less verbose wrapper for `mrcnn.visualize.display_instances`
     """
-    display_instances(img, preds['rois'], preds['masks'], preds['class_ids'], dataset.class_names, preds['scores'], figsize=figsize)
+    display_instances(img, preds['rois'], preds['masks'], preds['class_ids'], class_names, preds['scores'], figsize=figsize)
 
 
 def v_overlapping(r0, r1):
@@ -51,7 +51,7 @@ def region_crop(img, labels, region, axis=0, endpts=(815, 6775)):
     axis : int, optional
         Which axis to change `endpts` along, default=0 (y-coordinates)
     endpts : tuple(int)
-        Most extreme endpoint coordinates allowed along `axis`
+        Least extreme endpoint coordinates allowed along `axis`
 
     Returns
     -------
