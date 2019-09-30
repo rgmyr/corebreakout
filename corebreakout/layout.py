@@ -9,20 +9,19 @@ ORIENTATIONS = ['t2b', 'l2r']
 
 
 def sort_regions(regions, order):
-    """
-    Sort `skimage` regions (core columns), given the column `order` orientation
-    """
+    """Sort skimage `regions` (core columns), given the column `order`."""
     assert order in ORIENTATIONS, f'order {order} must be one of {ORIENTATIONS}'
+
     idx = 0 if order is 't2b' else 1
     regions.sort(key=lambda x: x.bbox[idx])
+
     return regions
 
 
 def transform_region(region_img, orientation):
-    """
-    Transform individual cropped `region_img` (core column), given the depth orientation
-    """
+    """Transform cropped `region_img` (core column), given the depth `orientation`."""
     assert orientation in ORIENTATIONS, f'orientation {orientation} must be one of {ORIENTATIONS}'
+
     if orientation is 't2b':
         return region_img
     elif orientation is 'l2r':
@@ -30,8 +29,7 @@ def transform_region(region_img, orientation):
 
 
 def crop_region(img, labels, region, axis=0, endpts=(815, 6775)):
-    """
-    Adjust region bbox and return cropped region * mask.
+    """Adjust region bbox and return cropped region * mask.
 
     Parameters
     ----------
