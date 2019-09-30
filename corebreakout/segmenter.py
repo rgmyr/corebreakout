@@ -16,10 +16,9 @@ import matplotlib.pyplot as plt
 from skimage import io, morphology, measure
 
 import mrcnn.model as modellib
-from mrcnn.utils import Dataset as mrcnn_Dataset
+#from mrcnn.utils import Dataset as mrcnn_Dataset
 
 from corebreakout import CoreColumn
-from corebreakout import mrcnn_model
 from corebreakout import defaults, datasets, layout, utils
 
 # There seem to be two slightly different offsets
@@ -32,11 +31,11 @@ endpts = {
 
 
 class CoreSegmenter:
-    """Mask-RCNN model container for extraction and aggregation of columns from core images.
+    """Mask-RCNN model container for extraction + aggregation of columns from core images.
 
     `model_dir` and `weights_path` must be passed to constructor.
     """
-    def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig, class_names=defaults.CLASSES, layout_params={}):
+    def __init__(self, model_dir, weights_path, model_config=defaults.DefaultConfig(), class_names=defaults.CLASSES, layout_params={}):
         """
         Parameters
         ----------
@@ -46,6 +45,7 @@ class CoreSegmenter:
             Path to saved weights file of corresponding model
         model_config : mrcnn.Config, optional
             MRCNN configuration object, default=`corebreakout.defaults.DefaultConfig`.
+            Note: `Config` object should be initialized so that all required attrs exist.
         dataset : mrcnn.utils.Dataset, optional
             An instance of `Dataset` or subclass to use for class names, etc. If None,
             will attempt to use a `PolygonDataset` with default parameters.
@@ -63,7 +63,7 @@ class CoreSegmenter:
             assert class_names[0] == 'BG', 'Background `BG` must be first in `class_names`'
             self.class_names = class_names
 
-        # Set defaults and check validity of new params via setter
+        # Set defaults and check validity of any new params via setter
         self._layout_params = defaults.LAYOUT_PARAMS
         self.layout_params = layout_params
 
@@ -71,10 +71,11 @@ class CoreSegmenter:
         print(f'Building MRCNN model from directory: {str(model_dir)}')
         self.model = modellib.MaskRCNN(mode='inference',
                                       config=self.model_config,
-                                      model_dir=model_dir)
+                                      model_dir=str(model_dir))
 
         print(f'Loading model weights from file: {str(weights_path)}')
-        self.model.load_weights(weights_path, by_name=True)
+        self.model.load_weights(str(weights_path), by_name=True)
+
 
     @property
     def layout_params(self):
@@ -85,6 +86,8 @@ class CoreSegmenter:
         self._layout_params.update(new_params)
         self._check_layout_params()
         self.column_class_id = self.class_names.index(self.layout_params['col_class'])
+
+        # If endpts is class, get the corresponding `id` number
         if self.endpts_is_class:
             self.endpts_class_id = self.class_names.index(self.layout_params['endpts'])
 
@@ -120,13 +123,13 @@ class CoreSegmenter:
         if min(depth_range) == 0.0 or depth_range[1]-depth_range[0] == 0.0:
             raise UserWarning(f'depth_range {depth_range} is suspect... make you are passing valid depths.')
 
-        # If `img` points to file, read it. Otherwise assumed to be valid array.
+        # If `img` points to file, read it. Otherwise assumed to be valid image array.
         if isinstance(img, (str, Path)):
             print(f'Reading file: {img}')
             img = io.imread(img)
 
         # Set up expected number of columns and their individual depths
-        col_height = layout_args['col_height']
+        col_height = self.layout_params['col_height']
         num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
         col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
         col_bots = [top+col_height for top in col_tops]
@@ -136,8 +139,16 @@ class CoreSegmenter:
         if show:
             utils.show_preds(img, preds, self.class_names)
 
-        # Select masks for column class, convert to 2D labels array
+        # Select masks for column class
         col_masks = preds['masks'][:,:,preds['class_ids']==self.column_class_id]
+
+        # Check that number of columns matches expectation
+        num_cols = col_masks.shape[-1]
+        if num_cols != num_expected:
+            raise UserWarning(f'Number of detected columns {num_cols} does not match \
+                             expectation of {num_expected}')
+
+        # Convert 3D binary masks to 2D integer labels array
         col_labels = utils.masks_to_labels(col_masks)
 
         # Get sorted `skimage` regions for column masks
@@ -146,19 +157,30 @@ class CoreSegmenter:
         # Figure out crop endpoints, set related args
         crop_axis = 0 if self.layout_params['orientation'] == 'l2r' else 1
 
-        if self.endpts_is_class:
-            measure_idxs = np.where(preds['class_ids'] == self.endpts_class_id)
+        # Set up `endpts` for later cropping adjustment
+        if self.endpts_is_auto:
+            endpts = self._get_auto_endpts(col_regions, crop_axis)
+
+        elif self.endpts_is_class:
+            measure_idxs = np.where(preds['class_ids'] == self.endpts_class_id)[0]
             # If object not detected, then ignore for cropping
             if measure_idxs.size == 0:
-                crop_axis, endpts = None, None
+                print('`endpts` class not detected, cropping will use `auto` method')
+                endpts = self._get_auto_endpts(col_regions, crop_axis)
             # Otherwise, use bbox of instance with highest confidence score
             else:
                 best_idx = measure_idxs[np.argmax(preds['scores'][measure_idxs])]
-                measure_bbox = measure.regionprops(preds['masks'][:,:,best_idx])[0].bbox
+                measure_bbox = measure.regionprops((preds['masks'][:,:,best_idx]).astype(np.int))[0].bbox
                 if crop_axis is 0:
-                    endpts = (measure_bbox[1], mesaure_bbox[3])
+                    endpts = (measure_bbox[1], measure_bbox[3])
                 else:
                     endpts = (measure_bbox[0], measure_bbox[2])
+
+        elif self.endpts_is_coords:
+            endpts = self.layout_params['endpts']
+
+        else:
+            crop_axis, endpts = None, None
 
         # Set single argument lambda functions to apply to column regions / region images
         crop_fn = lambda region: layout.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
@@ -179,25 +201,38 @@ class CoreSegmenter:
         return reduce(add, cols)
 
 
+    def _get_auto_endpts(self, col_regions, crop_axis):
+        """Find min/max of detected column masks along crop_axis to set endpoints."""
+        low_idx = 0 if crop_axis == 1 else 1
+        high_idx = 2 if crop_axis == 1 else 3
+
+        low = min(r.bbox[low_idx] for r in col_regions)
+        high = max(r.bbox[high_idx] for r in col_regions)
+
+        return (low, high)
+
+
     def _check_layout_params(self):
         """Make sure all values in `self.layout_params` are valid, set related boolean attributes."""
         lp = self.layout_params
 
         # Check `order` and `orientation` validity
-        assert lp['order'] in layout.ORIENTATIONS, f'{lp['order']} not a valid layout `order`.'
-        assert lp['orientation'] in layout.ORIENTATIONS, f'{lp['orientation']} not a valid layout `orientation`.'
+        assert lp['order'] in layout.ORIENTATIONS, f'{lp["order"]} not a valid layout `order`.'
+        assert lp['orientation'] in layout.ORIENTATIONS, f'{lp["orientation"]} not a valid layout `orientation`.'
         assert lp['order'] != lp['orientation'], 'layout `order` and `orientation` cannot be the same.'
 
         # Check that column class exists in provided class names
         assert lp['col_class'] in self.class_names, '`col_class` must be present in `class_names`'
 
-        # Check `endpts` validity; may be name of class or 2-tuple of endpts
+        # Check `endpts` validity; may be a name of class or a 2-tuple of endpts
         endpts = lp['endpts']
+        if str(endpts).lower() == 'auto':
+            self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = True, False, False
         if type(endpts) is str:
             assert endpts in self.class_names, f'{endpts} is not in {self.class_names}.'
-            self.endpts_is_class, self.endpts_is_coords = True, False
+            self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, True, False
         elif type(endpts) is tuple:
             assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
-            self.endpts_is_class, self.endpts_is_coords = False, True
-        else:
-            raise TypeError(f'`endpts` must be a class name or 2-tuple, not {type(endpts)}')
+            self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, False, True
+        elif endpts is not None:
+            raise TypeError(f'`endpts` must be class name, 2-tuple, \'auto\', or None, not {type(endpts)}')

@@ -6,13 +6,14 @@ TODO:
 """
 import numpy as np
 import pandas as pd
+from matplotlib import ticker
+import matplotlib.pyplot as plt
 
 from corebreakout import utils
 
 
 class CoreColumn:
-    """
-    Container for depth-registered, single-column images of core material.
+    """Container for depth-registered, single-column images of core material.
 
     `CoreColumn`s can be stacked via the __add__ operator, using `add_mode` from LHS instance,
     and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.
@@ -43,14 +44,17 @@ class CoreColumn:
 
         self.img = img    # img.setter called
 
-        assert depths or (top and base), 'Must specify either `depths` or `top` and `base`'
+        depths_given = depths is not None
+        top_given, base_given = top is not None, base is not None
 
-        if not depths:
+        assert depths_given or (top_given and base_given), 'Must specify either `depths` or `top` and `base`'
+
+        if not depths_given:
             self.top, self.base = top, base
             eps = (base - top) / (2 * self.height)
             self.depths = np.linspace(top+eps, base-eps, num=self.height)
 
-        elif not (top and base):
+        elif not (top_given and base_given):
             self.depths = depths
             eps = (depths[-1] - depths[0]) / (2 * self.height)
             self.top = depths[0] - eps
@@ -173,20 +177,110 @@ class CoreColumn:
         elif depth_diff > self.add_tol:
             raise UserWarning(f'Gap of {depth_diff} greater than `LHS.add_tol`: {self.add_tol}!')
 
-        # if 'fill', extend `self.img` and `self.depths` to fill the gap
+        # If 'fill' mode, extend `self.img` and `self.depths` to fill any gap
         if self.add_mode is 'fill':
             fill_dd = (self.dd + other.dd) / 2
-            fill_rows = depth_diff // fill_dd
+            fill_rows = int(depth_diff // fill_dd)
 
-            fill_depths = np.linspace(self.depths[-1]+fill_dd, other.depths[0]-fill_dd, num=fill_rows)
-            fill_img = np.zeros((fill_rows, self.width, self.channels), dtype=self.img.dtype)
+            if fill_rows > 0:
+                fill_depths = np.linspace(self.depths[-1]+fill_dd, other.depths[0]-fill_dd, num=fill_rows)
+                fill_img = np.zeros((fill_rows, self.width, self.channels), dtype=self.img.dtype)
 
-            self.img = utils.vstack_images(self.img, fill_img)
-            self.depths = np.concatenate(self.depths, fill_depths)
-
+                self.img = utils.vstack_images(self.img, fill_img)
+                self.depths = np.concatenate(self.depths, fill_depths)
 
         return CoreColumn(utils.vstack_images(self.img, other.img),
                          depths = np.concatenate([self.depths, other.depths]),
                          top = self.top, base = other.base,
                          add_tol = max(self.add_tol, other.add_tol),
                          add_mode = self.add_mode)
+
+
+    ###+++++++++++++++++++###
+    ###  Column Plotting  ###
+    ###+++++++++++++++++++###
+
+    def plot(self, figsize=(15, 650), **kwargs):
+        """Make an image figure with major and minor depth ticks.
+
+        Parameters
+        ----------
+        figsize : tuple(int)
+            Size of matplotlib figure to plot on.  Note: at default DPI of 100, 650 is
+            about as large as common image formats will support saving.
+        **kwargs:
+            Parameters for tick creation and appearance: 'major' and 'minor' options for
+            `*_precision`, `*_format_str`, `*_tick_size`. See `_make_image_ticks()` docs.
+
+        Returns
+        -------
+        fig, ax
+            Matplotlib figure and axis with image + ticks plotted.
+        """
+        fig, ax = plt.subplots(figsize=figsize)
+
+        major_ticks, major_locs, minor_ticks, minor_locs = self._make_image_ticks(**kwargs)
+
+        ax.yaxis.set_major_formatter(ticker.FixedFormatter((major_ticks)))
+        ax.yaxis.set_major_locator(ticker.FixedLocator((major_locs)))
+
+        ax.yaxis.set_minor_formatter(ticker.FixedFormatter((minor_ticks)))
+        ax.yaxis.set_minor_locator(ticker.FixedLocator((minor_locs)))
+
+        ax.tick_params(which='major', labelsize=kwargs.get('major_tick_size', 16), color='black')
+        ax.tick_params(which='minor', labelsize=kwargs.get('minor_tick_size',  8), color='gray')
+
+        ax.set_xticks([], [])
+        ax.grid(False)
+
+        ax.imshow(self.img)
+
+        return fig, ax
+
+
+    def _make_image_ticks(self, major_precision=0.1,
+                          major_format_str='{:.1f}',
+                          minor_precision=0.01,
+                          minor_format_str='{:.2f}'):
+        """Generate major & minor (ticks, locs) for image axis.
+
+        Parameters
+        ----------
+        *_precision : float, optional
+            Major, minor tick spacing (in depth units), defaults=0.1, 0.01.
+        *_format_str : str, optional
+            Format strings to coerce depths -> tick strings, defaults='{:.1f}', '{:.2f}'.
+
+        Returns
+        -------
+        major_ticks, major_locs, minor_ticks, minor_locs
+
+        *_ticks : lists of tick strings
+        *_locs : lists of tick locations in image coordinates (fractional row indices)
+        """
+        # lambdas to convert values --> strs
+        major_fmt_fn = lambda x: major_format_str.format(x)
+        minor_fmt_fn = lambda x: minor_format_str.format(x)
+
+        major_ticks, major_locs = [], []
+        minor_ticks, minor_locs = [], []
+
+        # remainders w.r.t. precision
+        major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
+        minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
+
+        for i in np.arange(1, self.height+1):
+
+            if np.argmin(major_rmndr[i-1:i+2]) == 1:
+                major_ticks.append(major_fmt_fn(self.depths[i-1]))
+                major_locs.append(i)
+
+            elif np.argmin(minor_rmndr[i-1:i+2]) == 1:
+                if major_ticks[-1]+'0' == minor_fmt_fn(self.depths[i-1]):
+                    # fixes some overlapping ticks, BUT not robust
+                    # enough for all possible precision combos
+                    continue
+                minor_ticks.append(minor_fmt_fn(self.depths[i-1]))
+                minor_locs.append(i)
+
+        return major_ticks, major_locs, minor_ticks, minor_locs

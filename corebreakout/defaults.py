@@ -67,7 +67,8 @@ class DefaultConfig(Config):
 
     # < 1 : wide anchor, > 1 : tall anchor
     # These defaults assume horizontal (wide) columns
-    RPN_ANCHOR_RATIOS = [0.1, 0.4, 0.7, 1]
+    # Note: starting from COCO model requires exactly 3 anchor ratios
+    RPN_ANCHOR_RATIOS = [0.1, 0.5, 0.9]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
     RPN_NMS_THRESHOLD = 0.7
@@ -79,11 +80,11 @@ class DefaultConfig(Config):
     DETECTION_MIN_CONFIDENCE = 0.95
 
     # Default number of train/test images, respectively
-    STEPS_PER_EPOCH = 17
-    VALIDATION_STEPS = 3
+    STEPS_PER_EPOCH = 25
+    VALIDATION_STEPS = 5
 
     # Modify loss weights for more precise optimization
-    # Few classes present, so we lower `class` losses
+    # Few classes present, so we can lower `class` losses
     LOSS_WEIGHTS = {
         "rpn_class_loss": 0.1,
         "rpn_bbox_loss": 1.,
