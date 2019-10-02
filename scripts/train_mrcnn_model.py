@@ -1,17 +1,14 @@
 """
 Train and save model from data in `include/pretrained`.
 """
-# Import Mask RCNN
-from mrcnn import utils
+import warnings
+
 import mrcnn.model as modellib
-from mrcnn.visualize import display_images, display_instances
-import mrcnn.model as modellib
-from mrcnn.model import log
 
 from corebreakout import defaults
 from corebreakout.datasets import PolygonDataset
 
-
+# Select model configuration to use
 model_config = defaults.DefaultConfig()
 
 
@@ -27,7 +24,7 @@ test_dataset.collect_annotated_images(data_root, 'test')
 test_dataset.prepare()
 
 
-# Create model in training mode
+# Build model in training mode, with COCO weights
 model = modellib.MaskRCNN(mode="training", config=model_config,
                           model_dir=str(defaults.TRAIN_DIR))
 
@@ -35,7 +32,8 @@ model.load_weights(str(defaults.COCO_MODEL_PATH), by_name=True,
                    exclude=["mrcnn_class_logits", "mrcnn_bbox_fc",
                             "mrcnn_bbox", "mrcnn_mask"])
 
-
+# Three step training proces
+# For the BGS dataset, seems to be diminishing returns after ~100 epochs
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
@@ -53,8 +51,9 @@ with warnings.catch_warnings():
                 epochs=100,
                 layers='3+')
 
+    # Finetune all layers of the model
     print('\n\nTuning all model layers')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE / 100,
-                epochs=1000,
+                epochs=300,
                 layers='all')

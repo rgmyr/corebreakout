@@ -1,5 +1,5 @@
 """
-Utilities related to column layout and ordering.
+Utilities related to column layout, order, and cropping.
 """
 import numpy as np
 

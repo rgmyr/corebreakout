@@ -43,15 +43,14 @@ class CoreSegmenter:
             Path to saved MRCNN model directory
         weights_path : str or Path
             Path to saved weights file of corresponding model
-        model_config : mrcnn.Config, optional
-            MRCNN configuration object, default=`corebreakout.defaults.DefaultConfig`.
-            Note: `Config` object should be initialized so that all required attrs exist.
-        dataset : mrcnn.utils.Dataset, optional
-            An instance of `Dataset` or subclass to use for class names, etc. If None,
-            will attempt to use a `PolygonDataset` with default parameters.
+        model_config : `mrcnn.Config`, optional
+            Instance of MRCNN configuration object, default=`defaults.DefaultConfig()`.
+        class_names : list(str), optional
+            A list of the class names for model output. Should be in same order as in
+            the `Dataset` object that model was trained on. Default=`defaults.CLASSES`
         layout_params : dict, optional
-            Any layout parameters to override from default=`corebreakout.defaults.LAYOUT_PARAMS`.
-            See `defaults.py` for explanations and options for each parameter.
+            Any layout parameters to override from default=`defaults.LAYOUT_PARAMS`.
+            See `docs/layout_parameters.md` for explanations and options for each parameter.
         """
         self.model_config = model_config
 
@@ -99,9 +98,9 @@ class CoreSegmenter:
         Parameters
         ----------
         img : str or array
-            Filename or RGB image array to segment
+            Filename or RGB image array to segment.
         depth_range : list(float)
-            Top and bottom depths of set of columns in image
+            Top and bottom depths of set of columns in image.
         add_tol : float, optional
             Tolerance for adding discontinuous columns. Default=None results in tolerance ~ image resolution.
         add_mode : one of {'fill', 'collapse'}, optional
@@ -109,12 +108,12 @@ class CoreSegmenter:
         layout_params : dict, optional
             Any layout parameters to override.
         show : boolean, optional
-            Set to True to show images/masks at each step
+            Set to True to show image with predictions overlayed.
 
         Returns
         -------
         img_col : CoreColumn
-            Stacked/aggregated `CoreColumn` object
+            Single aggregated `CoreColumn` object
         """
         # Note: assignment calls setter to update, checks validity
         self.layout_params = layout_params
@@ -180,7 +179,11 @@ class CoreSegmenter:
             endpts = self.layout_params['endpts']
 
         else:
+            # For safety?
             crop_axis, endpts = None, None
+
+        # REMOVE LATER
+        print(f'endpoint coords: {endpts}')
 
         # Set single argument lambda functions to apply to column regions / region images
         crop_fn = lambda region: layout.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
@@ -201,13 +204,18 @@ class CoreSegmenter:
         return reduce(add, cols)
 
 
-    def _get_auto_endpts(self, col_regions, crop_axis):
-        """Find min/max of detected column masks along crop_axis to set endpoints."""
+    def _get_auto_endpts(self, regions, crop_axis):
+        """Find min/max of detected `regions` masks along `crop_axis` to set endpoints.
+
+        NOTE: as written above, `regions` would be `col_regions` only, but in
+        principle any combination of classes could be used together, which may
+        be a better option for some datasets. This may be added later.
+        """
         low_idx = 0 if crop_axis == 1 else 1
         high_idx = 2 if crop_axis == 1 else 3
 
-        low = min(r.bbox[low_idx] for r in col_regions)
-        high = max(r.bbox[high_idx] for r in col_regions)
+        low = min(r.bbox[low_idx] for r in regions)
+        high = max(r.bbox[high_idx] for r in regions)
 
         return (low, high)
 
