@@ -7,10 +7,6 @@ Python package built on `matterport/Mask\_RCNN` for segmentation, stacking, and 
 
 ### TODO
 
-- Label an additional ~10 images
-
-- Finish image layout + manipulation utilities, fully integrate into `CoreSegmenter` (do slight refactoring of methods)
-
 - Move `CorePlotter` or parts of it into this package (check tick generation though -- make sure it works with `mode='collapse'`)
 
 - Write tutorials: one for building/training models, one for performing inference and processing datasets
@@ -27,16 +23,15 @@ This package was developed and tested under Linux (Ubuntu). It may work on other
 
 ## Requirements
 
-The following packages are required with installation:
+The following packages are required:
 
-- numpy
-- matplotlib
-- scikit-image
-- tensorflow
-- matterport/Mask\_RCNN
-- pycocotools
+- `numpy`
+- `matplotlib`
+- `scikit-image`
+- `tensorflow`
+- `mrcnn` via [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN)
 
-Third party tools are necessary for labeling new training images. There is built-in support for the default polygonal JSON annotation format of `labelme`, but any instance segmentation annotation format should be workable if the user is willing to write their own subclass of `mrcnn.utils.Dataset`.
+Third party tools are necessary for labeling new training images. There is built-in support for the default polygonal JSON annotation format of the [wkentaro/labelme](https://github.com/wkentaro/labelme) graphical image annotation tool, but any instance segmentation annotation format should be workable if the user is willing to write their own subclass of `mrcnn.utils.Dataset`.
 
 **Post-labeling tools?**
 
