@@ -11,13 +11,15 @@ from skimage import io
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Tesseract arguments
-tesseract_config = '-psm 6'
+# Set Tesseract arguments
+# Docs: https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#options
+TESSERACT_CONFIG = '-psm 6'
 
-text_bbox = (200, 400)
+TEXT_BBOX = 200, 2200, 400, 2800
+
 
 def truncate(f, n):
-    """Truncates or pads a float `f` to `n` decimal places without rounding."""
+    """Truncate or pad a float `f` to `n` decimal places, without rounding."""
     if isinstance(f, float):
         s = '{}'.format(f)
     else:
@@ -35,7 +37,7 @@ def depth_range_from_img(img, inspect):
     if isinstance(img, str):
         img = io.imread(img)
 
-    chars = pytesseract.image_to_string(crop_fn(img), config=tesseract_config)
+    chars = pytesseract.image_to_string(crop_fn(img), config=TESSERACT_CONFIG)
     numbers = [truncate(number,2) for number in re.findall('\d+\.\d+', chars)]
 
     if len(numbers) < 2:
