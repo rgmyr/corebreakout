@@ -35,6 +35,7 @@ TRAIN_DIR = MODEL_DIR / 'pretrain'
 
 CLASSES = ['col', 'tray']
 
+# See `docs/layout_parameters.md` for more information
 LAYOUT_PARAMS = {
     'order' : 't2b',            # depth order by which to sort set of columns
     'orientation' : 'l2r',      # depth orientation of each individual column
@@ -63,17 +64,17 @@ class DefaultConfig(Config):
     BACKBONE = 'resnet101'
 
     # Length of square anchor side in pixels
-    RPN_ANCHOR_SCALES = (64, 128, 192, 320, 352)
+    RPN_ANCHOR_SCALES = (64, 128, 192, 256, 320) #, 352)
 
     # < 1 : wide anchor, > 1 : tall anchor
     # These defaults assume horizontal (wide) columns
     # Note: starting from COCO model requires exactly 3 anchor ratios
-    RPN_ANCHOR_RATIOS = [0.1, 0.5, 0.9]
+    RPN_ANCHOR_RATIOS = [0.1, 0.55, 1.0]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
-    RPN_NMS_THRESHOLD = 0.7
+    RPN_NMS_THRESHOLD = 0.3 # default = 0.7
 
-    # TODO: STD_DEVs?
+    # TODO: STD_DEVs? Probably not, shouldn't make a big difference.
 
     # May need to increase?
     DETECTION_MAX_INSTANCES = 6

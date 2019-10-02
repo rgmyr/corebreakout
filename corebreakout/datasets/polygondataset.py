@@ -104,7 +104,8 @@ class PolygonDataset(Dataset):
         """
         Return the path of the image corresponding to `image_id`, if there is one.
         """
-        if self.image_info[image_id]['source'] == 'cb':
+        info = self.image_info[image_id]
+        if info['source'] == 'cb':
             return info["path"]
         else:
             super(self.__class__, self).image_reference(image_id)

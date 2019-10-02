@@ -120,18 +120,18 @@ class CoreSegmenter:
 
         # Is `depth_range` sane?
         if min(depth_range) == 0.0 or depth_range[1]-depth_range[0] == 0.0:
-            raise UserWarning(f'depth_range {depth_range} is suspect... make you are passing valid depths.')
+            raise UserWarning(f'`depth_range` {depth_range} is suspect... make you are passing valid depths.')
 
-        # If `img` points to file, read it. Otherwise assumed to be valid image array.
+        # If `img` points to a file, read it. Otherwise assumed to be valid image array.
         if isinstance(img, (str, Path)):
             print(f'Reading file: {img}')
             img = io.imread(img)
 
-        # Set up expected number of columns and their individual depths
+        # Set up expected number of columns and their top/base depths
         col_height = self.layout_params['col_height']
         num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
         col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
-        col_bots = [top+col_height for top in col_tops]
+        col_bases = [top+col_height for top in col_tops]
 
         # Get MRCNN column predictions
         preds = self.model.detect([img], verbose=0)[0]
@@ -182,7 +182,7 @@ class CoreSegmenter:
             # For safety?
             crop_axis, endpts = None, None
 
-        # REMOVE LATER
+        # REMOVE AFTER MAKING DOC IMAGES
         print(f'endpoint coords: {endpts}')
 
         # Set single argument lambda functions to apply to column regions / region images
@@ -195,7 +195,7 @@ class CoreSegmenter:
         # Assemble `CoreColumn` objects from masked/cropped image regions
         cols = [CoreColumn(crop, top=t, base=b,
                           add_tol=add_tol,
-                          add_mode=add_mode) for crop, t, b in zip(crops, col_tops, col_bots)]
+                          add_mode=add_mode) for crop, t, b in zip(crops, col_tops, col_bases)]
 
         # Slice the bottom depth if necessary
         cols[-1] = cols[-1].slice_depth(base=depth_range[1])
