@@ -47,7 +47,7 @@ The name of the class representing core sample columns in the M-RCNN model used 
 
 ## `endpts`
 
-The `'endpts'` parameter determines the method for finding and setting the minimum extent of the top and base ends of all columns detected in an image (along the depth axis implied by `orientation`). This exists to make sure that the bounding boxes of partial columns are extended to locations that are approximately `'col_height'` apart.
+The `'endpts'` parameter determines the method for finding and setting the minimum extent of the top and base ends of all columns detected in an image (along the depth axis implied by `orientation`). This exists to make sure that before cropping, the bounding boxes of partial columns are extended to locations that are approximately `'col_height'` apart.
 
 The value of `'endpts'` may be one of several things:
 - The name of a class (*e.g.*, `'tray'`)
