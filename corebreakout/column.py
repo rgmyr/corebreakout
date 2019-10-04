@@ -10,44 +10,45 @@ from matplotlib import ticker
 import matplotlib.pyplot as plt
 
 from corebreakout import utils
+from corebreakout.defaults import MAJOR_TICK_PARAMS, MINOR_TICK_PARAMS
 
 
 class CoreColumn:
     """Container for depth-registered, single-column images of core material.
 
-    `CoreColumn`s can be stacked via the __add__ operator, using `add_mode` from LHS instance,
+    `CoreColumn`s can be stacked via the `__add__` operator, using `add_mode` from LHS instance,
     and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.
 
     Either `depths` array or scalar `top` and `base` values must be provided to constructor.
-
-    Parameters
-    ----------
-    img : array
-        2D (grayscale) or 3D (RGB) image array representing a single column of core material
-    depths : array, optional
-        1D array of depths with `size=img.shape[0]` (one value for each row).
-        If not provided, depths are computed as `np.linspace(top, base, num=img.shape[0])`.
-    top : array, optional
-        The top depth. If not given and `depths` is, assumed to be depth of first row.
-    base : float, optional
-        The base depth. If not given and `depths` is, assumed to be depth of last row.
-    add_tol : float, optional
-        Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
-        where `@property dd` is the median difference in depth between adjacent `img` rows.
-    add_mode : one of {'fill', 'collapse'}, optional
-        How to add to this column. Both methods enforce depth ordering (LHS.base <= RHS.top):
-            - 'fill' is the default. Fills any depth gap with zero image and interpolated depths.
-            - 'collapse' will simply concatenate `img` and `depths` arrays.
-        Default is 'fill'.
     """
     def __init__(self, img, depths=None, top=None, base=None, add_tol=None, add_mode='fill'):
-
+        """
+        Parameters
+        ----------
+        img : array
+            2D (grayscale) or 3D (RGB) image array representing a single column of core material
+        depths : array, optional
+            1D array of depths with `size=img.shape[0]` (one value for each row).
+            If not provided, depths are computed as `np.linspace(top, base, num=img.shape[0])`.
+        top : array, optional
+            The top depth. If not given and `depths` is, assumed to be depth of first row.
+        base : float, optional
+            The base depth. If not given and `depths` is, assumed to be depth of last row.
+        add_tol : float, optional
+            Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
+            where `@property dd` is the median difference in depth between adjacent `img` rows.
+        add_mode : one of {'fill', 'collapse'}, optional
+            How to add to this column. Both methods enforce depth ordering (LHS.base <= RHS.top):
+                - 'fill' is the default. Fills any depth gap with zero image and interpolated depths.
+                - 'collapse' will simply concatenate `img` and `depths` arrays.
+            Default is 'fill'.
+        """
         self.img = img    # img.setter called
 
         depths_given = depths is not None
         top_given, base_given = top is not None, base is not None
 
-        assert depths_given or (top_given and base_given), 'Must specify either `depths` or `top` and `base`'
+        assert depths_given or (top_given and base_given), 'Must specify either `depths`, or `top` and `base`'
 
         if not depths_given:
             self.top, self.base = top, base
@@ -103,9 +104,7 @@ class CoreColumn:
 
     @property
     def dd(self):
-        """
-        An approximate value for the size of each row in depth units.
-        """
+        """An approximate value for the size of each row in depth units."""
         return np.median(np.diff(self.depths))
 
     @property
@@ -129,8 +128,8 @@ class CoreColumn:
 
 
     def slice_depth(self, top=None, base=None):
-        """
-        Slice the CoreColumn between `top` and `base`, if it would have an effect and is possible to do so.
+        """Slice the CoreColumn between `top` and `base`,
+        if it would have an effect and it is possible to do so.
         """
         top = top or self.top
         base = base or self.base
@@ -160,8 +159,7 @@ class CoreColumn:
     ###++++++++++++++++++++###
 
     def __add__(self, other):
-        """
-        Adding two CoreColumn objects appends RHS below LHS and returns new CoreColumn instance.
+        """Adding two CoreColumn objects appends RHS below LHS and returns new CoreColumn instance.
             - `img` and `depths` are concatenated:
                 - If `add_mode` is 'collapse', arrays are naively stacked.
                 - If `add_mode` is 'fill', a zero image + interpolated depths are added b/t LHS & RHS.
@@ -169,7 +167,7 @@ class CoreColumn:
             - `add_tol` is propagated by `max(LHS.add_tol, RHS.add_tol)`.
         """
         depth_diff = other.top - self.base
-        print(self.depth_range, other.depth_range, depth_diff)
+        print(self.depth_range, ' + ', other.depth_range, ' gap: ' depth_diff)
 
         if depth_diff < 0:
             raise UserWarning(f'Cant add shallower {other} below deeper {self}!')
@@ -180,7 +178,7 @@ class CoreColumn:
         # If 'fill' mode, extend `self.img` and `self.depths` to fill any gap
         if self.add_mode is 'fill':
             fill_dd = (self.dd + other.dd) / 2
-            fill_rows = int(depth_diff // fill_dd)
+            fill_rows = int(depth_diff // fill_dd)  # have to call int() for cases of 0.0
 
             if fill_rows > 0:
                 fill_depths = np.linspace(self.depths[-1]+fill_dd, other.depths[0]-fill_dd, num=fill_rows)
@@ -207,7 +205,7 @@ class CoreColumn:
         ----------
         figsize : tuple(int)
             Size of matplotlib figure to plot on.  Note: at default DPI of 100, 650 is
-            about as large as common image formats will support saving.
+            about as large as common image formats will support saving (~2^16 pixels).
         **kwargs:
             Parameters for tick creation and appearance: 'major' and 'minor' options for
             `*_precision`, `*_format_str`, `*_tick_size`. See `_make_image_ticks()` docs.
@@ -227,8 +225,8 @@ class CoreColumn:
         ax.yaxis.set_minor_formatter(ticker.FixedFormatter((minor_ticks)))
         ax.yaxis.set_minor_locator(ticker.FixedLocator((minor_locs)))
 
-        ax.tick_params(which='major', labelsize=kwargs.get('major_tick_size', 16), color='black')
-        ax.tick_params(which='minor', labelsize=kwargs.get('minor_tick_size',  8), color='gray')
+        ax.tick_params(which='major', labelsize=kwargs.get('major_tick_size', 32), color='black')
+        ax.tick_params(which='minor', labelsize=kwargs.get('minor_tick_size', 12), color='gray')
 
         ax.set_xticks([], [])
         ax.grid(False)
@@ -241,7 +239,7 @@ class CoreColumn:
     def _make_image_ticks(self, major_precision=0.1,
                           major_format_str='{:.1f}',
                           minor_precision=0.01,
-                          minor_format_str='{:.2f}'):
+                          minor_format_str='{:.2f}', **kwargs):
         """Generate major & minor (ticks, locs) for image axis.
 
         Parameters
@@ -265,7 +263,7 @@ class CoreColumn:
         major_ticks, major_locs = [], []
         minor_ticks, minor_locs = [], []
 
-        # remainders w.r.t. precision
+        # remainders w.r.t. precision, round close numbers
         major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
         minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
 
@@ -276,11 +274,18 @@ class CoreColumn:
                 major_locs.append(i)
 
             elif np.argmin(minor_rmndr[i-1:i+2]) == 1:
-                if major_ticks[-1]+'0' == minor_fmt_fn(self.depths[i-1]):
+                #if major_ticks[-1]+'0' == minor_fmt_fn(self.depths[i-1]):
+                if major_ticks[-1] == minor_fmt_fn(self.depths[i-1]):
                     # fixes some overlapping ticks, BUT not robust
                     # enough for all possible precision combos
                     continue
                 minor_ticks.append(minor_fmt_fn(self.depths[i-1]))
                 minor_locs.append(i)
+
+        # get last tick if needed, doesn't work above for some reason
+        last_depth = np.round(self.depths[-1], decimals=1)
+        if (last_depth % 1.0) == 0.0:
+            major_ticks.append(major_fmt_fn(last_depth))
+            major_locs.append(self.height-1)
 
         return major_ticks, major_locs, minor_ticks, minor_locs

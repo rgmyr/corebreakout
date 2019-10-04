@@ -1,5 +1,5 @@
 """
-Specify default relative paths + Mask_RCNN model config.
+Specify default relative paths + Mask_RCNN model config, also `CoreColumn` figure defaults.
 """
 import os
 from pathlib import Path
@@ -97,3 +97,33 @@ class DefaultConfig(Config):
     # Conservative batch size. Assumes single GPU.
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+
+
+####++++++++++++++++++++++++++++++++####
+#### Default CoreColumn plot params ####
+####++++++++++++++++++++++++++++++++####
+"""
+Set the default parameters for (fig, ax) returned by `CoreColumn.plot()`.
+
+You may also add additional arguments to both `*_TICK_PARAMS` from:
+    https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.tick_params.html
+"""
+MAJOR_TICK_PARAMS = {
+    'labelleft' : True,         # False to disable labels
+    'labelsize' : 32,
+    'labelcolor' : 'black',
+    'left' : True,              # False to disable ticks
+    'length' : 15,
+    'width' : 4,
+    'color' : 'black'
+}
+
+MINOR_TICK_PARAMS = {
+    'labelleft' : True,         # False to disable labels
+    'labelsize' : 12,
+    'labelcolor' : 'black',
+    'left' : True,              # False to disable ticks
+    'length' : 8,
+    'width' : 4,
+    'color' : 'black'
+}

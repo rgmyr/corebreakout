@@ -91,7 +91,7 @@ class CoreSegmenter:
             self.endpts_class_id = self.class_names.index(self.layout_params['endpts'])
 
 
-    def segment(self, img, depth_range, add_tol=None, add_mode='fill', layout_params={}, show=False):
+    def segment(self, img, depth_range, add_tol=None, add_mode='fill', layout_params={}, show=False, colors=None):
         """
         Detect and segment core columns in `img`, return stacked CoreColumn instance.
 
@@ -109,6 +109,10 @@ class CoreSegmenter:
             Any layout parameters to override.
         show : boolean, optional
             Set to True to show image with predictions overlayed.
+        colors : list, optional
+            A list of RGBA tuples, one for each in `class_names` (excluding 'BG').
+            Values should be in range [0.0, 1.0], If None, uses random colors.
+            Has no effect unless `show=True`.
 
         Returns
         -------
@@ -136,7 +140,10 @@ class CoreSegmenter:
         # Get MRCNN column predictions
         preds = self.model.detect([img], verbose=0)[0]
         if show:
-            utils.show_preds(img, preds, self.class_names)
+            if colors is not None:
+                assert len(colors) == (len(self.class_names)-1), 'Number of `colors` must match number of classes'
+                colors = [class_colors[i-1] for i in preds['class_ids']]
+            utils.show_preds(img, preds, self.class_names, colors=colors)
 
         # Select masks for column class
         col_masks = preds['masks'][:,:,preds['class_ids']==self.column_class_id]
@@ -158,7 +165,12 @@ class CoreSegmenter:
 
         # Set up `endpts` for later cropping adjustment
         if self.endpts_is_auto:
-            endpts = self._get_auto_endpts(col_regions, crop_axis)
+            if self.layout_params['endpts'] == 'auto':
+                endpts = self._get_auto_endpts(col_regions, crop_axis)
+            else:
+                # 'auto_all' mode
+                all_regions = measure.regionprops(utils.masks_to_labels(preds['masks']))
+                endpts = self._get_auto_endpts(all_regions, crop_axis)
 
         elif self.endpts_is_class:
             measure_idxs = np.where(preds['class_ids'] == self.endpts_class_id)[0]
@@ -204,6 +216,11 @@ class CoreSegmenter:
         return reduce(add, cols)
 
 
+    def _find_endpts(self, preds):
+        """Find column endpoints using method specified by `layout_params`."""
+        pass
+
+
     def _get_auto_endpts(self, regions, crop_axis):
         """Find min/max of detected `regions` masks along `crop_axis` to set endpoints.
 
@@ -234,10 +251,11 @@ class CoreSegmenter:
 
         # Check `endpts` validity; may be a name of class or a 2-tuple of endpts
         endpts = lp['endpts']
-        if str(endpts).lower() == 'auto':
+        if 'auto' in str(endpts):
+            assert str(endpts) in ['auto', 'auto_all'], 'Invalid `endpts` auto keyword'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = True, False, False
         if type(endpts) is str:
-            assert endpts in self.class_names, f'{endpts} is not in {self.class_names}.'
+            assert endpts in self.class_names, f'{endpts} is not `auto_*` or in {self.class_names}.'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, True, False
         elif type(endpts) is tuple:
             assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
