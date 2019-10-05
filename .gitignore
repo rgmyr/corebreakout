@@ -2,8 +2,10 @@
 *__pycache__*
 *pytest_cache*
 
-# exclude pretrained COCO mrcnn model
-include/pretrain/models/*
-!include/pretrain/models/.gitkeep
+# exclude assets, models
+assets/
+assets/models/
+!assets/.gitkeep
+!assets/models.gitkeep
 
-*.h5 
+*.h5

@@ -1,5 +1,5 @@
 """
-Specify default relative paths + Mask_RCNN model config, also `CoreColumn` figure defaults.
+Default paths, dataset and Mask_RCNN model config, `CoreColumn` viz settings.
 """
 import os
 from pathlib import Path
@@ -10,13 +10,15 @@ from corebreakout import __file__ as PKG_FILE
 
 
 ####+++++++++++++++####
-#### Default Paths #### (relative to package source)
+#### Default Paths ####
 ####+++++++++++++++####
 
-INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'include'
-DATASET_DIR = INCLUDE_DIR / 'pretrain/data'
+INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
+DATASET_DIR = INCLUDE_DIR / 'assets/data'
+#INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
+#DATASET_DIR = Path({PKG_FILE})
 
-
+# Before release: change this to 'assets/models'
 MODEL_DIR = Path('/home/'+os.environ['USER']+'/Dropbox/models/corebreakout')
 COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 
@@ -53,7 +55,7 @@ class DefaultConfig(Config):
 
     Override some default Mask_RCNN `Config` values.
 
-    For available parameters and explanations, see:
+    For all available parameters and explanations, see:
         https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
     """
     NAME = 'cb_default'
@@ -72,11 +74,11 @@ class DefaultConfig(Config):
     RPN_ANCHOR_RATIOS = [0.1, 0.55, 1.0]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
-    RPN_NMS_THRESHOLD = 0.3 # default = 0.7
+    RPN_NMS_THRESHOLD = 0.7 # default = 0.7
 
-    # TODO: STD_DEVs? Probably not, shouldn't make a big difference.
+    # STD_DEVs? Probably not, shouldn't make a big difference.
 
-    # May need to increase?
+    # Maximum number of detections and minimum confidence
     DETECTION_MAX_INSTANCES = 6
     DETECTION_MIN_CONFIDENCE = 0.95
 
@@ -102,10 +104,9 @@ class DefaultConfig(Config):
 ####++++++++++++++++++++++++++++++++####
 #### Default CoreColumn plot params ####
 ####++++++++++++++++++++++++++++++++####
-"""
-Set the default parameters for (fig, ax) returned by `CoreColumn.plot()`.
+"""Set the default parameters for (fig, ax) returned by `CoreColumn.plot()`.
 
-You may also add additional arguments to both `*_TICK_PARAMS` from:
+You can also add additional arguments to both `*_TICK_PARAMS` from:
     https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.tick_params.html
 """
 MAJOR_TICK_PARAMS = {

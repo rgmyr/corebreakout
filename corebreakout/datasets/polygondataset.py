@@ -14,27 +14,25 @@ from corebreakout import defaults
 
 
 class PolygonDataset(Dataset):
-    """
-    Subclass of `mrcnn.utils.Dataset` for polygonal JSON annotations in default `labelme` format.
+    """Subclass of `mrcnn.utils.Dataset` for polygonal JSON annotations in `labelme` format.
     See `wkentaro/labelme` to get the GUI. Outputs a JSON file with list of polygon 'shapes'.
 
     Labels must start with a unique class name, but instances can be differentiated afterward
     however you like. For example, different `col` instances can be labeled 'col1', 'col2', etc.
     And multiple polygons may belong to a single instance of a class.
 
-    The only restriction on classes is that no class name can a substring of any other class name.
+    The tradeoff is that no class name can a substring of any other class name.
     """
     def __init__(self, classes=defaults.CLASSES):
         super().__init__()
 
         for i, cls_name in zip(range(len(classes)), classes):
-            # `source` doesn't matter for us, just saying 'cb' for 'corebreakout'
+            # `source` doesn't matter for single dataset, just using 'cb' for 'corebreakout'
             self.add_class('cb', i+1, cls_name)     # Note: 'BG' = class 0
 
 
     def collect_annotated_images(self, data_dir, subset):
-        """
-        Check for annotation ('.json') and image ('.jpg'/'.jpeg') pairs, and add them.
+        """Check for annotation ('.json') and image ('.jpg'/'.jpeg') pairs, and add them.
 
         Corresponding annotation and image paths should differ only in their file extensions.
         """
@@ -54,9 +52,7 @@ class PolygonDataset(Dataset):
 
 
     def load_mask(self, image_id):
-        """
-        Return the `mask` and `class_ids` arrays for a given `image_id`.
-        """
+        """Return the `mask` and `class_ids` arrays for a given `image_id`."""
         ann_path = self.image_info[image_id]['ann_path']
 
         with open(ann_path, 'r') as ann_file:
@@ -66,8 +62,7 @@ class PolygonDataset(Dataset):
 
 
     def ann_to_mask(self, ann):
-        """
-        Take JSON annotation dict, return `(mask, class_ids)` arrays.
+        """Take JSON annotation dict, return `(mask, class_ids)` arrays.
 
         Assumes that some classes may have multiple instances ('col1', 'col2', etc.),
         and that each labeled instance may be composed of multiple polygons.
@@ -101,9 +96,7 @@ class PolygonDataset(Dataset):
 
 
     def image_reference(self, image_id):
-        """
-        Return the path of the image corresponding to `image_id`, if there is one.
-        """
+        """Return the path of the image corresponding to `image_id`, if there is one."""
         info = self.image_info[image_id]
         if info['source'] == 'cb':
             return info["path"]

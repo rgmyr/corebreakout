@@ -4,30 +4,6 @@ from skimage import io, measure, morphology
 from itertools import combinations
 
 
-###---------------------###
-### Region Manipulation ###
-###---------------------###
-
-def v_overlapping(r0, r1):
-    """
-    Check if regions `r0` & `r1` are *vertically* overlapping.
-    """
-    return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
-
-
-def h_overlapping(r0, r1):
-    """
-    Check if regions `r0` & `r1` are *horizontally* overlapping.
-    """
-    return (r0.bbox[1] < r1.bbox[3] and r0.bbox[3] > r1.bbox[1])
-
-
-
-#--------------------------#
-# Raw BlueLabel processing #
-#--------------------------#
-
-
 def morphology_op(remove_holes=False, closing_selem=None, erosion_selem=None):
     '''Create a function chaining multiple binary morphology operations.
 
@@ -88,17 +64,6 @@ def generate_mask(img, masking_color, tolerance=0, morph_op=None):
 
     return mask.astype(np.uint8)
 
-
-def draw_box(image, box, color, lw):
-    """Draw 3-pixel width bounding boxes on the given image array.
-    color: list of 3 int values for RGB.
-    """
-    y1, x1, y2, x2 = box
-    image[y1:y1 + lw, x1:x2] = color
-    image[y2:y2 + lw, x1:x2] = color
-    image[y1:y2, x1:x1 + lw] = color
-    image[y1:y2, x2:x2 + lw] = color
-    return image
 
 
 def clean_blue(image):

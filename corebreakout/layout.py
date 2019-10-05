@@ -18,14 +18,16 @@ def sort_regions(regions, order):
     return regions
 
 
-def transform_region(region_img, orientation):
-    """Transform cropped `region_img` (core column), given the depth `orientation`."""
+def rotate_vertical(region_img, orientation):
+    """Rotated cropped `region_img` (core column) to vertical, given the depth `orientation`."""
     assert orientation in ORIENTATIONS, f'orientation {orientation} must be one of {ORIENTATIONS}'
 
     if orientation is 't2b':
         return region_img
     elif orientation is 'l2r':
         return np.rot90(region_img, k=-1)
+    else:
+        raise ValueError(f'bad `orientation`: {orientation}')
 
 
 def crop_region(img, labels, region, axis=0, endpts=(815, 6775)):
