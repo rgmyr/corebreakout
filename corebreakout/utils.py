@@ -1,5 +1,5 @@
 """
-Utility functions. Mostly image + mask + region manipulation.
+Image / mask / region manipulation, visualization.
 """
 import numpy as np
 
@@ -21,6 +21,16 @@ def masks_to_labels(masks):
     for i in range(masks.shape[-1]):
         labels += (i+1) * masks[:,:,i].astype(int)
     return labels.astype(int)
+
+
+def squeeze_labels(labels):
+    """Set labels to range(0, objects+1)"""
+    label_ids = np.unique([r.label for r in measure.regionprops(labels)])
+
+    for new_label, label_id in zip(range(1, label_ids.size), label_ids[1:]):
+        labels[labels==label_id] == new_label
+
+    return labels
 
 
 def vstack_images(imgA, imgB):
@@ -64,11 +74,22 @@ def show_preds(img, preds, class_names, colors=None, ax=None, figsize=(16, 16)):
                      preds['scores'], colors=colors, ax=ax, figsize=figsize)
 
 
+def draw_box(image, bbox, color, lw):
+    """Draw RGB(A) `color` bounding box on image array."""
+    y1, x1, y2, x2 = bbox
+    image[y1:y1 + lw, x1:x2] = color
+    image[y2:y2 + lw, x1:x2] = color
+    image[y1:y2, x1:x1 + lw] = color
+    image[y1:y2, x2:x2 + lw] = color
+    return image
+
+
 def draw_lines(img, coords, axis, color=[255,0,0], lw=10):
-    """Draw lines on `img` at `coords` along `axis`.
+    """Draw `color` lines on `img` at `coords` along `axis`.
 
     axis == 0 --> horizonal lines
     axis == 1 --> vertical lines
+    line width [`lw`] will round down to even numbers.
 
     NOTE: if any (coord +/- (lw // 2)) falls outside of `img`, will raise Exception.
     """

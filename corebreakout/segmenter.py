@@ -31,7 +31,7 @@ endpts = {
 
 
 class CoreSegmenter:
-    """Mask-RCNN model container for extraction + aggregation of columns from core images.
+    """Mask-RCNN model container for extracting `CoreColumn`s from core images.
 
     `model_dir` and `weights_path` must be passed to constructor.
     """
@@ -84,16 +84,16 @@ class CoreSegmenter:
     def layout_params(self, new_params):
         self._layout_params.update(new_params)
         self._check_layout_params()
+
         self.column_class_id = self.class_names.index(self.layout_params['col_class'])
 
-        # If endpts is class, get the corresponding `id` number
+        # If endpts is class, save the corresponding `id` number
         if self.endpts_is_class:
             self.endpts_class_id = self.class_names.index(self.layout_params['endpts'])
 
 
     def segment(self, img, depth_range, add_tol=None, add_mode='fill', layout_params={}, show=False, colors=None):
-        """
-        Detect and segment core columns in `img`, return stacked CoreColumn instance.
+        """Detect and segment core columns in `img`, return single aggregated CoreColumn instance.
 
         Parameters
         ----------
@@ -117,14 +117,14 @@ class CoreSegmenter:
         Returns
         -------
         img_col : CoreColumn
-            Single aggregated `CoreColumn` object
+            Single aggregated `CoreColumn` instance
         """
         # Note: assignment calls setter to update, checks validity
         self.layout_params = layout_params
 
         # Is `depth_range` sane?
         if min(depth_range) == 0.0 or depth_range[1]-depth_range[0] == 0.0:
-            raise UserWarning(f'`depth_range` {depth_range} is suspect... make you are passing valid depths.')
+            raise UserWarning(f'`depth_range` {depth_range} starts at 0.0 or has no extent')
 
         # If `img` points to a file, read it. Otherwise assumed to be valid image array.
         if isinstance(img, (str, Path)):
@@ -163,7 +163,7 @@ class CoreSegmenter:
         # Figure out crop endpoints, set related args
         crop_axis = 0 if self.layout_params['orientation'] == 'l2r' else 1
 
-        # Set up `endpts` for later cropping adjustment
+        # Set up `endpts` for bbox adjustment
         if self.endpts_is_auto:
             if self.layout_params['endpts'] == 'auto':
                 endpts = self._get_auto_endpts(col_regions, crop_axis)
@@ -191,8 +191,7 @@ class CoreSegmenter:
             endpts = self.layout_params['endpts']
 
         else:
-            # For safety?
-            crop_axis, endpts = None, None
+            raise RuntimeError()
 
         # REMOVE AFTER MAKING DOC IMAGES
         print(f'endpoint coords: {endpts}')
@@ -216,18 +215,26 @@ class CoreSegmenter:
         return reduce(add, cols)
 
 
+    def segment_all(imgs, depth_ranges, **kwargs):
+        """Segment a set of `imgs` with known `depth_ranges`, return concatenated `CoreColumn`
+
+        Parameters
+        ----------
+        imgs : Iterable of either filepaths or numpy image arrays.
+        depth_ranges: Iterable of (top, base) pairs for each
+        **kwargs :
+            See `segment()` docstring for options.
+        """
+        return reduce(add, [self.segment(img, dr. **kwargs) for img, dr in zip(imgs, depth_ranges)])
+
+
     def _find_endpts(self, preds):
         """Find column endpoints using method specified by `layout_params`."""
         pass
 
 
     def _get_auto_endpts(self, regions, crop_axis):
-        """Find min/max of detected `regions` masks along `crop_axis` to set endpoints.
-
-        NOTE: as written above, `regions` would be `col_regions` only, but in
-        principle any combination of classes could be used together, which may
-        be a better option for some datasets. This may be added later.
-        """
+        """Find min/max of detected `regions` masks along `crop_axis`."""
         low_idx = 0 if crop_axis == 1 else 1
         high_idx = 2 if crop_axis == 1 else 3
 
@@ -261,4 +268,4 @@ class CoreSegmenter:
             assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, False, True
         elif endpts is not None:
-            raise TypeError(f'`endpts` must be class name, 2-tuple, \'auto\', or None, not {type(endpts)}')
+            raise TypeError(f'`endpts` must be class name, 2-tuple, \'auto(_all)\', or None, not {type(endpts)}')

@@ -1,9 +1,6 @@
 # `corebreakout`
 
-Python package built on `matterport/Mask\_RCNN` for segmentation, stacking, and depth alignment of geological core image datasets.
-
-- Include a general pretrained model and tools for (re-)training with novel datasets.
-- **other features**
+Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for segmentation, stacking, and depth alignment of geological core image datasets.
 
 ### TODO
 
@@ -18,12 +15,12 @@ Python package built on `matterport/Mask\_RCNN` for segmentation, stacking, and 
 
 ## Target Platform
 
-This package was developed and tested under Linux (Ubuntu). It may work on other platforms, but probably requires adjustment of some configuration file parameters (e.g., file system conventions for Windows).
+This package was developed and tested under Linux (Ubuntu, PopOS). It may work on other platforms, but probably requires adjustment of some configuration file parameters found at [corebreakout/defaults.py] (e.g., file system conventions for Windows).
 
 
 ## Requirements
 
-The following packages are required:
+The following Python packages are required:
 
 - `numpy`
 - `matplotlib`
@@ -31,7 +28,15 @@ The following packages are required:
 - `tensorflow`
 - `mrcnn` via [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN)
 
-Third party tools are necessary for labeling new training images. There is built-in support for the default polygonal JSON annotation format of the [wkentaro/labelme](https://github.com/wkentaro/labelme) graphical image annotation tool, but any instance segmentation annotation format should be workable if the user is willing to write their own subclass of `mrcnn.utils.Dataset`.
+The installation should check for and install `numpy`, `matplotlib`, and `scikit-image`. The user should install others...
+
+Using `tensorflow-gpu` is very much recommended.
+
+# Using new datasets
+
+Third party tools are necessary for labeling new training images. There is built-in support for the default polygonal JSON annotation format of the [wkentaro/labelme](https://github.com/wkentaro/labelme) graphical image annotation tool, but any instance segmentation annotation format would be workable if the user is willing to write their own subclass of `mrcnn.utils.Dataset`.
+
+See more detailed documentation: [docs/creating_datasets.md]
 
 **Post-labeling tools?**
 
@@ -42,14 +47,10 @@ Third party tools are necessary for labeling new training images. There is built
 
 ```
 $ git clone https://github.com/rgmyr/corebreakout.git
-```
-
-**Install:**
-
-```
 $ cd corebreakout
 ```
-And then use `pip`:
+
+And then use **`pip`**:
 ```
 $ pip install -e .
 ```
@@ -58,12 +59,12 @@ $ pip install -e .
 $ python setup.py install
 ```
 
-Develop mode installation (`pip install -e .`) is recommended, since most users will want to change some parameters in the source code to suit their particular dataset of interest without having to reinstall afterward -- but it is not required.
+Develop mode installation (`pip install -e .`) is recommended, since we expect that most users will want to change some parameters in the source code to suit their particular dataset without having to reinstall afterward.
 
 
 ## Tutorial
 
-See the `tutorial` folder for notebooks demonstrating model training and usage.
+See the `docs/tutorial` folder for notebooks demonstrating model training and usage.
 
 
 ### Additional object types for detection
