@@ -1,10 +1,10 @@
 """
-Define a suite of tests for the CoreColumn class.
+Define a suite of tests for the `corebreakout.CoreColumn` class.
 """
 import pytest
-
 import numpy as np
 from skimage import io, color
+
 from corebreakout import CoreColumn
 
 # Example (unmasked) single-column images
@@ -12,19 +12,81 @@ img1 = io.imread('tests/data/column1.jpeg')       # shape = (6070, 782, 3)
 img2 = io.imread('tests/data/column2.jpeg')       # shape = (5917, 779, 3)
 img3 = io.imread('tests/data/column3.jpeg')       # shape = (4469, 803, 3)
 
+height1, height2, height3 = (img.shape[0] for img in [img1, img2, img3])
+
 
 def test_construction():
+    """Test various construction arguments that should fail."""
 
+    # 1D array should fail
     with pytest.raises(ValueError):
-        _ = CoreColumn(np.random.random(100))       # 1D array should fail
-    with pytest.raises(ValueError):
-        _ = CoreColumn(np.expand_dims(img1, -1))    # 4D array should fail
+        _ = CoreColumn(np.random.random(100), top=1.0, base=2.0)
 
+    # 4D array should fail
+    with pytest.raises(ValueError):
+        _ = CoreColumn(np.expand_dims(img1, -1), top=1.0, base=2.0)
+
+    # No depth info should fail
+    with pytest.raises(AssertionError):
+        _ = CoreColumn(img1)
+
+    # Depth and image size mismatch should fail
+    with pytest.raises(AssertionError):
+        _ = CoreColumn(img1, depths=np.linspace(1.0, 2.0, num=100))
+
+    # More bad top/base/depth combos?
 
 
 def test_addition():
-    pass
+    """Test various column combination possibilities."""
+
+    column1 = CoreColumn(img1, top=1.0, base=2.0)
+    column2 = CoreColumn(img2, top=2.0, base=3.0)
+    column3 = CoreColumn(img3, top=3.0, base=4.0)
+
+    # Default `add_mode` should just stack images
+    one_plus_two = column1 + column2
+    assert one_plus_two.height == (height1 + height2)
+
+    # Gap is bigger than default `add_tol`
+    with pytest.raises(UserWarning):
+        _ = column1 + column3
+
+    # Change `add_tol`
+    column1.add_tol = 1.0
+    column1.add_mode = 'collapse'
+    one_plus_three = column1 + column3
+    assert one_plus_three.height == (height1 + height3)
+
+    # Make sure 'fill' ends up filling
+    column1.add_mode = 'fill'
+    one_plus_three = column1 + column3
+    assert one_plus_three.height > (height1 + height3)
 
 
 def test_slicing():
-    pass
+    """Test the `slice_depth` method."""
+
+    column = CoreColumn(img1, top=1.0, base=2.0)
+    height = column.height
+
+    # Superset should have no effect
+    superset_column = column.slice_depth(top=0.0, base=3.0)
+    assert superset_column == column
+
+    # These should reduce data
+    slice1 = column.slice_depth(base=1.5)
+    assert slice1.height < column.height
+
+    slice2 = column.slice_depth(top=1.5)
+    assert slice2.height < column.height
+
+    # These should not be allowed
+    with pytest.raises(AssertionError):
+        _ = column.slice_depth(top=1.75, base=1.25)
+
+    with pytest.raises(AssertionError):
+        _ = column.slice_depth(top=2.5)
+
+    with pytest.raises(AssertionError):
+        _ = column.slice_depth(base=0.5)

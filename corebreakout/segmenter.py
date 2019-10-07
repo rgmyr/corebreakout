@@ -222,7 +222,7 @@ class CoreSegmenter:
         **kwargs :
             See `segment()` docstring for options.
         """
-        return reduce(add, [self.segment(img, dr. **kwargs) for img, dr in zip(imgs, depth_ranges)])
+        return reduce(add, [self.segment(img, dr, **kwargs) for img, dr in zip(imgs, depth_ranges)])
 
 
     def _find_endpts(self, preds):

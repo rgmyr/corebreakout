@@ -10,6 +10,7 @@ def v_overlapping(r0, r1):
     """Check if skimage regions `r0` & `r1` are *vertically* overlapping."""
     return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
 
+
 def h_overlapping(r0, r1):
     """Check if skimage regions `r0` & `r1` are *horizontally* overlapping."""
     return (r0.bbox[1] < r1.bbox[3] and r0.bbox[3] > r1.bbox[1])
@@ -42,7 +43,7 @@ def vstack_images(imgA, imgB):
     dw = imgA.shape[1] - imgB.shape[1]
 
     if dw == 0:
-        return np.concatenate([self.img, other.img])
+        return np.concatenate([imgA, imgB])
     elif dimA == 2:
         pads = ((0,0), (0, abs(dw)))
     else:
