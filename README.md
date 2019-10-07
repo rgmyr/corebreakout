@@ -34,7 +34,7 @@ The installation should check for and install `numpy`, `matplotlib`, and `scikit
 
 The user is responsible for installing `tensorflow`, due to the ambiguity between `tensorflow` and `tensorflow-gpu`. We highly recommend the latter for building new models, although it may be possible to perform inference on CPU.
 
-Using `tensorflow-gpu` is very much recommended.
+[Instructions for `Mask_RCNN` here]
 
 
 ## Installation

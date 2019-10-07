@@ -1,61 +1,50 @@
 # Using and Adding `Datasets`
 
+The recommended way to add a new set of labeled training images is to annotate them using [wkentaro/labelme](https://github.com/wkentaro/labelme). The `labelme` GUI allows the user to draw any number of labeled polygons on an image, and saves their labels and coordinates in a JSON annotation file.
+
+Simply copy all the images you want to label to a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built in `corebreakout.datasets.PolygonDataset` class with your training data, follow these guidelines:
+
+- Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files (this is `labelme`'s default)
+- You may label any number of classes. You will have to supply a list of these classes to the `PolygonDataset` constructor, or modify `defaults.DEFAULT_CLASSES`.
+- Different instances of the same class should begin with the class name and be differentiated afterward (*e.g.*, `col1, col2, col3`)
+  - The corollary is that no class name can be a substring of any other class name (*e.g.*, `col, col_tray` would not be allowed)
+  - Multiple polygons may belong to a single instance, though we recommend keeping masks on the coarser side when possible
+- Recommended: after annotating images, split into sibling `'train'` and `'test'` directories
+
+After compiling the annotations, you may wish to modify `defaults.DATASET_DIR` to avoid need to explicitly specify the data location.
+
 ## `corebreakout.datasets.PolygonDataset`
 
-This is a subclass of `mrcnn.utils.Dataset` for instance segmentation annotations in the default JSON format of [wkentaro/labelme](https://github.com/wkentaro/labelme). Used for training and validation testing of `mrcnn.model.MaskRCNN` models.
+This is a subclass of `mrcnn.utils.Dataset` for instance segmentation annotations in the default JSON format of [wkentaro/labelme](https://github.com/wkentaro/labelme).
 
-- Assumes `<fname>.jpeg` images in a flat directory with corresponding `<fname>.json` annotations
-- Instances of a class are differentiated after the class name (*e.g.*, `column1`, `column2`)
-
-## Usage
+### Usage
 
 ```
 from corebreakout.datasets import PolygonDataset
 
 data_dir = defaults.DEFAULT_DATA_DIR    # parent of any separate annotation data directories
-subset = 'train'                        # subdirectory to read from
+subset = 'train'                        # which subdirectory to read from
 
 dataset = PolygonDataset(classes=defaults.DEFAULT_CLASSES)
+
+# Collect all of the requied ID + path information
 dataset.collect_annotated_images(data_dir, subset)
+
+# Set all the attrs required for use
 dataset.prepare()
+
 print(dataset)
 ```
 
-## Writing your own `Dataset`
+## Subclassing `mrcnn.utils.Dataset`
 
-If you want to use a different annotation format, you can inherit from the base `mrcnn.utils.Dataset` class. It stores
+If you want to use a different annotation format, you can inherit from the base `mrcnn.utils.Dataset` class.
 
+You will need to write some user-called method to collect file information:
 - `collect_annotated_images(data_dir, subset)`
-  - Add all of images from a directory and subset (subdirectory) to the `Dataset` via the `add_image()` method.    
-- `load_mask(image_id)`
-  - Given an `image_id`, load (and compute, if necessary) the corresponding mask. For a mask with `N` object instances (not including the background), the return value from this function is `(mask, class_ids)`, where `mask` is boolean array of shape `(H,W,N)` and `class_ids` is an 1D integer array of size `N` with one `class_id` for each of the instance channels in `mask`.
-- `image_reference(image_id)`
-  - Return the path of an image, a link to it, or some other details about it that help in looking it up or debugging it. See the code for an example.
+  - Register `image_id`, `path`, and `ann_path` for each image + annotation pair in `<data_dir>/<subset>` directory.
 
-## Documentation for `mrcnn.utils.Dataset`
-
-**Attributes:**
-- `@property image_ids`
-- `image_info`
-  - List of `dict` info for each image, each having at least `'source'`, `'id'`, and `'path'` keys
-- `class_info`
-  - List of classes, with each represented as a `dict` with keys `'source'`, `'id'`, and `'name'`. Background is always the first class.
-- ``
-
-**Methods:**
-- `add_class(source, class_id, class_name)`
-- `add_image`
-- `image_reference`
-- `prepare()`
-- `map_source_class`
-- `source_image_link`
-- `load_image`
-- `load_mask`
-
-To subclass, you can write some user-called method to collect file information:
-- `collect_annotated_images(data_dir, subset)`: register the `image_id`, `path`, and `ann_path`
-
-And then ovverride the methods:
+And then override at least these two methods:
 - `load_mask(image_id)`
   - Given an `image_id`, load (and compute, if necessary) the corresponding mask. For a mask with `N` object instances (not including the background), the return value from this function should be `(mask, class_ids)`, where `mask` is boolean array of shape `(H,W,N)` and `class_ids` is an 1D integer array of size `N` with one `class_id` for each of the channels in `mask`.
 - `image_reference(image_id)`

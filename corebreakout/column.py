@@ -29,11 +29,11 @@ class CoreColumn:
             2D (grayscale) or 3D (RGB) image array representing a single column of core material
         depths : array, optional
             1D array of depths with `size=img.shape[0]` (one value for each row).
-            If not provided, depths are computed as `np.linspace(top, base, num=img.shape[0])`.
+            If not provided, depths will be evenly spaced between `top` and `base`.
         top : array, optional
-            The top depth. If not given and `depths` is, assumed to be depth of first row.
+            The top depth. If not given, assumed to be just above first row of `depths`.
         base : float, optional
-            The base depth. If not given and `depths` is, assumed to be depth of last row.
+            The base depth. If not given, assumed to be just below last row of `depths`.
         add_tol : float, optional
             Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
             where `@property dd` is the median difference in depth between adjacent `img` rows.
@@ -95,6 +95,7 @@ class CoreColumn:
     def depths(self, arr):
         assert type(arr) is np.ndarray and arr.ndim == 1, '`depths` must be 1D array'
         assert arr.size == self.height, 'length of `depths` must match image height'
+        assert np.all(np.diff(arr) > 0), '`depths` must be strictly increasing'
         self._depths = arr
 
     @property
@@ -127,21 +128,27 @@ class CoreColumn:
 
 
     def slice_depth(self, top=None, base=None):
-        """Slice the CoreColumn between `top` and `base`,
+        """Get a sliced CoreColumn between `top` and `base`,
         if it would have an effect and it is possible to do so.
         """
         top = top or self.top
         base = base or self.base
         assert base > top, 'Slice boundaries must maintain depth order.'
 
+        assert top < self.base, f'Cannot slice to top {top} with base {self.base}'
+        assert base > self.top, f'Cannot slice to base {base} with top {self.top}'
+
         # check that there's a difference, and that it isn't a superset of current range
         if [top, base] != [self.top, self.base] and (top > self.top or base < self.base):
             idxs = np.logical_and(self.depths >= top, self.depths <= base)
-            self.img = self.img[idxs]
-            self.depths = self.depths[idxs]
-            self.top, self.base = top, base
-
-        return self
+            #self.img = self.img[idxs]
+            #self.depths = self.depths[idxs]
+            #self.top, self.base = top, base
+            return CoreColumn(self.img[idxs,...], depths=self.depths[idxs],
+                             top=top, base=base,
+                             add_mode=self.add_mode, add_tol=self.add_tol)
+        else:
+            return self
 
 
     def __repr__(self):
@@ -166,7 +173,7 @@ class CoreColumn:
             - `add_tol` is propagated by `max(LHS.add_tol, RHS.add_tol)`.
         """
         depth_diff = other.top - self.base
-        print(self.depth_range, ' + ', other.depth_range, ' gap: ' depth_diff)
+        print(self.depth_range, ' + ', other.depth_range, ' gap: ', depth_diff)
 
         if depth_diff < 0:
             raise UserWarning(f'Cant add shallower {other} below deeper {self}!')
@@ -184,13 +191,44 @@ class CoreColumn:
                 fill_img = np.zeros((fill_rows, self.width, self.channels), dtype=self.img.dtype)
 
                 self.img = utils.vstack_images(self.img, fill_img)
-                self.depths = np.concatenate(self.depths, fill_depths)
+                self.depths = np.concatenate([self.depths, fill_depths])
 
         return CoreColumn(utils.vstack_images(self.img, other.img),
                          depths = np.concatenate([self.depths, other.depths]),
                          top = self.top, base = other.base,
                          add_tol = max(self.add_tol, other.add_tol),
                          add_mode = self.add_mode)
+
+
+    ###+++++++++++++++###
+    ### Save and Load ###
+    ###+++++++++++++++###
+
+    def save(self, path, name=None):
+        """Save the CoreColumn to directory `path`.
+
+        Parameters
+        ----------
+        path : str or Path
+            Location to save to (must exist and be a directory).
+        name : str, optional
+            Stem to save files as, default=`CoreColumn_<top>_<base>`.
+
+        This will save three files in `path`:
+            <name>_img.npy : image array
+            <name>_depths.npy : depths array
+            <name>.pkl : the rest of the instance
+        """
+
+        pass
+
+    @classmethod
+    def load(cls, path, name):
+        """Return a new CoreColumn instance from directory `path`. The three required
+        files (<name>_img.npy, <name>_depths.npy, <name>.pkl) must exist.
+        """
+
+        pass
 
 
     ###+++++++++++++++++++###
