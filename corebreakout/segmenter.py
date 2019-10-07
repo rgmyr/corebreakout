@@ -2,9 +2,6 @@
 Raw core image processing using Mask-RCNN model(s).
 
 Mask-RCNN implementation from `mrcnn` package: github/matterport/Mask_RCNN
-
-TODO:
-    - allow other orientations + object classes in `segment` method
 """
 from pathlib import Path
 from operator import add

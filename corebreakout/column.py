@@ -45,8 +45,7 @@ class CoreColumn:
         """
         self.img = img    # img.setter called
 
-        depths_given = depths is not None
-        top_given, base_given = top is not None, base is not None
+        depths_given, top_given, base_given = depths is not None, top is not None, base is not None
 
         assert depths_given or (top_given and base_given), 'Must specify either `depths`, or `top` and `base`'
 
@@ -149,8 +148,8 @@ class CoreColumn:
         return (
             f'CoreColumn instance with:\n'
             f'\t img.shape: {self.img.shape}\n'
-            f'\t depth_range: ({self.top}, {self.base})\n'
-            f'\t add_tol & mode: {self.add_tol} , {self.add_mode}\n'
+            f'\t (top, base): ({self.top}, {self.base})\n'
+            f'\t add_tol & add_mode: {self.add_tol} , {self.add_mode}\n'
         )
 
 
