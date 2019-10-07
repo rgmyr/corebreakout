@@ -1,5 +1,9 @@
-"""
-Script utilizing `pytesseract` to extract top + base depths from image text.
+"""Script utilizing `pytesseract` to extract top + base depths from image text with consistent location.
+
+Instructions for use:
+    - Modify `TEXT_BBOX` to match the location of informative text in your images
+    -
+
 """
 import os
 import re
@@ -11,11 +15,33 @@ from skimage import io
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Set Tesseract arguments
-# Docs: https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#options
+
+
+# Set Tesseract arguments. See docs for options:
+#    https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#options
 TESSERACT_CONFIG = '-psm 6'
 
+# Set location (x0, y0, x1, y1) of text
 TEXT_BBOX = 200, 2200, 400, 2800
+
+parser = argparse.ArgumentParser(description="Extract top and base depths from an image with `pytesseract`")
+parser.add_argument(
+    'root_dir',
+    type=str,
+    help="A common parent directory of all target `converted` directories."
+)
+parser.add_argument(
+    '--force',
+    dest='force',
+    action='store_true',
+    help="Flag to force overwrite of any existing auto_depths.csv files."
+)
+parser.add_argument(
+    '--inspect',
+    dest='inspect',
+    action='store_true',
+    help="Flag to inspect images and OCR output whenever there is an issue."
+)
 
 
 def truncate(f, n):
@@ -31,12 +57,17 @@ def truncate(f, n):
 
 
 def depth_range_from_img(img, inspect):
-    # defaults for now, seems to work for both layouts in schiehallion
-    crop_fn = lambda x: x[200:400,2200:2800]
+    """Take an image or path to one, return (top, base) depths.
+
+    If `inspect`, will show any text bboxes where < 2 floats found.
+    """
+    x0, y0, x1, y1 = TEXT_BBOX
+    crop_fn = lambda x: x[x0:x1,y0:y1]
 
     if isinstance(img, str):
         img = io.imread(img)
 
+    # Get string of text, look for possible floats
     chars = pytesseract.image_to_string(crop_fn(img), config=TESSERACT_CONFIG)
     numbers = [truncate(number,2) for number in re.findall('\d+\.\d+', chars)]
 
@@ -44,10 +75,11 @@ def depth_range_from_img(img, inspect):
         if inspect:
             print('PROBLEM WITH THIS FILE, filling in 0\'s')
             print(chars)
-            plt.imshow(cropper(img))
+            plt.imshow(crop_fn(img))
             plt.show()
         return (0.0, 0.0)
     else:
+        # Return last two possible floats
         return (float(numbers[-2]), float(numbers[-1]))
 
 
@@ -76,23 +108,7 @@ def auto_label_all_subdirs(path, force_overwrite=False, inspect=False):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'root_dir',
-        type=str,
-        help="A common parent directory of all target `converted` directories."
-    )
-    parser.add_argument(
-        '--force',
-        dest='force',
-        action='store_true',
-        help="Flag to force overwrite of any existing auto_depths.csv files"
-    )
-    parser.add_argument(
-        '--inspect',
-        dest='inspect',
-        action='store_true',
-        help="Flag to inspect images and OCR output whenever there is an issue"
-    )
+
     args = parser.parse_args()
+
     auto_label_all_subdirs(args.root_dir, force_overwrite=args.force, inspect=args.inspect)
