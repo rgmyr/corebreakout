@@ -16,7 +16,7 @@ height1, height2, height3 = (img.shape[0] for img in [img1, img2, img3])
 
 
 def test_construction():
-    """Test various construction arguments that should fail."""
+    """Try various construction arguments that should fail."""
 
     # 1D array should fail
     with pytest.raises(ValueError):
@@ -34,7 +34,11 @@ def test_construction():
     with pytest.raises(AssertionError):
         _ = CoreColumn(img1, depths=np.linspace(1.0, 2.0, num=100))
 
-    # More bad top/base/depth combos?
+    # Grayscale should be allowed
+    gray_column = CoreColumn(color.rgb2gray(img1), top=1.0, base=2.0)
+    assert gray_column.channels == 1, 'Grayscale image should have 1 channel'
+
+
 
 
 def test_addition():
@@ -44,7 +48,7 @@ def test_addition():
     column2 = CoreColumn(img2, top=2.0, base=3.0)
     column3 = CoreColumn(img3, top=3.0, base=4.0)
 
-    # Default `add_mode` should just stack images
+    # Adjacent images -> should not fill between
     one_plus_two = column1 + column2
     assert one_plus_two.height == (height1 + height2)
 
@@ -56,12 +60,13 @@ def test_addition():
     column1.add_tol = 1.0
     column1.add_mode = 'collapse'
     one_plus_three = column1 + column3
-    assert one_plus_three.height == (height1 + height3)
+    assert one_plus_three.height == (height1 + height3), 'collapse == naive vstack'
 
     # Make sure 'fill' ends up filling
     column1.add_mode = 'fill'
     one_plus_three = column1 + column3
-    assert one_plus_three.height > (height1 + height3)
+    assert one_plus_three.height > (height1 + height3), 'fill should fill something'
+
 
 
 def test_slicing():
