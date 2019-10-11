@@ -195,7 +195,7 @@ class CoreSegmenter:
 
         # Set single argument lambda functions to apply to column regions / region images
         crop_fn = lambda region: layout.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
-        transform_fn = lambda region: layout.transform_region(region, self.layout_params['orientation'])
+        transform_fn = lambda region: layout.rotate_vertical(region, self.layout_params['orientation'])
 
         # Apply cropping and transform (rotation) to column regions
         crops = [transform_fn(crop_fn(region)) for region in col_regions]
