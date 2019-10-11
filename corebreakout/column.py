@@ -5,7 +5,6 @@ TODO:
     - do we really need 'slice_depth', or can we do something more clever?
 """
 import numpy as np
-import pandas as pd
 from matplotlib import ticker
 import matplotlib.pyplot as plt
 
@@ -156,7 +155,7 @@ class CoreColumn:
             f'CoreColumn instance with:\n'
             f'\t img.shape: {self.img.shape}\n'
             f'\t (top, base): ({self.top}, {self.base})\n'
-            f'\t add_tol & add_mode: {self.add_tol} , {self.add_mode}\n'
+            f'\t add_tol & add_mode: {self.add_tol:.4f} , {self.add_mode}\n'
         )
 
 
@@ -235,7 +234,7 @@ class CoreColumn:
     ###  Column Plotting  ###
     ###+++++++++++++++++++###
 
-    def plot(self, figsize=(15, 650), **kwargs):
+    def plot(self, figsize=(15, 50), major_kwargs={}, minor_kwargs={}):
         """Make an image figure with major and minor depth ticks.
 
         Parameters
@@ -252,9 +251,14 @@ class CoreColumn:
         fig, ax
             Matplotlib figure and axis with image + ticks plotted.
         """
+        # need to to this some other way
+        major_kwargs = {**MAJOR_TICK_PARAMS, **major_kwargs}
+        minor_kwargs = {**MINOR_TICK_PARAMS, **minor_kwargs}
+        all_kwargs = {**major_kwargs, **minor_kwargs}
+
         fig, ax = plt.subplots(figsize=figsize)
 
-        major_ticks, major_locs, minor_ticks, minor_locs = self._make_image_ticks(**kwargs)
+        major_ticks, major_locs, minor_ticks, minor_locs = self._make_image_ticks(**all_kwargs)
 
         ax.yaxis.set_major_formatter(ticker.FixedFormatter((major_ticks)))
         ax.yaxis.set_major_locator(ticker.FixedLocator((major_locs)))
@@ -262,8 +266,8 @@ class CoreColumn:
         ax.yaxis.set_minor_formatter(ticker.FixedFormatter((minor_ticks)))
         ax.yaxis.set_minor_locator(ticker.FixedLocator((minor_locs)))
 
-        ax.tick_params(which='major', labelsize=kwargs.get('major_tick_size', 32), color='black')
-        ax.tick_params(which='minor', labelsize=kwargs.get('minor_tick_size', 12), color='gray')
+        ax.tick_params(which='major', **major_kwargs)
+        ax.tick_params(which='minor', **minor_kwargs)
 
         ax.set_xticks([], [])
         ax.grid(False)
@@ -300,7 +304,7 @@ class CoreColumn:
         major_ticks, major_locs = [], []
         minor_ticks, minor_locs = [], []
 
-        # remainders w.r.t. precision, round close numbers
+        # remainders of depth w.r.t. precision
         major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
         minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
 
@@ -311,10 +315,9 @@ class CoreColumn:
                 major_locs.append(i)
 
             elif np.argmin(minor_rmndr[i-1:i+2]) == 1:
-                #if major_ticks[-1]+'0' == minor_fmt_fn(self.depths[i-1]):
-                if major_ticks[-1] == minor_fmt_fn(self.depths[i-1]):
-                    # fixes some overlapping ticks, BUT not robust
-                    # enough for all possible precision combos
+                # if already major tick, don't bother
+                # NOTE: ugh, need to fix again
+                if major_ticks[-1] == major_fmt_fn(self.depths[i-1]):
                     continue
                 minor_ticks.append(minor_fmt_fn(self.depths[i-1]))
                 minor_locs.append(i)

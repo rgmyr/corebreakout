@@ -2,10 +2,8 @@
 *__pycache__*
 *pytest_cache*
 
-# exclude assets, models
-assets/
+# exclude models
 assets/models/
-!assets/.gitkeep
-!assets/models.gitkeep
+!assets/models/.gitkeep
 
 *.h5
