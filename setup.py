@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-'''
-Seems to work fine, might update later.
-'''
-
 import os
 from setuptools import find_packages
 
@@ -15,7 +11,7 @@ PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 setup(name='corebreakout',
       version='0.1',
-      description='Image segmentation tools for alignment of core sample images',
+      description='Image segmentation tools for processing geological core sample images',
       url='https://github.com/rgmyr/corebreakout',
       author='Ross Meyer',
       author_email='ross.meyer@utexas.edu',

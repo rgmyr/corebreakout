@@ -203,8 +203,8 @@ class CoreColumn:
     ### Save and Load ###
     ###+++++++++++++++###
 
-    def save(self, path, name=None):
-        """Save the CoreColumn to directory `path`.
+    def save(self, path, name=None, pickle=True, image=False, depths=False):
+        """Save the CoreColumn (or parts of it) to directory `path`.
 
         Parameters
         ----------
@@ -212,20 +212,61 @@ class CoreColumn:
             Location to save to (must exist and be a directory).
         name : str, optional
             Stem to save files as, default=`CoreColumn_<top>_<base>`.
-
-        This will save three files in `path`:
-            <name>_img.npy : image array
-            <name>_depths.npy : depths array
-            <name>.pkl : the rest of the instance
+        pickle : bool, optional
+            Whether to pickle the entire object with `dill`, default=True.
+        image : bool, optional
+            Whether to save the image as '.npy' file, default=False.
+        depths : bool, optional
+            Whether to save the depths as a '.npy' file, default=False
         """
+        assert pickle or image or depths, 'Must save something.'
 
-        pass
+        path = Path(path)
+        assert path.exists() and path.isdir(), f'Save location {path} doesnt exist.'
+
+        if name:
+            assert type(name) is str, 'Name must be a string'
+        else:
+            name = f'CoreColumn_{self.top:.2f}_{self.base:.2f}'
+
+        if pickle:
+            with open(path / (name+'.pkl'), 'wb') as pfile:
+                dill.dump(self, pfile)
+        if image:
+            np.save((path / (name+'_image.npy')), self.img)
+        if depths:
+            np.save((path / (name+'_depths.npy')), self.depths)
+
 
     @classmethod
-    def load(cls, path, name):
-        """Return a new CoreColumn instance from directory `path`. The three required
-        files (<name>_img.npy, <name>_depths.npy, <name>.pkl) must exist.
+    def load(cls, path, name, **kwargs):
+        """Load a CoreColumn instance from directory `path`.
+
+        If '<name>.pkl' exists, will just load from that file.
+
+        Otherwise, at least '<name>_image.npy' must exist. If '<name>_depths.npy'
+        also exists, those will be read as `depths`. If not, the user must pass
+        either `depths` or `top` & `base` as **kwargs.
         """
+        path = Path(path)
+        assert path.exists() and path.isdir(), f'Load location {path} doesnt exist.'
+
+        pickle_path = path / (name+'.pkl')
+        image_path = path / (name+'_image.npy')
+        depths_path = path / (name+'_depths.npy')
+
+        if pickle_path.isfile():
+            return dill.load(pickle_file)
+
+        assert image_path.isfile(), '_image.npy file must exist if pickle doesnt.'
+        img = np.load(image_path)
+
+        if depths_path.isfile():
+            kwargs['depths'] = np.load(depths_path)
+        else:
+            assert 'top' in kwargs.keys() and 'base' in kwargs.keys(), 'Depth info needed.'
+
+        return cls(img, **kwargs)
 
         pass
 
