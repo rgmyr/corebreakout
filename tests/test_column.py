@@ -16,7 +16,7 @@ height1, height2, height3 = (img.shape[0] for img in [img1, img2, img3])
 
 
 def test_construction():
-    """Try various construction arguments that should fail."""
+    """Try various construction arguments that should fail or succeed."""
 
     # 1D array should fail
     with pytest.raises(ValueError):
@@ -30,6 +30,9 @@ def test_construction():
     with pytest.raises(AssertionError):
         _ = CoreColumn(img1)
 
+    # Just depths should be fine
+    _ = CoreColumn(img1, depths=np.linspace(1.0, 2.0, num=img1.shape[0]))
+
     # Depth and image size mismatch should fail
     with pytest.raises(AssertionError):
         _ = CoreColumn(img1, depths=np.linspace(1.0, 2.0, num=100))
@@ -37,8 +40,6 @@ def test_construction():
     # Grayscale should be allowed
     gray_column = CoreColumn(color.rgb2gray(img1), top=1.0, base=2.0)
     assert gray_column.channels == 1, 'Grayscale image should have 1 channel'
-
-
 
 
 def test_addition():
@@ -56,6 +57,10 @@ def test_addition():
     with pytest.raises(UserWarning):
         _ = column1 + column3
 
+    # Should only be able to add in depth order
+    with pytest.raises(UserWarning):
+        _ = column2 + column1
+
     # Change `add_tol`
     column1.add_tol = 1.0
     column1.add_mode = 'collapse'
@@ -65,8 +70,7 @@ def test_addition():
     # Make sure 'fill' ends up filling
     column1.add_mode = 'fill'
     one_plus_three = column1 + column3
-    assert one_plus_three.height > (height1 + height3), 'fill should fill something'
-
+    assert one_plus_three.height > (height1 + height3), '`fill` should have filled something'
 
 
 def test_slicing():

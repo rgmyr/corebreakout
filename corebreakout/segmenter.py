@@ -1,7 +1,6 @@
-"""
-Raw core image processing using Mask-RCNN model(s).
+"""Raw core image processing using Mask-RCNN model(s).
 
-Mask-RCNN implementation from `mrcnn` package: github/matterport/Mask_RCNN
+Mask-RCNN implementation from `mrcnn` package @ matterport/Mask_RCNN
 """
 from pathlib import Path
 from operator import add
@@ -16,7 +15,7 @@ import mrcnn.model as modellib
 #from mrcnn.utils import Dataset as mrcnn_Dataset
 
 from corebreakout import CoreColumn
-from corebreakout import defaults, datasets, layout, utils
+from corebreakout import defaults, datasets, utils, viz
 
 # There seem to be two slightly different offsets
 # Eventually we should get away from this, maybe by also detecting core box boundaries
@@ -139,8 +138,8 @@ class CoreSegmenter:
         if show:
             if colors is not None:
                 assert len(colors) == (len(self.class_names)-1), 'Number of `colors` must match number of classes'
-                colors = [class_colors[i-1] for i in preds['class_ids']]
-            utils.show_preds(img, preds, self.class_names, colors=colors)
+                colors = [colors[i-1] for i in preds['class_ids']]
+            viz.show_preds(img, preds, self.class_names, colors=colors)
 
         # Select masks for column class
         col_masks = preds['masks'][:,:,preds['class_ids']==self.column_class_id]
@@ -155,34 +154,37 @@ class CoreSegmenter:
         col_labels = utils.masks_to_labels(col_masks)
 
         # Get sorted `skimage` regions for column masks
-        col_regions = layout.sort_regions(measure.regionprops(col_labels), self.layout_params['order'])
+        col_regions = utils.sort_regions(measure.regionprops(col_labels), self.layout_params['order'])
 
         # Figure out crop endpoints, set related args
         crop_axis = 0 if self.layout_params['orientation'] == 'l2r' else 1
 
         # Set up `endpts` for bbox adjustment
         if self.endpts_is_auto:
+
             if self.layout_params['endpts'] == 'auto':
-                endpts = self._get_auto_endpts(col_regions, crop_axis)
+                regions = col_regions
             else:
                 # 'auto_all' mode
-                all_regions = measure.regionprops(utils.masks_to_labels(preds['masks']))
-                endpts = self._get_auto_endpts(all_regions, crop_axis)
+                regions = measure.regionprops(utils.masks_to_labels(preds['masks']))
+
+            endpts = utils.maximum_extent(regions, crop_axis)
 
         elif self.endpts_is_class:
+
             measure_idxs = np.where(preds['class_ids'] == self.endpts_class_id)[0]
+
             # If object not detected, then ignore for cropping
             if measure_idxs.size == 0:
                 print('`endpts` class not detected, cropping will use `auto` method')
-                endpts = self._get_auto_endpts(col_regions, crop_axis)
+                regions = col_regions
+
             # Otherwise, use bbox of instance with highest confidence score
             else:
                 best_idx = measure_idxs[np.argmax(preds['scores'][measure_idxs])]
-                measure_bbox = measure.regionprops((preds['masks'][:,:,best_idx]).astype(np.int))[0].bbox
-                if crop_axis is 0:
-                    endpts = (measure_bbox[1], measure_bbox[3])
-                else:
-                    endpts = (measure_bbox[0], measure_bbox[2])
+                regions = measure.regionprops((preds['masks'][:,:,best_idx]).astype(np.int))
+
+            endpts = utils.maximum_extent(regions, crop_axis)
 
         elif self.endpts_is_coords:
             endpts = self.layout_params['endpts']
@@ -194,8 +196,8 @@ class CoreSegmenter:
         print(f'endpoint coords: {endpts}')
 
         # Set single argument lambda functions to apply to column regions / region images
-        crop_fn = lambda region: layout.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
-        transform_fn = lambda region: layout.rotate_vertical(region, self.layout_params['orientation'])
+        crop_fn = lambda region: utils.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
+        transform_fn = lambda region: utils.rotate_vertical(region, self.layout_params['orientation'])
 
         # Apply cropping and transform (rotation) to column regions
         crops = [transform_fn(crop_fn(region)) for region in col_regions]
@@ -228,6 +230,18 @@ class CoreSegmenter:
     def _find_endpts(self, preds):
         """Find column endpoints using method specified by `layout_params`."""
         pass
+
+    def _get_expected_cols(self, depth_range, col_height):
+        """Compute the top/base of columns required to span `depth_range`.
+
+        Returns
+        -------
+        num_expected
+        """
+        col_height = self.layout_params['col_height']
+        num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
+        col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
+        col_bases = [top+col_height for top in col_tops]
 
 
     def _get_auto_endpts(self, regions, crop_axis):

@@ -43,7 +43,7 @@ LAYOUT_PARAMS = {
     'orientation' : 'l2r',      # depth orientation of each individual column
     'col_height' : 1.0,         # assumed height of each column, or tray, etc.
     'col_class' : 'col',        # name of class for sample material columns
-    'endpts' : 'tray'           # name of class, or 2-tuple of explicit pixel rows/cols
+    'endpts' : 'tray'           # name of class, 'auto', 'auto_all', or 2-tuple
 }
 
 ####++++++++++++++++++++++####
