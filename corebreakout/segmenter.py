@@ -12,18 +12,9 @@ import matplotlib.pyplot as plt
 from skimage import io, morphology, measure
 
 import mrcnn.model as modellib
-#from mrcnn.utils import Dataset as mrcnn_Dataset
 
 from corebreakout import CoreColumn
-from corebreakout import defaults, datasets, utils, viz
-
-# There seem to be two slightly different offsets
-# Eventually we should get away from this, maybe by also detecting core box boundaries
-
-endpts = {
-    'A': (815, 6775),
-    'B': (325, 6600)
-}
+from corebreakout import defaults, utils, viz
 
 
 class CoreSegmenter:
@@ -89,7 +80,7 @@ class CoreSegmenter:
 
 
     def segment(self, img, depth_range, add_tol=None, add_mode='fill', layout_params={}, show=False, colors=None):
-        """Detect and segment core columns in `img`, return single aggregated CoreColumn instance.
+        """Detect and segment core columns in `img`, return single aggregated `CoreColumn` instance.
 
         Parameters
         ----------
@@ -244,17 +235,6 @@ class CoreSegmenter:
         col_bases = [top+col_height for top in col_tops]
 
 
-    def _get_auto_endpts(self, regions, crop_axis):
-        """Find min/max of detected `regions` masks along `crop_axis`."""
-        low_idx = 0 if crop_axis == 1 else 1
-        high_idx = 2 if crop_axis == 1 else 3
-
-        low = min(r.bbox[low_idx] for r in regions)
-        high = max(r.bbox[high_idx] for r in regions)
-
-        return (low, high)
-
-
     def _check_layout_params(self):
         """Make sure all values in `self.layout_params` are valid, set related boolean attributes."""
         lp = self.layout_params
@@ -273,7 +253,7 @@ class CoreSegmenter:
             assert str(endpts) in ['auto', 'auto_all'], 'Invalid `endpts` auto keyword'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = True, False, False
         if type(endpts) is str:
-            assert endpts in self.class_names, f'{endpts} is not `auto_*` or in {self.class_names}.'
+            assert endpts in self.class_names, f'{endpts} is `auto_*` or in {self.class_names}.'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, True, False
         elif type(endpts) is tuple:
             assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
