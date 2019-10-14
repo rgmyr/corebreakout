@@ -1,5 +1,8 @@
-
+"""
+Assorted visualization functions.
+"""
 from mrcnn.visualize import display_instances
+
 
 ###++++++++++++++++++++++###
 ### Model + bbox + lines ###
@@ -62,3 +65,8 @@ def draw_box(img, box, color, lw):
     img[y1:y2, x2:x2 + lw] = color
 
     return img
+
+
+###++++++++++++++++++++###
+### Column depth ticks ###
+###++++++++++++++++++++###

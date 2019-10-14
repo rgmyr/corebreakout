@@ -268,8 +268,6 @@ class CoreColumn:
 
         return cls(img, **kwargs)
 
-        pass
-
 
     ###+++++++++++++++++++###
     ###  Column Plotting  ###

@@ -4,6 +4,7 @@ Dataset class for COCO format segmentation labels
 import os
 import json
 from pathlib import Path
+from itertools import product
 
 import skimage
 import numpy as np
@@ -25,6 +26,9 @@ class PolygonDataset(Dataset):
     """
     def __init__(self, classes=defaults.CLASSES):
         super().__init__()
+
+        if not self.check_classes(classes):
+            raise ValueError(f'{classes} are invalid.')
 
         for i, cls_name in zip(range(len(classes)), classes):
             # `source` doesn't matter for single dataset, just using 'cb' for 'corebreakout'
@@ -110,3 +114,11 @@ class PolygonDataset(Dataset):
             f'Class count : {self.num_classes}\n' +
             '\n'.join(['{:3}. {:50}'.format(i, info['name']) for i, info in enumerate(self.class_info)])
         )
+
+    @staticmethod
+    def check_classes(classes):
+        """Make sure no class is a substring of any other class."""
+        for pair in product(classes, classes):
+            if (pair[0] != pair[1]) and (pair[0] in pair[1]):
+                return False
+        return True
