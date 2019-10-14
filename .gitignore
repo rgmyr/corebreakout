@@ -7,3 +7,4 @@ assets/models/
 !assets/models/.gitkeep
 
 *.h5
+*.npy

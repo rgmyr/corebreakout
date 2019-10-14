@@ -20,7 +20,7 @@ LAYOUT_PARAMS = {
 }
 ```
 
-**DEVELOPMENT NOTE:** The only allowed values for `order` and `orientation` are `'t2b'` and `'l2r'`. This covers all conventional core image layouts that we are aware of, but we would consider adding `'b2t'` and `'r2l'` if provided with use-cases. If you have one, please open an issue (or submit a pull request).
+**DEVELOPMENT NOTE:** The only allowed values for `order` and `orientation` are `'t2b'` and `'l2r'`. This covers all conventional core image layouts that we are aware of, but we would consider adding `'b2t'` and `'r2l'` if provided with use-cases. If you have one, please open an issue (or submit a pull request ;-).
 
 ## `order` and `orientation`
 
@@ -49,18 +49,26 @@ The name of the class representing core sample columns in the M-RCNN model used 
 
 The `'endpts'` parameter determines the method for making sure that before cropping, the `top` and `base` of partial columns are extended to locations that are approximately `'col_height'` apart. Different options may work better or worse depending on how clean the samples are and how consistent the layout is.
 
-Predicted masks tend to be subsets of the 'true' masks, so short columns are extended, but longer columns are not shortened.
+**Note:** Predicted masks tend to be subsets of the 'true' masks, so **short columns are extended**, but **longer columns are not shortened**. You can see this in the example images below, where the computed endpoint locations are shown as solid yellow lines, and the resulting column bounding boxes are shown as green dashed lines.
 
 Allowed values of `'endpts'` include:
 - The name of a class (*e.g.*, `'tray'`)
     - Results in columns being extended to the `top` and `base` of the strongest detection of this class
     - Must be found in the `class_names` attribute of the `CoreSegmenter` instance
     - Typical choices would be empty trays, or the measuring sticks commonly placed next to boxes of core
+
+![](images/endpts_tray.png)
+
 - One of the keywords `'auto'` or `'auto_all'`
     - Results in columns being extended to the min/max coordinates of a set of detected objects
-    - `'auto'` will use only objects of `'col_class'` as the relevant set (*e.g.*, all `'col'` detections)
-    - `'auto_all'` will use all objects in the image (*e.g.*, all `'col'` **and** `'tray'` detections)
-- A 2-tuple of explicit integer endpoint coordinates (*e.g.*, `(800, 2000)`)
+    - `'auto'` will use only objects of `'col_class'` as the relevant set (*e.g.*, all `'col'` detections -- first example below)
+    - `'auto_all'` will use all objects in the image (*e.g.*, all `'col'` **and** `'tray'` detections -- second example below)
+
+![](images/endpts_auto.png)
+
+![](images/endpts_auto_all.png)
+
+- A 2-tuple of explicit integer endpoint coordinates (*e.g.*, `(100, 6900)`)
     - Results in columns being extended to at least these min/max coordinates
 
-**TODO: example images showing endpoints selected by each option**
+![](images/endpts_explicit.png)

@@ -119,10 +119,8 @@ class CoreSegmenter:
             img = io.imread(img)
 
         # Set up expected number of columns and their top/base depths
-        col_height = self.layout_params['col_height']
-        num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
-        col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
-        col_bases = [top+col_height for top in col_tops]
+        col_tops, col_bases = self.expected_tops_bases(depth_range, self.layout_params['col_height'])
+        num_expected = len(col_tops)
 
         # Get MRCNN column predictions
         preds = self.model.detect([img], verbose=0)[0]
@@ -190,7 +188,7 @@ class CoreSegmenter:
         crop_fn = lambda region: utils.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
         transform_fn = lambda region: utils.rotate_vertical(region, self.layout_params['orientation'])
 
-        # Apply cropping and transform (rotation) to column regions
+        # Apply cropping and rotation to column regions
         crops = [transform_fn(crop_fn(region)) for region in col_regions]
 
         # Assemble `CoreColumn` objects from masked/cropped image regions
@@ -210,29 +208,33 @@ class CoreSegmenter:
 
         Parameters
         ----------
-        imgs : Iterable of either filepaths or numpy image arrays.
-        depth_ranges: Iterable of (top, base) pairs for each
+        imgs : Iterable of either filepaths or image arrays.
+        depth_ranges: Iterable of (top, base) pairs for each image.
         **kwargs :
             See `segment()` docstring for options.
         """
+        assert len(imgs) == len(depth_ranges), 'Should pass equal number of images and ranges.'
+
         return reduce(add, [self.segment(img, dr, **kwargs) for img, dr in zip(imgs, depth_ranges)])
 
 
-    def _find_endpts(self, preds):
-        """Find column endpoints using method specified by `layout_params`."""
-        pass
+    @staticmethod
+    def expected_tops_bases(depth_range, col_height):
+        """Compute tops/bases of `col_height` columns spanning `depth_range`.
 
-    def _get_expected_cols(self, depth_range, col_height):
-        """Compute the top/base of columns required to span `depth_range`.
+        Note: col_bases[-1] does not necessarily == depth_range[-1]. The columns
+        are meant to cover the range, not match it exactly. Slicing happens later.
 
         Returns
         -------
-        num_expected
+        col_tops, col_bases
         """
-        col_height = self.layout_params['col_height']
         num_expected = ceil(depth_range[1]-depth_range[0] / col_height)
+
         col_tops = [depth_range[0]+i*col_height for i in range(num_expected)]
         col_bases = [top+col_height for top in col_tops]
+
+        return col_tops, col_bases
 
 
     def _check_layout_params(self):
