@@ -14,7 +14,7 @@ from corebreakout import __file__ as PKG_FILE
 ####+++++++++++++++####
 
 INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
-DATASET_DIR = INCLUDE_DIR / 'assets/data'
+DATASET_DIR = INCLUDE_DIR / 'data'
 #INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
 #DATASET_DIR = Path({PKG_FILE})
 
