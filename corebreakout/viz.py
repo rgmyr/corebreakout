@@ -70,3 +70,58 @@ def draw_box(img, box, color, lw):
 ###++++++++++++++++++++###
 ### Column depth ticks ###
 ###++++++++++++++++++++###
+
+def make_depth_ticks(depths, major_precision=0.1,
+                    major_format_str='{:.1f}',
+                    minor_precision=0.01,
+                    minor_format_str='{:.2f}'):
+    """Generate major & minor (ticks, locs) for depth array axis.
+
+    Parameters
+    ----------
+    depths : array
+        An array of (ordered) depth values from which to generate ticks/locs.
+    *_precision : float, optional
+        Major, minor tick spacing (in depth units), defaults=0.1, 0.01.
+    *_format_str : str, optional
+        Format strings to coerce depths -> tick strings, defaults='{:.1f}', '{:.2f}'.
+
+    Returns
+    -------
+    major_ticks, major_locs, minor_ticks, minor_locs
+
+    *_ticks : lists of tick label strings
+    *_locs : lists of tick locations in array coordinates (fractional indices)
+    """
+    # lambdas to convert values --> strs
+    major_fmt_fn = lambda x: major_format_str.format(x)
+    minor_fmt_fn = lambda x: minor_format_str.format(x)
+
+    major_ticks, major_locs = [], []
+    minor_ticks, minor_locs = [], []
+
+    # remainders of depth w.r.t. precision
+    major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
+    minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
+
+    for i in np.arange(1, self.height+1):
+
+        if np.argmin(major_rmndr[i-1:i+2]) == 1:
+            major_ticks.append(major_fmt_fn(self.depths[i-1]))
+            major_locs.append(i)
+
+        elif np.argmin(minor_rmndr[i-1:i+2]) == 1:
+            # if already major tick, don't bother
+            # NOTE: ugh, need to fix again
+            if major_ticks[-1] == major_fmt_fn(self.depths[i-1]):
+                continue
+            minor_ticks.append(minor_fmt_fn(self.depths[i-1]))
+            minor_locs.append(i)
+
+    # get last tick if needed, doesn't work above for some reason
+    last_depth = np.round(self.depths[-1], decimals=1)
+    if (last_depth % 1.0) == 0.0:
+        major_ticks.append(major_fmt_fn(last_depth))
+        major_locs.append(self.height-1)
+
+    return major_ticks, major_locs, minor_ticks, minor_locs

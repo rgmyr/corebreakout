@@ -1,5 +1,5 @@
 """
-Train and save model from data in `include/pretrained`.
+Train and save model from data in `assets/data`.
 """
 import warnings
 

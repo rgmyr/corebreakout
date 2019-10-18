@@ -319,7 +319,7 @@ class CoreColumn:
     def _make_image_ticks(self, major_precision=0.1,
                           major_format_str='{:.1f}',
                           minor_precision=0.01,
-                          minor_format_str='{:.2f}', **kwargs):
+                          minor_format_str='{:.2f}'):
         """Generate major & minor (ticks, locs) for image axis.
 
         Parameters

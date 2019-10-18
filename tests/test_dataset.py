@@ -6,7 +6,7 @@ import pytest
 from corebreakout.datasets import PolygonDataset
 
 
-DATA_DIR, DATA_SUBSET = './data', 'two_image_dataset'
+DATA_DIR, DATA_SUBSET = 'tests/data', 'two_image_dataset'
 
 good_classes = ['col', 'tray']
 not_good_classes = ['col', 'col_tray']
@@ -28,4 +28,5 @@ def test_dataset_construction():
     assert len(dataset.class_info) == 3, 'Class check, BG added.'
 
     dataset.collect_annotated_images(DATA_DIR, DATA_SUBSET)
-    assert len(self.image_ids) == 2, 'Data check.'
+    dataset.prepare()
+    assert len(dataset.image_ids) == 2, 'Data check.'

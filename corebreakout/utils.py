@@ -44,16 +44,6 @@ def maximum_extent(regions, crop_axis):
     return (low, high)
 
 
-def v_overlapping(r0, r1):
-    """Check if skimage regions `r0` & `r1` are *vertically* overlapping."""
-    return (r0.bbox[0] < r1.bbox[2] and r0.bbox[2] > r1.bbox[0])
-
-
-def h_overlapping(r0, r1):
-    """Check if skimage regions `r0` & `r1` are *horizontally* overlapping."""
-    return (r0.bbox[1] < r1.bbox[3] and r0.bbox[3] > r1.bbox[1])
-
-
 def crop_region(img, labels, region, axis=0, endpts=(815, 6775)):
     """Adjust region bbox and return cropped region * mask.
 

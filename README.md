@@ -4,16 +4,6 @@
 
 `corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth alignment of geological core images. It also provides the `CoreColumn` data structure for the saving, loading, and visualization of core image data.
 
-### TODO
-
-- Move `CorePlotter` or parts of it into this package (check tick generation though -- make sure it works with `mode='collapse'`)
-
-- Write tutorials: one for building/training models, one for performing inference and processing datasets
-
-- Clean up `scripts/` and `notebooks` directories
-
-- Finishing writing `pytest` files
-
 
 ## Target Platform
 
@@ -24,10 +14,10 @@ This package was developed and tested under Linux (Ubuntu, PopOS). It may work o
 
 The following Python packages are required:
 
-- `numpy`
+- `numpy<=1.16.4`
 - `matplotlib`
 - `scikit-image`
-- `tensorflow`
+- `tensorflow<=1.15`
 - `mrcnn` via [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN)
 
 The installation should check for and install `numpy`, `matplotlib`, and `scikit-image`.
@@ -53,11 +43,9 @@ $ pip install -e .
 
 ## Data Assets
 
-In order to run tests, or perform inference without training a new model, you will need to download the data.
+In order to use the provided dataset or perform inference without training a new model, you will need to download the data.
 
-Run tests with `pytest`
-
-## Tutorial
+## Getting started
 
 # Using new datasets
 
@@ -67,7 +55,7 @@ For more details about `Dataset`s, see: [docs/creating_datasets.md]
 
 # Development and Community Guidelines
 
-## Submit and Issue
+## Submit an Issue
 
 ## Contributing
 

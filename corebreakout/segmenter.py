@@ -242,8 +242,8 @@ class CoreSegmenter:
         lp = self.layout_params
 
         # Check `order` and `orientation` validity
-        assert lp['order'] in layout.ORIENTATIONS, f'{lp["order"]} not a valid layout `order`.'
-        assert lp['orientation'] in layout.ORIENTATIONS, f'{lp["orientation"]} not a valid layout `orientation`.'
+        assert lp['order'] in utils.ORIENTATIONS, f'{lp["order"]} not a valid layout `order`.'
+        assert lp['orientation'] in utils.ORIENTATIONS, f'{lp["orientation"]} not a valid layout `orientation`.'
         assert lp['order'] != lp['orientation'], 'layout `order` and `orientation` cannot be the same.'
 
         # Check that column class exists in provided class names
