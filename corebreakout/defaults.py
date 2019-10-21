@@ -13,13 +13,12 @@ from corebreakout import __file__ as PKG_FILE
 #### Default Paths ####
 ####+++++++++++++++####
 
-INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
-DATASET_DIR = INCLUDE_DIR / 'data'
-#INCLUDE_DIR = Path(PKG_FILE).parent.parent / 'assets'
-#DATASET_DIR = Path({PKG_FILE})
+ASSETS_DIR = Path(PKG_FILE).parent.parent / 'assets'
+DATASET_DIR = ASSETS_DIR / 'data'
 
 # Before release: change this to 'assets/models'
 MODEL_DIR = Path('/home/'+os.environ['USER']+'/Dropbox/models/corebreakout')
+#CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_corebreakout.h5'
 COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 
 # Current Mask RCNN experiments
@@ -42,7 +41,7 @@ LAYOUT_PARAMS = {
     'order' : 't2b',            # depth order by which to sort set of columns
     'orientation' : 'l2r',      # depth orientation of each individual column
     'col_height' : 1.0,         # assumed height of each column, or tray, etc.
-    'col_class' : 'col',        # name of class for sample material columns
+    'col_class' : 'col',        # name of class for core sample columns
     'endpts' : 'tray'           # name of class, 'auto', 'auto_all', or 2-tuple
 }
 
