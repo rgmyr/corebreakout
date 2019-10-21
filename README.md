@@ -1,17 +1,18 @@
 # CoreBreakout
 
-## Overview
+### Overview
 
-`corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images. It also provides the `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
+`corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images.
 
 ![](docs/images/JOSS_figure_workflow.png)
 
+It also provides the `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
 
-## Target Platform
+### Target Platform
 
-This package was developed on Linux (Ubuntu, PopOS), and has also (TBD!) been tested on Mac OS X. It may work on other platforms, but we make no guarantees.
+This package was developed on Linux (Ubuntu, PopOS), and has also (TBD!) been tested on Mac OS X. It may work on other platforms, but we can make no guarantees.
 
-# Installation
+## Installation
 
 ### Requirements
 
@@ -38,9 +39,9 @@ $ cd corebreakout
 
 ### Download data (optional)
 
-To make use of the provided dataset and pretrained model, or to train new a model starting from the pretrained COCO model, you will need to download the `assets.zip` folder from the [releases page].
+To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [releases page].
 
-Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to the new location.
+Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 
 
 ### Install (`conda` version)
@@ -68,7 +69,7 @@ $ cd ..
 $ pip install -e .
 ```
 
-# Usage
+## Usage
 
 ### Using new datasets
 
@@ -90,22 +91,24 @@ For details about image layout specification, see: [docs/layout_parameters.md](h
 
 ### Extracting depth ranges with OCR
 
-We provide a script for extracting `top` and `base` depths from image text using `pytesseract`. This helps with aggregating the information required to process a large number of images.
+We provide a script for extracting `top` and `base` depths from image text using `pytesseract`. This can help with aggregating the information required to process a large number of images.
 
 You can install `pytesseract` via `conda` or `pip`, and then follow the instructions in the docstring of [scripts/get_ocr_depths.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py)
 
 
-# Development and Community Guidelines
+## Development and Community Guidelines
 
-## Submit an Issue
+### Submit an Issue
 
 - Navigate to the repository's [issue tab](https://github.com/rgmyr/corebreakout/issues)
 - Search for existing related issues
 - If necessary, create and submit a new issue
 
-## Contributing
+### Contributing
 
-## Testing
+- Please see [`CONTRIBUTING.md`](.github/CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) for how to contribute to the project
+
+### Testing
 
 - Most `corebreakout` functionality not requiring trained model weights can be verified with `pytest`:
 
