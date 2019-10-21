@@ -20,7 +20,7 @@ LAYOUT_PARAMS = {
 }
 ```
 
-**DEVELOPMENT NOTE:** The only allowed values for `order` and `orientation` are `'t2b'` and `'l2r'`. This covers all conventional core image layouts that we are aware of, but we would consider adding `'b2t'` and `'r2l'` if provided with use-cases. If you have one, please open an issue (or submit a pull request ;-).
+**DEVELOPMENT NOTE:** The only allowed values for `order` and `orientation` are `'t2b'` and `'l2r'`. This covers all conventional core image layouts that we are aware of, but we would consider adding `'b2t'` and `'r2l'` if provided with use-cases. If you have one, please open an issue (or submit a pull request :-).
 
 ## `order` and `orientation`
 
@@ -49,7 +49,7 @@ The name of the class representing core sample columns in the M-RCNN model used 
 
 The `'endpts'` parameter determines the method for making sure that before cropping, the `top` and `base` of partial columns are extended to locations that are approximately `'col_height'` apart. Different options may work better or worse depending on how clean the samples are and how consistent the layout is.
 
-**Note:** Predicted masks tend to be subsets of the 'true' masks, so **short columns are extended**, but **longer columns are not shortened**. You can see this in the example images below, where the computed endpoint locations are shown as solid yellow lines, and the resulting column bounding boxes are shown as green dashed lines.
+Predicted masks tend to be subsets of the 'true' masks, so **short columns are extended**, but **longer columns are NOT shortened**. You can see this in the example images below, where the computed minimal endpoint locations are shown as solid yellow lines, and the resulting column bounding boxes are shown as green dashed lines.
 
 Allowed values of `'endpts'` include:
 - The name of a class (*e.g.*, `'tray'`)

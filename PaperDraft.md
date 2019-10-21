@@ -19,7 +19,7 @@ authors:
 affiliations:
  - name: Department of Geology and Geological Engineering, Colorado School of Mines
    index: 1
-date: 7 October 2019
+date: 21 October 2019
 bibliography: paper.bib
 ---
 
@@ -33,7 +33,7 @@ Core samples -- cylindrical rock samples taken from subsurface boreholes -- are 
 
 We provide a labeled example dataset courtesy of the British Geological Survey, and make it straightforward for geologists to add their own training images, configure and train new models, and subsequently process their own image datasets. It supports standard core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects.
 
-![Figure here](docs/images/workflow.png)
+![Figure here](docs/images/JOSS_figure_workflow.png)
 
 ## Functionality
 
