@@ -2,12 +2,12 @@
 
 ### docs
 
-- Finish README (Getting Started, Contributing, etc.)
+- Finish README (installation in particular)
 - Short demo of training
 - Short demo of inference
 - `scripts/README.md`
 
-Notes: require `Python>=3.6`, and `numpy<=1.16.4` (for compatibility with `tf`)
+**Note**: require `Python>=3.6`, and `numpy<=1.16.4` (for compatibility with `tf`)
 
 ### modeling
 
