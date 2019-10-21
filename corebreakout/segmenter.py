@@ -181,9 +181,6 @@ class CoreSegmenter:
         else:
             raise RuntimeError()
 
-        # REMOVE AFTER MAKING DOC IMAGES
-        print(f'endpoint coords: {endpts}')
-
         # Set single argument lambda functions to apply to column regions / region images
         crop_fn = lambda region: utils.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
         transform_fn = lambda region: utils.rotate_vertical(region, self.layout_params['orientation'])

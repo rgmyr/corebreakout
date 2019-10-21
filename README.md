@@ -106,7 +106,7 @@ You can install `pytesseract` via `conda` or `pip`, and then follow the instruct
 
 ### Contributing
 
-- Please see [`CONTRIBUTING.md`](.github/CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) for how to contribute to the project
+- Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md) for how to contribute to the project
 
 ### Testing
 
