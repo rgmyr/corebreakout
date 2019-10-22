@@ -1,9 +1,13 @@
 """Script utilizing `pytesseract` to extract top + base depths from image text with consistent location.
 
-Instructions for use:
+Instructions for users:
     - Modify `TEXT_BBOX` to match the location of informative text in your images
-    -
+    - The BBOX should be set such that the depths are the last two numbers in the text.
 
+Notes:
+    - Will walk <root_dir> and separately process any subdirectories containing <subdir> in their name.
+    - Images in <subdir> should have '.jpeg' extension.
+    - csv's with filenames, tops, and bases will be saved as <save_name>.csv in each <subdir>
 """
 import os
 import re
@@ -16,25 +20,37 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-
 # Set Tesseract arguments. See docs for options:
 #    https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#options
 TESSERACT_CONFIG = '-psm 6'
 
-# Set location (x0, y0, x1, y1) of text
+# Set bounding box (x0, y0, x1, y1) of text
 TEXT_BBOX = 200, 2200, 400, 2800
 
-parser = argparse.ArgumentParser(description="Extract top and base depths from an image with `pytesseract`")
+
+parser = argparse.ArgumentParser(description="Extract OCR top and base depths from images with `pytesseract`")
 parser.add_argument(
     'root_dir',
     type=str,
-    help="A common parent directory of all target `converted` directories."
+    help="A common parent directory of all target <subdir> directories."
+)
+parser.add_argument(
+    '--subdir',
+    type=str,
+    default='converted',
+    help="A string contained in the name of all target subdirectories."
+)
+parser.add_argument(
+    '--save_name'
+    type=str,
+    default='auto_depths',
+    help="Name of csv file(s) saved in image subdirectory (or subdirectories)."
 )
 parser.add_argument(
     '--force',
     dest='force',
     action='store_true',
-    help="Flag to force overwrite of any existing auto_depths.csv files."
+    help="Flag to force overwrite of any existing <save_name>.csv files."
 )
 parser.add_argument(
     '--inspect',
@@ -57,7 +73,7 @@ def truncate(f, n):
 
 
 def depth_range_from_img(img, inspect):
-    """Take an image or path to one, return (top, base) depths.
+    """Take an image or string path to one, return (top, base) depths.
 
     If `inspect`, will show any text bboxes where < 2 floats found.
     """
@@ -73,7 +89,7 @@ def depth_range_from_img(img, inspect):
 
     if len(numbers) < 2:
         if inspect:
-            print('PROBLEM WITH THIS FILE, filling in 0\'s')
+            print('Less than two floats found, filling in 0\'s')
             print(chars)
             plt.imshow(crop_fn(img))
             plt.show()
@@ -92,23 +108,33 @@ def is_good_dir(d, force_overwrite):
         return is_converted_dir and no_depth_file
 
 
-def auto_label_all_subdirs(path, force_overwrite=False, inspect=False):
-    img_dirs = [d[0] for d in os.walk(path) if is_good_dir(d[0], force_overwrite)]
-    for d in img_dirs:
-        print('Processing directory: ', d)
-        img_paths = list(sorted(glob.glob(d+'/*.jpeg')))
-        img_files = [p.split('/')[-1] for p in img_paths]
-        df = pd.DataFrame(index=img_files, columns=['top','bottom'])
-        for img_path, img_file in zip(img_paths, img_files):
-            top, bottom = depth_range_from_img(img_path, inspect)
-            df.at[img_file,'top'] = top
-            df.at[img_file,'bottom'] = bottom
-        df.to_csv(d+'/auto_depths.csv')
-        print('Wrote file: .../auto_depths.csv')
+def find_subdirs(path, subdir, force_overwrite):
+    return [d[0] for d in os.walk(path) if is_good_dir(d[0], force_overwrite)]]
+
+
+def process_subdir(subdir_path, save_name, inspect):
+    img_paths = list(sorted(glob.glob(subdir_path + '/*.jpeg')))
+    img_files = [p.split('/')[-1] for p in img_paths]
+
+    df = pd.DataFrame(index=img_files, columns=['top','bottom'])
+
+    for img_path, img_file in zip(img_paths, img_files):
+        top, bottom = depth_range_from_img(img_path, inspect)
+        df.at[img_file,'top'] = top
+        df.at[img_file,'bottom'] = bottom
+
+        save_path = d+f'/{save_name}.csv'
+        df.to_csv(save_path)
+        print('Wrote file: ', save_path)
 
 
 if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    auto_label_all_subdirs(args.root_dir, force_overwrite=args.force, inspect=args.inspect)
+    img_dirs = find_subdirs(args.root_dir, args.subdir, args.force_overwrite)
+
+    print(f'Processing {len(img_dirs)} directories...')
+
+    for d in img_dirs:
+        process_subdir(d, args.save_name, args.inspect)
