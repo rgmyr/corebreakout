@@ -50,12 +50,12 @@ with warnings.catch_warnings():
     print('\n\nTuning stage 4 and up')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE / 10,
-                epochs=100,
+                epochs=75,
                 layers='4+')
 
     # Finetune all layers of the model
     print('\n\nTuning all model layers')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE / 100,
-                epochs=200,
+                epochs=125,
                 layers='all')

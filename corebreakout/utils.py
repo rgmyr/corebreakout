@@ -8,26 +8,28 @@ import numpy as np
 ###++++++++++++++++++++++++++++++###
 
 # Could add 'b2t' and 'r2l', although those are very unusual
-ORIENTATIONS = ['t2b', 'l2r']
+ORIENTATIONS = ["t2b", "l2r"]
 
 
 def rotate_vertical(region_img, orientation):
     """Rotated (cropped) `region_img` array to vertical, given the depth `orientation`."""
-    assert orientation in ORIENTATIONS, f'orientation {orientation} must be one of {ORIENTATIONS}'
+    assert (
+        orientation in ORIENTATIONS
+    ), f"orientation {orientation} must be one of {ORIENTATIONS}"
 
-    if orientation is 't2b':
+    if orientation is "t2b":
         return region_img
-    elif orientation is 'l2r':
+    elif orientation is "l2r":
         return np.rot90(region_img, k=-1)
     else:
-        raise ValueError(f'bad `orientation`: {orientation}')
+        raise ValueError(f"bad `orientation`: {orientation}")
 
 
 def sort_regions(regions, order):
     """Sort skimage `regions` (core columns), given the column `order`."""
-    assert order in ORIENTATIONS, f'order {order} must be one of {ORIENTATIONS}'
+    assert order in ORIENTATIONS, f"order {order} must be one of {ORIENTATIONS}"
 
-    idx = 0 if order is 't2b' else 1
+    idx = 0 if order is "t2b" else 1
     regions.sort(key=lambda x: x.bbox[idx])
 
     return regions
@@ -72,21 +74,22 @@ def crop_region(img, labels, region, axis=0, endpts=(815, 6775)):
     elif axis is 1:
         r0, r1 = min(r0, endpts[0]), max(r1, endpts[1])
 
-    region_img = img * np.expand_dims(labels==region.label, -1)
+    region_img = img * np.expand_dims(labels == region.label, -1)
 
-    return region_img[r0:r1,c0:c1,:]
+    return region_img[r0:r1, c0:c1, :]
 
 
 ###++++++++++++++++++++++++###
 ### Preds + masks + labels ###
 ###++++++++++++++++++++++++###
 
+
 def masks_to_labels(masks):
     """Convert boolean (H,W,N) `masks` array to integer (H,W) in range(0,N+1)."""
     labels = np.zeros(masks.shape[0:-1], dtype=np.int)
 
     for i in range(masks.shape[-1]):
-        labels += (i+1) * masks[:,:,i].astype(int)
+        labels += (i + 1) * masks[:, :, i].astype(int)
 
     return labels
 
@@ -96,7 +99,7 @@ def squeeze_labels(labels):
     label_ids = np.unique([r.label for r in measure.regionprops(labels)])
 
     for new_label, label_id in zip(range(1, label_ids.size), label_ids[1:]):
-        labels[labels==label_id] == new_label
+        labels[labels == label_id] == new_label
 
     return labels
 
@@ -104,21 +107,21 @@ def squeeze_labels(labels):
 def vstack_images(imgA, imgB):
     """Vstack `imgA` and `imgB`, after RHS zero-padding the narrower if necessary."""
     dimA, dimB = imgA.ndim, imgB.ndim
-    assert dimA == dimB, f'Cannot vstack images of different dimensions: {(dimA, dimB)}'
-    assert dimA in [2, 3], f'Images must be 2D or 3D, not {dimA}D'
+    assert dimA == dimB, f"Cannot vstack images of different dimensions: {(dimA, dimB)}"
+    assert dimA in [2, 3], f"Images must be 2D or 3D, not {dimA}D"
 
     dw = imgA.shape[1] - imgB.shape[1]
 
     if dw == 0:
         return np.concatenate([imgA, imgB])
     elif dimA == 2:
-        pads = ((0,0), (0, abs(dw)))
+        pads = ((0, 0), (0, abs(dw)))
     else:
-        pads = ((0,0), (0, abs(dw)), (0,0))
+        pads = ((0, 0), (0, abs(dw)), (0, 0))
 
     if dw < 0:
-        paddedA = np.pad(imgA, pads, 'constant')
+        paddedA = np.pad(imgA, pads, "constant")
         return np.concatenate([paddedA, imgB])
     else:
-        paddedB = np.pad(imgB, pads, 'constant')
+        paddedB = np.pad(imgB, pads, "constant")
         return np.concatenate([imgA, paddedB])

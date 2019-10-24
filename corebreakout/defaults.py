@@ -13,16 +13,16 @@ from corebreakout import __file__ as PKG_FILE
 #### Default Paths ####
 ####+++++++++++++++####
 
-ASSETS_DIR = Path(PKG_FILE).parent.parent / 'assets'
-DATASET_DIR = ASSETS_DIR / 'data'
+ASSETS_DIR = Path(PKG_FILE).parent.parent / "assets"
+DATASET_DIR = ASSETS_DIR / "data"
 
 # Before release: change this to 'assets/models'
-MODEL_DIR = Path('/home/'+os.environ['USER']+'/Dropbox/models/corebreakout')
-#CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_corebreakout.h5'
-COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
+MODEL_DIR = Path("/home/" + os.environ["USER"] + "/Dropbox/models/corebreakout")
+# CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_corebreakout.h5'
+COCO_MODEL_PATH = MODEL_DIR / "mask_rcnn_coco.h5"
 
 # Current Mask RCNN experiments
-TRAIN_DIR = MODEL_DIR / 'pretrain'
+TRAIN_DIR = MODEL_DIR / "pretrain"
 
 
 # weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
@@ -34,20 +34,21 @@ TRAIN_DIR = MODEL_DIR / 'pretrain'
 #### Default Dataset Params ####
 ####++++++++++++++++++++++++####
 
-CLASSES = ['col', 'tray']
+CLASSES = ["col", "tray"]
 
 # See `docs/layout_parameters.md` for more information
 LAYOUT_PARAMS = {
-    'order' : 't2b',            # depth order by which to sort set of columns
-    'orientation' : 'l2r',      # depth orientation of each individual column
-    'col_height' : 1.0,         # assumed height of each column, or tray, etc.
-    'col_class' : 'col',        # name of class for core sample columns
-    'endpts' : 'tray'           # name of class, 'auto', 'auto_all', or 2-tuple
+    "order": "t2b",  # depth order by which to sort set of columns
+    "orientation": "l2r",  # depth orientation of each individual column
+    "col_height": 1.0,  # assumed height of each column, or tray, etc.
+    "col_class": "col",  # name of class for core sample columns
+    "endpts": "tray",  # name of class, 'auto', 'auto_all', or 2-tuple
 }
 
 ####++++++++++++++++++++++####
 #### Default Model Config ####
 ####++++++++++++++++++++++####
+
 
 class DefaultConfig(Config):
     """M-RCNN model configuration.
@@ -57,23 +58,24 @@ class DefaultConfig(Config):
     For all available parameters and explanations, see:
         https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py
     """
-    NAME = 'cb_default'
+
+    NAME = "cb_default"
 
     # Number of classes, including background
     NUM_CLASSES = 1 + len(CLASSES)
 
-    BACKBONE = 'resnet101'
+    BACKBONE = "resnet101"
 
     # Length of square anchor side in pixels
-    RPN_ANCHOR_SCALES = (64, 128, 192, 256, 320) #, 352)
+    RPN_ANCHOR_SCALES = (64, 128, 192, 256, 320)  # , 352)
 
     # < 1 : wide anchor, > 1 : tall anchor
     # These defaults assume horizontal (wide) columns
     # Note: starting from COCO model requires exactly 3 anchor ratios
-    RPN_ANCHOR_RATIOS = [0.1, 0.55, 1.0]
+    RPN_ANCHOR_RATIOS = [1, 3, 5]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
-    RPN_NMS_THRESHOLD = 0.7 # default = 0.7
+    RPN_NMS_THRESHOLD = 0.7  # default = 0.7
 
     # STD_DEVs? Probably not, shouldn't make a big difference.
 
@@ -89,10 +91,10 @@ class DefaultConfig(Config):
     # Few classes present, so we can lower `class` losses
     LOSS_WEIGHTS = {
         "rpn_class_loss": 0.5,
-        "rpn_bbox_loss": 1.,
+        "rpn_bbox_loss": 1.0,
         "mrcnn_class_loss": 0.5,
-        "mrcnn_bbox_loss": 1.,
-        "mrcnn_mask_loss": 1.
+        "mrcnn_bbox_loss": 1.0,
+        "mrcnn_mask_loss": 1.0,
     }
 
     # Conservative batch size. Assumes single GPU.
@@ -109,21 +111,21 @@ You can also add additional arguments to both `*_TICK_PARAMS` from:
     https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.tick_params.html
 """
 MAJOR_TICK_PARAMS = {
-    'labelleft' : True,         # False to disable labels
-    'labelsize' : 32,
-    'labelcolor' : 'black',
-    'left' : True,              # False to disable ticks
-    'length' : 15,
-    'width' : 4,
-    'color' : 'black'
+    "labelleft": True,  # False to disable labels
+    "labelsize": 32,
+    "labelcolor": "black",
+    "left": True,  # False to disable ticks
+    "length": 15,
+    "width": 4,
+    "color": "black",
 }
 
 MINOR_TICK_PARAMS = {
-    'labelleft' : True,         # False to disable labels
-    'labelsize' : 12,
-    'labelcolor' : 'black',
-    'left' : True,              # False to disable ticks
-    'length' : 8,
-    'width' : 4,
-    'color' : 'black'
+    "labelleft": True,  # False to disable labels
+    "labelsize": 12,
+    "labelcolor": "black",
+    "left": True,  # False to disable ticks
+    "length": 8,
+    "width": 4,
+    "color": "black",
 }

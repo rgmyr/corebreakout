@@ -10,7 +10,7 @@ except ImportError:
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 setup(name='corebreakout',
-      version='0.1',
+      version='0.2',
       description='Image segmentation tools for processing geological core sample images',
       url='https://github.com/rgmyr/corebreakout',
       author='Ross Meyer',
@@ -18,7 +18,6 @@ setup(name='corebreakout',
       packages=find_packages(PACKAGE_PATH),
       install_requires=[
             'numpy >= 1.13.0',
-            'scipy >= 1.0.0',
             'scikit-image >= 0.13.1',
             'matplotlib'
       ],
