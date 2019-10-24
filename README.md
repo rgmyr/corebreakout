@@ -44,30 +44,31 @@ To make use of the provided dataset and model, or to train new a model starting 
 Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 
 
-### Install (`conda` version)
+### Installation
 
-We recommend installing `corebreakout` and its dependencies in an isolated environment.
+We recommend installing `corebreakout` and its dependencies in an isolated environment, and further recommend the use of `conda`.
 
-If you are a `conda` user on a `*nix` system, you can create a new environment called `corebreakout` and install everything at once by running the provided `bash` script:
+To create a new `conda` environment called `corebreakout` and activate it:
 
 ```
-$ ./conda_install.sh
+$ conda create -n corebreakout python=3.7
+$ conda activate corebreakout
 ```
 
-### Install (`pip` version)
+Then install all of the required packages into the environment:
 
-First install `mrcnn` and its requirements:
 ```
-$ cd Mask_RCNN
-$ pip install -r requirements.txt
-$ python setup.py install
+$ conda install --file  requirements.txt
 ```
 
-Then install `corebreakout` using **`pip`**. Develop mode installation (`-e`) is recommended, since many users will want to change some parameters to suit their own data without having to reinstall afterward:
+Finally, install `mrcnn` and `corebreakout` using `pip`. Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some parameters to suit their own data without having to reinstall afterward:
+
 ```
-$ cd ..
+$ pip install ./Mask_RCNN
 $ pip install -e .
 ```
+
+Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some parameters to suit their own data without having to reinstall afterward.
 
 ## Usage
 
@@ -79,7 +80,7 @@ For details about `Dataset` usage and subclassing, see: [docs/creating_datasets.
 
 ### Training models
 
-Training a model requires a `Dataset`. You may (modify if necessary and) use [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py), or [notebooks/train_mrcnn_model.ipynb]().
+Training a model requires a `Dataset`. You may (modify, if necessary, and) run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py), or [notebooks/train_mrcnn_model.ipynb]().
 
 For details about `mrcnn` model configuration and training, see: [docs/model_building.md](https://github.com/rgmyr/corebreakout/blob/master/docs/model_building.md)
 
@@ -117,4 +118,5 @@ $ cd <root_directory>
 $ pytest .
 ```
 
-- Model usage via the `CoreSegmenter` class can be verified by running `notebooks/test_inference.ipynb`
+- Model usage via the `CoreSegmenter` class can be verified by running `tests/notebooks/test_inference.ipynb`
+- Plotting of `CoreColumns` can be verified by running `tests/notebooks/test_plotting.ipynb`
