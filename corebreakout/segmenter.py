@@ -8,8 +8,7 @@ from functools import reduce
 from math import ceil
 
 import numpy as np
-import matplotlib.pyplot as plt
-from skimage import io, morphology, measure
+from skimage import io, measure
 
 import mrcnn.model as modellib
 
@@ -89,7 +88,8 @@ class CoreSegmenter:
         depth_range : list(float)
             Top and bottom depths of set of columns in image.
         add_tol : float, optional
-            Tolerance for adding discontinuous columns. Default=None results in tolerance ~ image resolution.
+            Tolerance for adding discontinuous `CoreColumn`s.
+            Default=None results in tolerance ~ image resolution.
         add_mode : one of {'fill', 'collapse'}, optional
             Add mode for generated `CoreColumn` instances (see `CoreColumn` docs)
         layout_params : dict, optional
@@ -150,7 +150,6 @@ class CoreSegmenter:
 
         # Set up `endpts` for bbox adjustment
         if self.endpts_is_auto:
-
             if self.layout_params['endpts'] == 'auto':
                 regions = col_regions
             else:
@@ -160,7 +159,6 @@ class CoreSegmenter:
             endpts = utils.maximum_extent(regions, crop_axis)
 
         elif self.endpts_is_class:
-
             measure_idxs = np.where(preds['class_ids'] == self.endpts_class_id)[0]
 
             # If object not detected, then ignore for cropping
@@ -182,7 +180,8 @@ class CoreSegmenter:
             raise RuntimeError()
 
         # Set single argument lambda functions to apply to column regions / region images
-        crop_fn = lambda region: utils.crop_region(img, col_labels, region, axis=crop_axis, endpts=endpts)
+        crop_fn = lambda region: utils.crop_region(img, col_labels, region,
+                                                  axis=crop_axis, endpts=endpts)
         transform_fn = lambda region: utils.rotate_vertical(region, self.layout_params['orientation'])
 
         # Apply cropping and rotation to column regions
@@ -220,7 +219,7 @@ class CoreSegmenter:
         """Compute tops/bases of `col_height` columns spanning `depth_range`.
 
         Note: col_bases[-1] does not necessarily == depth_range[-1]. The columns
-        are meant to cover the range, not match it exactly. Slicing happens later.
+        are meant to cover the range starting from `top`, not match it exactly.
 
         Returns
         -------
@@ -251,11 +250,14 @@ class CoreSegmenter:
         if 'auto' in str(endpts):
             assert str(endpts) in ['auto', 'auto_all'], 'Invalid `endpts` auto keyword'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = True, False, False
-        if type(endpts) is str:
+
+        elif type(endpts) is str:
             assert endpts in self.class_names, f'{endpts} is `auto_*` or in {self.class_names}.'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, True, False
+
         elif type(endpts) is tuple:
             assert len(endpts) == 2, f'explicit `endpts` must have length == 2, not {len(endpts)}'
             self.endpts_is_auto, self.endpts_is_class, self.endpts_is_coords = False, False, True
-        elif endpts is not None:
-            raise TypeError(f'`endpts` must be class name, 2-tuple, \'auto(_all)\', or None, not {type(endpts)}')
+
+        else:
+            raise TypeError(f'`endpts` must be class name, 2-tuple, or \'auto(_all)\' not {type(endpts)}')
