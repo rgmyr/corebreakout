@@ -1,6 +1,7 @@
 """
 Assorted visualization functions.
 """
+import numpy as np
 from mrcnn.visualize import display_instances
 
 
@@ -47,9 +48,12 @@ def draw_lines(img, coords, axis, color=[255, 0, 0], lw=10):
 
     axis == 0 --> horizonal lines
     axis == 1 --> vertical lines
-    line width [`lw`] will round down to even numbers.
+    line width (`lw`) will round down to even numbers.
 
-    NOTE: if any (coord +/- (lw // 2)) falls outside of `img`, will raise Exception.
+    Raises
+    ------
+    IndexError
+        If any (coord +/- (lw // 2)) falls outside of `img`
     """
     assert axis in [0, 1], "`axis` must be 0 (horizontal) or 1 (vertical)"
 
@@ -88,6 +92,7 @@ def make_depth_ticks(
     major_format_str="{:.1f}",
     minor_precision=0.01,
     minor_format_str="{:.2f}",
+    overlap_buffer=10
 ):
     """Generate major & minor (ticks, locs) for depth array axis.
 
@@ -99,6 +104,9 @@ def make_depth_ticks(
         Major, minor tick spacing (in depth units), defaults=0.1, 0.01.
     *_format_str : str, optional
         Format strings to coerce depths -> tick strings, defaults='{:.1f}', '{:.2f}'.
+    overlap_buffer : int, optional
+        Minimum # of indices b/t major and minor ticks. Majors take precedence.
+        (This is a less-than-elegant solution to overlapping tick problems.)
 
     Returns
     -------
@@ -115,8 +123,8 @@ def make_depth_ticks(
     minor_ticks, minor_locs = [], []
 
     # remainders of depth w.r.t. precision
-    major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
-    minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
+    major_rmndr = np.insert(depths % major_precision, (0, depths.size), np.inf)
+    minor_rmndr = np.insert(depths % minor_precision, (0, depths.size), np.inf)
 
     for i in np.arange(1, self.height + 1):
 
@@ -124,11 +132,11 @@ def make_depth_ticks(
             major_ticks.append(major_fmt_fn(self.depths[i - 1]))
             major_locs.append(i)
 
-        elif np.argmin(minor_rmndr[i - 1 : i + 2]) == 1:
-            # if already major tick, don't bother
-            # NOTE: ugh, need to fix again
-            if major_ticks[-1] == major_fmt_fn(self.depths[i - 1]):
-                continue
+        # skip indexes until `overlap_buffer` from last major
+        if (i - major_locs[-1]) < overlap_buffer:
+            continue
+
+        if np.argmin(minor_rmndr[i - 1 : i + 2]) == 1:
             minor_ticks.append(minor_fmt_fn(self.depths[i - 1]))
             minor_locs.append(i)
 

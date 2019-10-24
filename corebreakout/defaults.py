@@ -67,12 +67,12 @@ class DefaultConfig(Config):
     BACKBONE = "resnet101"
 
     # Length of square anchor side in pixels
-    RPN_ANCHOR_SCALES = (64, 128, 192, 256, 320)  # , 352)
+    RPN_ANCHOR_SCALES = (64, 128, 192, 256, 320)
 
     # < 1 : wide anchor, > 1 : tall anchor
     # These defaults assume horizontal (wide) columns
     # Note: starting from COCO model requires exactly 3 anchor ratios
-    RPN_ANCHOR_RATIOS = [1, 3, 5]
+    RPN_ANCHOR_RATIOS = [0.5, 1, 2]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
     RPN_NMS_THRESHOLD = 0.7  # default = 0.7
@@ -83,7 +83,8 @@ class DefaultConfig(Config):
     DETECTION_MAX_INSTANCES = 6
     DETECTION_MIN_CONFIDENCE = 0.95
 
-    # Default number of train/test images, respectively
+    # Set to default number of train/test images, respectively
+    # (Can increase former to validate less often though)
     STEPS_PER_EPOCH = 25
     VALIDATION_STEPS = 5
 
@@ -97,7 +98,7 @@ class DefaultConfig(Config):
         "mrcnn_mask_loss": 1.0,
     }
 
-    # Conservative batch size. Assumes single GPU.
+    # Conservative batch size + assuming single GPU.
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
 
