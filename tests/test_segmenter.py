@@ -6,10 +6,6 @@ import pytest
 from corebreakout import CoreSegmenter
 
 
-def test_segmenter_construction():
-    pass
-
-
 def test_expected_tops_bases():
     """Test the computation of tops/bases from `depth_range`s and `col_height`s."""
 
@@ -20,6 +16,12 @@ def test_expected_tops_bases():
     depth_range = [1.0, 2.0]
     tops, bases = CoreSegmenter.expected_tops_bases(depth_range, col_height)
     assert len(tops) == 1, "Should find one expected column."
+
+
+# Since construction/segmentation requires saved weights,
+# we will not use these tests for now:
+def test_segmenter_construction():
+    pass
 
 
 def test_segmenter_segmentation():

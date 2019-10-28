@@ -1,8 +1,9 @@
 ---
-title: 'CoreBreakout: Raw Subsurface Core Images to Depth-Registered Datasets'
+title: 'CoreBreakout: Subsurface Core Images to Depth-Registered Datasets'
 tags:
   - Python
   - image processing
+  - deep learning
   - geology
   - geoscience
   - subsurface
@@ -19,7 +20,7 @@ authors:
 affiliations:
  - name: Department of Geology and Geological Engineering, Colorado School of Mines
    index: 1
-date: 21 October 2019
+date: 31 October 2019
 bibliography: paper.bib
 ---
 
@@ -31,29 +32,19 @@ Core samples -- cylindrical rock samples taken from subsurface boreholes -- are 
 
 ## Workflow
 
-We provide a labeled example dataset courtesy of the British Geological Survey, and make it straightforward for geologists to add their own training images, configure and train new models, and subsequently process their own image datasets. It supports standard core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects.
+We provide a labeled example dataset courtesy of the British Geological Survey, and make it straightforward for geologists to add their own training images using ``labelme`` [@Wada:2016], configure and train new models, and subsequently process their own images to compile depth-aligned datasets. It supports standard core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects.
 
-![Figure here](docs/images/JOSS_figure_workflow.png)
+![](../docs/images/JOSS_figure_workflow.png)
 
 ## Functionality
 
-In addition to the Python API, the source code includes scripts for training models, extracting meta-data from images with OCR, and processing directories of images with saved models. The segmentation functionality could be built into a GUI in the future, but that is beyond the current scope of the project.
+In addition to the Python package API, the source code includes scripts for training models, extracting meta-data from images with OCR, and processing directories of images with saved models. The segmentation functionality could be integrated into a GUI for an even higher degree of control and accuracy, but that is beyond the current scope of the project.
 
-``corebreakout`` is currently being utilized for ongoing work in image-based lithology modeling (Martin et al., 2019). The segmentation functionality was used to build a large image dataset for machine learning experiments, and the `CoreColumn` class provides a convenient API for retrieving, manipulating, and visualizing stored data. We also plan to release our modeling code, which uses this data structure to combine image data, sampled well log data, and interval labels into datasets for sequence modeling.
+``corebreakout`` is currently being utilized for ongoing work in image-based lithology modeling (Martin et al., 2019). It has been used to compile a large image dataset for machine learning experiments, and the `CoreColumn` class provides a convenient API for retrieving, manipulating, and visualizing stored data. We also plan to release our modeling code, which uses this data structure to combine depth-registered image data, sampled well log data, and interval labels into multi-modal datasets for sequence modeling.
 
 # Acknowledgements
 
 We would like to acknowledge the contribution of open source subsurface core images from the British Geological Survey (https://bgs.ac.uk/), and financial support from Chevron through the Chevron Center of Research Excellence (https://core.mines.edu/).
 
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
 
 # References
