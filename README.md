@@ -6,29 +6,25 @@
 
 ![](docs/images/JOSS_figure_workflow.png)
 
-It also provides the `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
+It also provides a `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
+
+## Getting Started
 
 ### Target Platform
 
 This package was developed on Linux (Ubuntu, PopOS), and has also (TBD!) been tested on Mac OS X. It may work on other platforms, but we can make no guarantees.
 
-## Installation
-
 ### Requirements
 
-In addition to Python`>=3.6`, the following packages are required:
+In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notably:
 
-- `numpy<=1.16.4`
-- `matplotlib`
-- `scikit-image`
-- `1.3<=tensorflow<=1.15`
-- `mrcnn` via [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN)
+- `1.3<=tensorflow-gpu<=1.15` (or possibly just `tensorflow`)
+- `2.0.8<=keras<=2.2.5`
+- `mrcnn` via [submodule: matterport/Mask\_RCNN](Mask_RCNN)
 
-The installation process should check for and install `numpy`, `matplotlib`, and `scikit-image`.
+The `tensorflow` requirement is not explicitly listed in `requirements.txt`, due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. We highly recommend the latter for building new models, although it may be possible to perform inference with saved models on CPU.
 
-The `tensorflow` requirement is not explicitly enforced in `setup.py`, due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. We highly recommend the latter for building new models, although it may be possible to perform inference on CPU.
-
-[Instructions for `Mask_RCNN` here]
+Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests.
 
 ### Download code
 
@@ -41,34 +37,40 @@ $ cd corebreakout
 
 To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [releases page].
 
-Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
+Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, you should modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 
 
 ### Installation
 
-We recommend installing `corebreakout` and its dependencies in an isolated environment, and further recommend the use of `conda`.
+We recommend installing `corebreakout` and its dependencies in an isolated environment, and further recommend the use of `conda`. See [Conda: Managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+
+---
 
 To create a new `conda` environment called `corebreakout` and activate it:
 
 ```
-$ conda create -n corebreakout python=3.7
+$ conda create -n corebreakout python=3.6 tensorflow-gpu=1.14
 $ conda activate corebreakout
 ```
 
-Then install all of the required packages into the environment:
+**Note:** If you want to try a CPU-only installation, then replace `tensorflow-gpu` with `tensorflow`. You may also lower the version number if you are on a machine with `CUDA<10.0` (required for TensorFlow >= 1.13.0). See [TensorFlow GPU requirements](https://www.tensorflow.org/install/gpu#software_requirements) for more compatibility details.
+
+---
+
+Then install the rest of the required packages into the environment:
 
 ```
-$ conda install --file  requirements.txt
+$ conda install --file requirements.txt
 ```
 
-Finally, install `mrcnn` and `corebreakout` using `pip`. Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some parameters to suit their own data without having to reinstall afterward:
+---
+
+Finally, install `mrcnn` and `corebreakout` using `pip`. Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some of the default parameters to suit their own data without having to reinstall afterward:
 
 ```
 $ pip install ./Mask_RCNN
 $ pip install -e .
 ```
-
-Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some parameters to suit their own data without having to reinstall afterward.
 
 ## Usage
 
@@ -118,5 +120,5 @@ $ cd <root_directory>
 $ pytest .
 ```
 
-- Model usage via the `CoreSegmenter` class can be verified by running `tests/notebooks/test_inference.ipynb`
+- Model usage via the `CoreSegmenter` class can be verified by running `tests/notebooks/test_inference.ipynb` (requires saved weights)
 - Plotting of `CoreColumns` can be verified by running `tests/notebooks/test_plotting.ipynb`

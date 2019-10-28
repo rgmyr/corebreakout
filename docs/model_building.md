@@ -23,7 +23,6 @@ You can either modify `DefaultConfig`, or create your own `Config` subclass.
 
 The easiest way to train a model is by running `scripts/train_mrcnn_model.py`. This script loads pretrained `COCO` weights, and executes a three step training + tuning run.
 
-
 While training, `mrcnn` logs `tensorboard` files to the specified `model_dir`. You can view the files by running:
 
 ```

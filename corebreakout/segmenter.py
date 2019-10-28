@@ -73,6 +73,7 @@ class CoreSegmenter:
         print(f"Loading model weights from file: {str(weights_path)}")
         self.model.load_weights(str(weights_path), by_name=True)
 
+
     @property
     def layout_params(self):
         return self._layout_params
@@ -87,6 +88,7 @@ class CoreSegmenter:
         # If endpts is class, save the corresponding `id` number
         if self.endpts_is_class:
             self.endpts_class_id = self.class_names.index(self.layout_params["endpts"])
+
 
     def segment(
         self,
@@ -233,6 +235,7 @@ class CoreSegmenter:
         # Return the concatenation of all column objects
         return reduce(add, cols)
 
+
     def segment_all(imgs, depth_ranges, **kwargs):
         """Segment a set of `imgs` with known `depth_ranges`, return concatenated `CoreColumn`
 
@@ -252,6 +255,7 @@ class CoreSegmenter:
             [self.segment(img, dr, **kwargs) for img, dr in zip(imgs, depth_ranges)],
         )
 
+
     @staticmethod
     def expected_tops_bases(depth_range, col_height):
         """Compute tops/bases of `col_height` columns spanning `depth_range`.
@@ -269,6 +273,7 @@ class CoreSegmenter:
         col_bases = [top + col_height for top in col_tops]
 
         return col_tops, col_bases
+
 
     def _check_layout_params(self):
         """Make sure all values in `self.layout_params` are valid, set related boolean attributes."""

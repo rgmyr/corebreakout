@@ -19,7 +19,8 @@ setup(name='corebreakout',
       install_requires=[
             'numpy >= 1.13.0',
             'scikit-image >= 0.13.1',
-            'matplotlib'
+            'matplotlib',
+            
       ],
       zip_safe=False
 )
