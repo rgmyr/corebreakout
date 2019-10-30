@@ -16,13 +16,12 @@ This package was developed on Linux (Ubuntu, PopOS), and has also (TBD!) been te
 
 ### Requirements
 
-In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notably:
+In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notable exceptions are:
 
 - `1.3<=tensorflow-gpu<=1.14` (or possibly just `tensorflow`)
-- `2.0.8<=keras<=2.2.5`
 - `mrcnn` via [submodule: matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN/tree/3deaec5d902d16e1daf56b62d5971d428dc920bc)
 
-The `tensorflow` requirement is not explicitly listed in `requirements.txt`, due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. We highly recommend the latter for building new models, although it may be possible to perform inference with saved models on CPU.
+The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. We highly recommend the latter for building new models, although it may be possible to perform inference with saved models on CPU.
 
 Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests.
 
@@ -65,7 +64,7 @@ $ conda install --file requirements.txt
 
 ---
 
-Finally, install `mrcnn` and `corebreakout` using `pip`. Develop mode installation (`-e`) is recommended for `corebreakout`, since many users will want to change some of the default parameters to suit their own data without having to reinstall afterward:
+Finally, install `mrcnn` and `corebreakout` using `pip`. Develop mode installation (`-e`) is recommended (but not required) for `corebreakout`, since many users will want to change some of the default parameters to suit their own data without having to reinstall afterward:
 
 ```
 $ pip install ./Mask_RCNN

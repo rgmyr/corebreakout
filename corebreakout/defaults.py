@@ -72,10 +72,10 @@ class DefaultConfig(Config):
     # < 1 : wide anchor, > 1 : tall anchor
     # These defaults assume horizontal (wide) columns
     # Note: starting from COCO model requires exactly 3 anchor ratios
-    RPN_ANCHOR_RATIOS = [0.5, 1, 2]
+    RPN_ANCHOR_RATIOS = [0.2, 0.5, 1]
 
     # Non-max suppresion threshold. Increasing generates more proposals.
-    RPN_NMS_THRESHOLD = 0.7  # default = 0.7
+    RPN_NMS_THRESHOLD = 0.9  # default = 0.7
 
     # STD_DEVs? Probably not, shouldn't make a big difference.
 
