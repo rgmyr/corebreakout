@@ -1,12 +1,42 @@
 """
 Train and save model from data in `assets/data`.
 """
+import argparse
 import warnings
 
 import mrcnn.model as modellib
 
 from corebreakout import defaults
 from corebreakout.datasets import PolygonDataset
+
+"""
+parser = argparse.ArgumentParser(description="Train a new MRCNN model from COCO weights")
+parser.add_argument(
+    '--steps',
+    type=int,
+    default=3,
+    help="1, 2, or 3. How many of the steps to train: (heads, 4+, entire model)"
+)
+parser.add_argument(
+    '--save_name'
+    type=str,
+    default='auto_depths',
+    help="Name of csv file(s) saved in image subdirectory (or subdirectories)."
+)
+parser.add_argument(
+    '--force',
+    dest='force',
+    action='store_true',
+    help="Flag to force overwrite of any existing <save_name>.csv files."
+)
+parser.add_argument(
+    '--inspect',
+    dest='inspect',
+    action='store_true',
+    help="Flag to inspect images and OCR output whenever there is an issue."
+)
+"""
+
 
 # Select model configuration to use
 model_config = defaults.DefaultConfig()
@@ -43,19 +73,19 @@ with warnings.catch_warnings():
     print('\n\nTraining network heads')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE,
-                epochs=25,
+                epochs=40,
                 layers='heads')
 
     # Finetune layers from ResNet stage 4 and up
     print('\n\nTuning stage 4 and up')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE / 10,
-                epochs=75,
+                epochs=100,
                 layers='4+')
 
     # Finetune all layers of the model
     print('\n\nTuning all model layers')
     model.train(train_dataset, test_dataset,
                 learning_rate=model_config.LEARNING_RATE / 100,
-                epochs=125,
+                epochs=150,
                 layers='all')

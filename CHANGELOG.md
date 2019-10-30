@@ -14,7 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- `environment.yml` file for simple `conda env` setup
+- `requirements.txt`
+- CONTRIBUTING, LICENSE, and CODE_OF_CONDUCT files
+- `tests/notebooks`
 
 ### Removed
 
