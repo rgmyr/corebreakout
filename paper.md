@@ -26,7 +26,7 @@ bibliography: paper.bib
 
 # Summary
 
-Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to answer questions relating to geologic history and processes. Unlike other common sources of borehole data (*e.g.*, well logs), core is the only data that preserves true geologic scale and heterogeneity. A geologist will often describe the core by visual inspection and hand-draw a graphic log of the vertical changes in grain size and other rock properties. This description process is time consuming, subjective, and analog. The digitization and structuring of core image data allows for the development of automated and semi-automated workflows, which can in turn facilitate quantitative analysis of the hundreds of thousands of meters of core stored in public and private repositories around the world.
+Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to answer questions about geologic history and processes. Unlike other common sources of borehole data (*e.g.*, well logs), core is the only data that preserves true geologic scale and heterogeneity. A geologist will often describe the core by visual inspection and hand-draw a graphic log of the vertical changes in grain size and other rock properties. This description process is time consuming, subjective, and analog. The digitization and structuring of core image data allows for the development of automated and semi-automated workflows, which can in turn facilitate quantitative analysis of the hundreds of thousands of meters of core stored in public and private repositories around the world.
 
 ``corebreakout`` is a Python package for transforming raw images of geological core samples into structured datasets for analysis and modeling. It uses the Mask R-CNN algorithm [@He:2017], and is built around the open source TensorFlow and Keras implementation released by Matterport, Inc. [@Abdulla:2017].
 
@@ -34,7 +34,7 @@ Core samples -- cylindrical rock samples taken from subsurface boreholes -- are 
 
 We provide a labeled example dataset courtesy of the British Geological Survey, and make it straightforward for geologists to add their own training images using ``labelme`` [@Wada:2016], configure and train new models, and subsequently process their own images to compile depth-aligned datasets. It supports standard core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects.
 
-![](../docs/images/JOSS_figure_workflow.png)
+![](./docs/images/JOSS_figure_workflow.png)
 
 ## Functionality
 
