@@ -12,18 +12,20 @@ It also provides a `CoreColumn` data structure for saving, loading, manipulating
 
 ### Target Platform
 
-This package was developed on Linux (Ubuntu, PopOS), and has also (TBD!) been tested on Mac OS X. It may work on other platforms, but we can make no guarantees.
+This package was developed on Linux (Ubuntu, PopOS), and has also been tested on OS X. It may work on other platforms, but we can make no guarantees.
 
 ### Requirements
 
-In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notable exceptions are:
+In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notable exceptions to the list are:
 
 - `1.3<=tensorflow-gpu<=1.14` (or possibly just `tensorflow`)
 - `mrcnn` via [submodule: matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN/tree/3deaec5d902d16e1daf56b62d5971d428dc920bc)
 
-The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. We highly recommend the latter for building new models, although it may be possible to perform inference with saved models on CPU.
-
 Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests.
+
+The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. The latter is almost certainly required for building new models, although it may be possible to perform inference with saved models on CPU.
+
+Note that TensorFlow GPU capabilities are implemented with [CUDA](https://developer.nvidia.com/cuda-zone), which requires a [supported NVIDIA GPU](https://developer.nvidia.com/cuda-gpus).
 
 ### Download code
 
@@ -45,14 +47,14 @@ We recommend installing `corebreakout` and its dependencies in an isolated envir
 
 ---
 
-To create a new `conda` environment called `corebreakout` and activate it:
+To create a new `conda` environment called `corebreakout-env` and activate it:
 
 ```
-$ conda create -n corebreakout python=3.6 tensorflow-gpu=1.14
-$ conda activate corebreakout
+$ conda create -n corebreakout-env python=3.6 tensorflow-gpu=1.14
+$ conda activate corebreakout-env
 ```
 
-**Note:** If you want to try a CPU-only installation, then replace `tensorflow-gpu` with `tensorflow`. You may also lower the version number if you are on a machine with `CUDA<10.0` (required for TensorFlow >= 1.13.0). See [TensorFlow GPU requirements](https://www.tensorflow.org/install/gpu#software_requirements) for more compatibility details.
+**Note:** If you want to try a CPU-only installation, then replace `tensorflow-gpu` with `tensorflow`. You may also lower the version number if you are on a machine with `CUDA<10.0` (required for TensorFlow`>=1.13`). See [TensorFlow GPU requirements](https://www.tensorflow.org/install/gpu#software_requirements) for more compatibility details.
 
 ---
 
@@ -81,7 +83,7 @@ For details about `Dataset` usage and subclassing, see: [docs/creating_datasets.
 
 ### Training models
 
-Training a model requires a `Dataset`. You may (modify, if necessary, and) run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py), or [notebooks/train_mrcnn_model.ipynb]().
+Training a model requires a `Dataset`. You may run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py) (after modifying, if necessary), or [notebooks/train_mrcnn_model.ipynb]().
 
 For details about `mrcnn` model configuration and training, see: [docs/model_building.md](https://github.com/rgmyr/corebreakout/blob/master/docs/model_building.md)
 

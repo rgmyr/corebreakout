@@ -9,7 +9,8 @@ from matplotlib import ticker
 import matplotlib.pyplot as plt
 
 from corebreakout import utils
-from corebreakout.defaults import MAJOR_TICK_PARAMS, MINOR_TICK_PARAMS
+from corebreakout.viz import make_depth_ticks
+from corebreakout.defaults import DEPTH_TICK_ARGS, MAJOR_TICK_PARAMS, MINOR_TICK_PARAMS
 
 
 class CoreColumn:
@@ -294,7 +295,7 @@ class CoreColumn:
     ###  Column Plotting  ###
     ###+++++++++++++++++++###
 
-    def plot(self, figsize=(15, 50), major_kwargs={}, minor_kwargs={}):
+    def plot(self, figsize=(15, 50), tick_kwargs={}, major_kwargs={}, minor_kwargs={}):
         """Make an image figure with major and minor depth ticks.
 
         Parameters
@@ -302,9 +303,11 @@ class CoreColumn:
         figsize : tuple(int)
             Size of matplotlib figure to plot on.  Note: at default DPI of 100, 650 is
             about as large as common image formats will support saving (~2^16 pixels).
-        **kwargs:
-            Parameters for tick creation and appearance: 'major' and 'minor' options for
-            `*_precision`, `*_format_str`, `*_tick_size`. See `_make_image_ticks()` docs.
+        tick_kwargs:
+            Parameters for tick creation: 'major' and 'minor' options for
+            `*_precision` and `*_format_str`. See `viz.make_depth_ticks()`.
+        major/minor_kwargs:
+            Parameters for tick size and appearance. Passed to `ax.tick_params`.
 
         Returns
         -------
@@ -312,14 +315,14 @@ class CoreColumn:
             Matplotlib figure and axis with image + ticks plotted.
         """
         # need to to this some other way
-        major_kwargs = {**MAJOR_TICK_PARAMS, **major_kwargs}
-        minor_kwargs = {**MINOR_TICK_PARAMS, **minor_kwargs}
-        all_kwargs = {**major_kwargs, **minor_kwargs}
+        tick_kwargs = strict_update(DEPTH_TICK_ARGS, tick_kwargs)
+        major_kwargs = strict_update(MAJOR_TICK_PARAMS, major_kwargs)
+        minor_kwargs = strict_update(MINOR_TICK_PARAMS, minor_kwargs)
 
         fig, ax = plt.subplots(figsize=figsize)
 
-        major_ticks, major_locs, minor_ticks, minor_locs = self._make_image_ticks(
-            **all_kwargs
+        major_ticks, major_locs, minor_ticks, minor_locs = make_depth_ticks(
+            self.depths, **tick_kwargs
         )
 
         ax.yaxis.set_major_formatter(ticker.FixedFormatter((major_ticks)))
@@ -337,59 +340,3 @@ class CoreColumn:
         ax.imshow(self.img)
 
         return fig, ax
-
-    def _make_image_ticks(
-        self,
-        major_precision=0.1,
-        major_format_str="{:.1f}",
-        minor_precision=0.01,
-        minor_format_str="{:.2f}",
-    ):
-        """Generate major & minor (ticks, locs) for image axis.
-
-        Parameters
-        ----------
-        *_precision : float, optional
-            Major, minor tick spacing (in depth units), defaults=0.1, 0.01.
-        *_format_str : str, optional
-            Format strings to coerce depths -> tick strings, defaults='{:.1f}', '{:.2f}'.
-
-        Returns
-        -------
-        major_ticks, major_locs, minor_ticks, minor_locs
-
-        *_ticks : lists of tick strings
-        *_locs : lists of tick locations in image coordinates (fractional row indices)
-        """
-        # lambdas to convert values --> strs
-        major_fmt_fn = lambda x: major_format_str.format(x)
-        minor_fmt_fn = lambda x: minor_format_str.format(x)
-
-        major_ticks, major_locs = [], []
-        minor_ticks, minor_locs = [], []
-
-        # remainders of depth w.r.t. precision
-        major_rmndr = np.insert(self.depths % major_precision, (0, self.height), np.inf)
-        minor_rmndr = np.insert(self.depths % minor_precision, (0, self.height), np.inf)
-
-        for i in np.arange(1, self.height + 1):
-
-            if np.argmin(major_rmndr[i - 1 : i + 2]) == 1:
-                major_ticks.append(major_fmt_fn(self.depths[i - 1]))
-                major_locs.append(i)
-
-            elif np.argmin(minor_rmndr[i - 1 : i + 2]) == 1:
-                # if already major tick, don't bother
-                # NOTE: ugh, need to fix again
-                if major_ticks[-1] == major_fmt_fn(self.depths[i - 1]):
-                    continue
-                minor_ticks.append(minor_fmt_fn(self.depths[i - 1]))
-                minor_locs.append(i)
-
-        # get last tick if needed, doesn't work above for some reason
-        last_depth = np.round(self.depths[-1], decimals=1)
-        if (last_depth % 1.0) == 0.0:
-            major_ticks.append(major_fmt_fn(last_depth))
-            major_locs.append(self.height - 1)
-
-        return major_ticks, major_locs, minor_ticks, minor_locs

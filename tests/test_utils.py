@@ -20,6 +20,15 @@ def region_labels(regions):
     return [r.label for r in regions]
 
 
+def test_strict_update():
+    d1 = {'a' : 1, 'b' : 2}
+    d2 = {'b' : 3, 'c' : 4}
+
+    assert utils.strict_update(d1, d2) == {'a': 1, 'b': 3}, "A strict dict update."
+
+    assert d1 == {'a' : 1, 'b' : 2}, "Not an `inplace` operation"
+
+
 def test_masks_to_labels():
     _labels = utils.masks_to_labels(example_masks)
     assert np.array_equal(_labels, example_labels), "Masks conversion."
