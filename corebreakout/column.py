@@ -1,9 +1,9 @@
 """
-CoreColumn object representing single column images of core material.
-
-TODO:
-    - do we really need 'slice_depth', or can we do something more clever?
+CoreColumn object representing depth-registered single column images of core material.
 """
+import dill
+from pathlib import Path
+
 import numpy as np
 from matplotlib import ticker
 import matplotlib.pyplot as plt
@@ -132,6 +132,7 @@ class CoreColumn:
         assert mode in ("collapse", "fill"), f"{mode} not a valid `add_mode`"
         self._add_mode = mode
 
+
     def slice_depth(self, top=None, base=None):
         """Get a sliced CoreColumn between `top` and `base`,
         if it would have an effect and it is possible to do so.
@@ -162,6 +163,7 @@ class CoreColumn:
         else:
             return self
 
+
     def __repr__(self):
         return (
             f"CoreColumn instance with:\n"
@@ -169,6 +171,32 @@ class CoreColumn:
             f"\t (top, base): ({self.top}, {self.base})\n"
             f"\t add_tol & add_mode: {self.add_tol:.4f} , {self.add_mode}\n"
         )
+
+
+    def __eq__(self, other):
+        """Equivalence testing. Includes add options.
+
+        Uses np.isclose/allclose because of floating point errors.
+        """
+        if self.add_mode != other.add_mode:
+            return False
+        if not np.isclose(self.add_tol, other.add_tol):
+            return False
+
+        if not np.isclose(self.top, other.top):
+            return False
+        if not np.isclose(self.base, other.base):
+            return False
+
+        if (self.height != other.height):
+            return False
+
+        if not np.allclose(self.depths, other.depths):
+            return False
+        if not np.allclose(self.img, other.img):
+            return False
+
+        return True
 
     ###++++++++++++++++++++###
     ### Column Combination ###
@@ -242,7 +270,7 @@ class CoreColumn:
         assert pickle or image or depths, "Must save something."
 
         path = Path(path)
-        assert path.exists() and path.isdir(), f"Save location {path} doesnt exist."
+        assert path.exists() and path.is_dir(), f"Save location {path} doesnt exist."
 
         if name:
             assert type(name) is str, "Name must be a string"
@@ -269,19 +297,20 @@ class CoreColumn:
         either `depths` or `top` & `base` as **kwargs.
         """
         path = Path(path)
-        assert path.exists() and path.isdir(), f"Load location {path} doesnt exist."
+        assert path.exists() and path.is_dir(), f"Load location {path} doesnt exist."
 
         pickle_path = path / (name + ".pkl")
         image_path = path / (name + "_image.npy")
         depths_path = path / (name + "_depths.npy")
 
-        if pickle_path.isfile():
-            return dill.load(pickle_file)
+        if pickle_path.is_file():
+            with open(pickle_path, 'rb') as pickle_file:
+                return dill.load(pickle_file)
 
-        assert image_path.isfile(), "_image.npy file must exist if pickle doesnt."
+        assert image_path.is_file(), "_image.npy file must exist if pickle doesnt."
         img = np.load(image_path)
 
-        if depths_path.isfile():
+        if depths_path.is_file():
             kwargs["depths"] = np.load(depths_path)
         else:
             assert (

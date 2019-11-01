@@ -1,11 +1,14 @@
 """
 Define a suite of tests for the `corebreakout.CoreColumn` class.
 """
+import tempfile
+
 import pytest
 import numpy as np
 from skimage import io, color
 
 from corebreakout import CoreColumn
+
 
 # Example (unmasked) single-column images
 img1 = io.imread("tests/data/column1.jpeg")  # shape = (6070, 782, 3)
@@ -106,9 +109,43 @@ def test_slicing():
 def test_pickle_save_load():
     """Test saving as a single pickle file."""
 
-    column = CoreColumn(img1, top=1.0, base=2.0)
+    save_column = CoreColumn(img1, top=1.0, base=2.0)
 
-    
+    with tempfile.TemporaryDirectory() as TEMP_PATH:
+
+        save_column.save(TEMP_PATH, name='testcol',
+                        pickle=True, image=False, depths=False)
+
+        load_column = CoreColumn.load(TEMP_PATH, 'testcol')
+
+    assert load_column == save_column, 'Loaded should match saved.'
 
 
 def test_numpy_save_load():
+    """Test numpy image + depths save."""
+
+    save_column = CoreColumn(img1, top=1.0, base=2.0)
+
+    with tempfile.TemporaryDirectory() as TEMP_PATH:
+
+        save_column.save(TEMP_PATH, name='testcol',
+                        pickle=False, image=True, depths=True)
+
+        load_column = CoreColumn.load(TEMP_PATH, 'testcol')
+
+    assert load_column == save_column, 'Loaded should match saved.'
+
+
+def test_image_only_save_load():
+    """Test numpy image-only save."""
+
+    save_column = CoreColumn(img1, top=1.0, base=2.0)
+
+    with tempfile.TemporaryDirectory() as TEMP_PATH:
+
+        save_column.save(TEMP_PATH, name='testcol',
+                        pickle=False, image=True, depths=False)
+
+        load_column = CoreColumn.load(TEMP_PATH, 'testcol', top=1.0, base=2.0)
+
+    assert load_column == save_column, 'Loaded should match saved.'
