@@ -34,7 +34,7 @@ Core samples -- cylindrical rock samples taken from subsurface boreholes -- are 
 
 We provide a labeled example dataset courtesy of the British Geological Survey, and make it straightforward for geologists to add their own training images using ``labelme`` [@Wada:2016], configure and train new models, and subsequently process their own images to compile depth-aligned datasets. It supports standard core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects.
 
-![](./docs/images/JOSS_figure_workflow.png)
+![](JOSS_figure_workflow.png)
 
 ## Functionality
 
