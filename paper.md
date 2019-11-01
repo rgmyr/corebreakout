@@ -40,7 +40,7 @@ We provide a labeled example dataset courtesy of the British Geological Survey, 
 
 In addition to the Python package API, the source code includes scripts for training models, extracting text meta-data from images with OCR, and processing directories of images with saved models. The segmentation functionality could be integrated into a GUI for an even higher degree of control and accuracy, but that is beyond the current scope of the project.
 
-``corebreakout`` is currently being utilized for ongoing work in image-based lithology modeling (Martin et al., 2019). It has been used to compile a large image dataset for machine learning experiments, and the `CoreColumn` class provides a convenient API for retrieving, manipulating, and visualizing stored data. We also plan to release our modeling code, which uses this data structure to combine depth-registered image data, sampled well log data, and interval labels into multi-modal datasets for sequence modeling.
+``corebreakout`` is currently being utilized for ongoing work in image-based lithology modeling [@Martin:2019]. It has been used to compile a large image dataset for machine learning experiments, and the `CoreColumn` class provides a convenient API for retrieving, manipulating, and visualizing stored data. We also plan to release our modeling code, which uses this data structure to combine depth-registered image data, sampled well log data, and interval labels into multi-modal datasets for sequence modeling.
 
 # Acknowledgements
 

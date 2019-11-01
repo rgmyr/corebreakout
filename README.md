@@ -6,7 +6,7 @@
 
 ![](JOSS_figure_workflow.png)
 
-It also provides a `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
+It also provides a `CoreColumn` data structure, which can be sliced and added, and which facilitates saving, loading, manipulating, and visualizing depth-aligned core image data.
 
 ## Getting Started
 
@@ -121,5 +121,5 @@ $ cd <root_directory>
 $ pytest .
 ```
 
-- Model usage via the `CoreSegmenter` class can be verified by running `tests/notebooks/test_inference.ipynb` (requires saved weights)
-- Plotting of `CoreColumns` can be verified by running `tests/notebooks/test_plotting.ipynb`
+- Model usage via the `CoreSegmenter` class can be verified by running `tests/notebooks/test_inference.ipynb` (requires saved model weights)
+- Plotting of `CoreColumn`s can be verified by running `tests/notebooks/test_plotting.ipynb`
