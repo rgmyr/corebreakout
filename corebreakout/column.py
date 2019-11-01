@@ -1,9 +1,10 @@
 """
-CoreColumn object representing depth-registered single column images of core material.
+CoreColumn abstraction representing depth-registered single-column images of core material.
 """
-import dill
+
 from pathlib import Path
 
+import dill
 import numpy as np
 from matplotlib import ticker
 import matplotlib.pyplot as plt

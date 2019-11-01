@@ -8,6 +8,8 @@
 
 It also provides a `CoreColumn` data structure, which can be sliced and added, and which facilitates saving, loading, manipulating, and visualizing depth-aligned core image data.
 
+We are currently using this package to enable research on [Lithology Prediction of Slabbed Core Photos Using Machine Learning Models](https://figshare.com/articles/Lithology_Prediction_of_Slabbed_Core_Photos_Using_Machine_Learning_Models/8023835/2), and are working on getting a DOI for the project through the [Journal of Open Source Software](https://joss.theoj.org/).
+
 ## Getting Started
 
 ### Target Platform

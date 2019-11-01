@@ -11,12 +11,11 @@
 
 ### source
 
-- fix handling of plot `kwargs`
-- `tests/notebooks/test_inference.ipynb`
-- `tests/notebooks/test_plotting.ipynb`
+- fix up `scripts`
+- fix up `notebooks`
+- run `tests/notebooks/test_inference.ipynb`
 
 ### SUBMISSION
 
 - Do we need copyright stuff at the top of each file?
 - upload `assets.zip` to releases page
-- test paper compilation at `whedon.theoj.org`
