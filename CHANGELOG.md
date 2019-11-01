@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- `requirements.txt`
+- `requirements.txt` (except `imgaug`, which is included in `setup.py`)
 - CONTRIBUTING, LICENSE, and CODE_OF_CONDUCT files
 - `tests/notebooks`
 

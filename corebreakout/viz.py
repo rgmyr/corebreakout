@@ -85,6 +85,10 @@ def draw_box(img, box, color, lw):
 ### Column depth ticks ###
 ###++++++++++++++++++++###
 
+def local_min(arr, i):
+    """Return True if arr[i] is a local minimum, else False."""
+    return np.argmin(arr[i - 1 : i + 2]) == 1
+
 
 def make_depth_ticks(
     depths,
@@ -106,7 +110,8 @@ def make_depth_ticks(
         Format strings to coerce depths -> tick strings, defaults='{:.1f}', '{:.2f}'.
     overlap_buffer : int, optional
         Minimum # of indices b/t major and minor ticks. Majors take precedence.
-        (This is a less-than-elegant solution to overlapping tick problems.)
+        (This is a less-than-elegant solution to overlapping tick problems...
+         it could probably be improved in future releases)
 
     Returns
     -------
@@ -123,20 +128,22 @@ def make_depth_ticks(
     minor_ticks, minor_locs = [], []
 
     # remainders of depth w.r.t. precision
+    # add `inf`s at start and end to get first/last ticks
     major_rmndr = np.insert(depths % major_precision, (0, depths.size), np.inf)
     minor_rmndr = np.insert(depths % minor_precision, (0, depths.size), np.inf)
 
     for i in np.arange(1, self.height + 1):
 
-        if np.argmin(major_rmndr[i - 1 : i + 2]) == 1:
+        if local_min(major_rmndr, i):
             major_ticks.append(major_fmt_fn(self.depths[i - 1]))
             major_locs.append(i)
+            #continue
 
         # skip indexes until `overlap_buffer` from last major
-        if (i - major_locs[-1]) < overlap_buffer:
-            continue
+        #if (i - major_locs[-1]) < overlap_buffer:
+        #    continue
 
-        if np.argmin(minor_rmndr[i - 1 : i + 2]) == 1:
+        elif local_min(minor_rmndr, i):
             minor_ticks.append(minor_fmt_fn(self.depths[i - 1]))
             minor_locs.append(i)
 

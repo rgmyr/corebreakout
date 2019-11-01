@@ -3,6 +3,25 @@ Assorted image / mask / label / region manipulation functions.
 """
 import numpy as np
 
+
+def strict_update(d1, d2):
+    """For two dicts `d1` and `d2`, works like `d1.update(d2)`, except without
+    adding any new keys to `d1` (only values of existing keys updated).
+
+    Dictonaries are copied, so that this does not have an 'inplace' effect.
+    """
+    assert type(d1) == type(d2) == dict, 'Only for dictionaries.'
+    d1, d2 = d1.copy(), d2.copy()
+
+    for k in d1.keys():
+        try:
+            d1[k] = d2[k]
+        except KeyError:
+            continue
+
+    return d1
+
+
 ###++++++++++++++++++++++++++++++###
 ### Region + Layout Manipulation ###
 ###++++++++++++++++++++++++++++++###

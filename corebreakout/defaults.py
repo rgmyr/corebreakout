@@ -108,9 +108,20 @@ class DefaultConfig(Config):
 ####++++++++++++++++++++++++++++++++####
 """Set the default parameters for (fig, ax) returned by `CoreColumn.plot()`.
 
+DEPTH_TICK_ARGS -- passed to `viz.make_depth_ticks()`
+MAJOR_TICK_PARAMS -- passed to `ax.tick_params(which='major', ...)`
+MINOR_TICK_PARAMS -- passed to `ax.tick_params(which='minor', ...)`
+
 You can also add additional arguments to both `*_TICK_PARAMS` from:
     https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.axes.Axes.tick_params.html
 """
+DEPTH_TICK_ARGS = {
+    "major_precision": 0.1,
+    "major_format_str": "{:.1f}",
+    "minor_precision": 0.01,
+    "minor_format_str": "{:.2f}",
+}
+
 MAJOR_TICK_PARAMS = {
     "labelleft": True,  # False to disable labels
     "labelsize": 32,

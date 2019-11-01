@@ -5,13 +5,14 @@ from setuptools import find_packages
 try:
     from setuptools import setup
 except ImportError:
-    from distutils.core import setup
+    raise UserWarning('`distutils` is not supported. You must use Python>=3.6')
 
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 
-# duplication of requirements.txt
+# Mostly a duplication of requirements.txt
+# with the addition of pip-only package `imgaug`
 install_requires = [
     'numpy<=1.16.4',
     'scipy',
