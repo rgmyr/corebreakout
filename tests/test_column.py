@@ -101,3 +101,14 @@ def test_slicing():
 
     with pytest.raises(AssertionError):
         _ = column.slice_depth(base=0.5)
+
+
+def test_pickle_save_load():
+    """Test saving as a single pickle file."""
+
+    column = CoreColumn(img1, top=1.0, base=2.0)
+
+    
+
+
+def test_numpy_save_load():
