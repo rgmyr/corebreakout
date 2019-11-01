@@ -4,7 +4,7 @@
 
 `corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images.
 
-![](docs/images/JOSS_figure_workflow.png)
+![](JOSS_figure_workflow.png)
 
 It also provides a `CoreColumn` data structure for saving, loading, manipulating, and visualizing depth-aligned core image data.
 

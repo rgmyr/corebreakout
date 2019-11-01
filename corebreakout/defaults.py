@@ -127,7 +127,7 @@ MAJOR_TICK_PARAMS = {
     "labelsize": 32,
     "labelcolor": "black",
     "left": True,  # False to disable ticks
-    "length": 15,
+    "length": 35,
     "width": 4,
     "color": "black",
 }
@@ -137,7 +137,7 @@ MINOR_TICK_PARAMS = {
     "labelsize": 12,
     "labelcolor": "black",
     "left": True,  # False to disable ticks
-    "length": 8,
+    "length": 5,
     "width": 4,
     "color": "black",
 }

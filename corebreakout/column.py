@@ -8,9 +8,8 @@ import numpy as np
 from matplotlib import ticker
 import matplotlib.pyplot as plt
 
-from corebreakout import utils
+from corebreakout import utils, defaults
 from corebreakout.viz import make_depth_ticks
-from corebreakout.defaults import DEPTH_TICK_ARGS, MAJOR_TICK_PARAMS, MINOR_TICK_PARAMS
 
 
 class CoreColumn:
@@ -314,10 +313,9 @@ class CoreColumn:
         fig, ax
             Matplotlib figure and axis with image + ticks plotted.
         """
-        # need to to this some other way
-        tick_kwargs = strict_update(DEPTH_TICK_ARGS, tick_kwargs)
-        major_kwargs = strict_update(MAJOR_TICK_PARAMS, major_kwargs)
-        minor_kwargs = strict_update(MINOR_TICK_PARAMS, minor_kwargs)
+        tick_kwargs = utils.strict_update(defaults.DEPTH_TICK_ARGS, tick_kwargs)
+        major_kwargs = utils.strict_update(defaults.MAJOR_TICK_PARAMS, major_kwargs)
+        minor_kwargs = utils.strict_update(defaults.MINOR_TICK_PARAMS, minor_kwargs)
 
         fig, ax = plt.subplots(figsize=figsize)
 

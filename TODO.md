@@ -2,11 +2,8 @@
 
 ### docs
 
-- Finish README (installation in particular)
 - Training notebook
 - `scripts/README.md`
-
-**Note**: require `Python>=3.6`, and `numpy<=1.16.4` (for compatibility with `tf`)
 
 ### modeling
 

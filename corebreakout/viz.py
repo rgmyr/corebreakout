@@ -132,10 +132,12 @@ def make_depth_ticks(
     major_rmndr = np.insert(depths % major_precision, (0, depths.size), np.inf)
     minor_rmndr = np.insert(depths % minor_precision, (0, depths.size), np.inf)
 
-    for i in np.arange(1, self.height + 1):
+    print(major_rmndr[-5:])
+
+    for i in np.arange(1, major_rmndr.size):
 
         if local_min(major_rmndr, i):
-            major_ticks.append(major_fmt_fn(self.depths[i - 1]))
+            major_ticks.append(major_fmt_fn(depths[i - 1]))
             major_locs.append(i)
             #continue
 
@@ -144,13 +146,15 @@ def make_depth_ticks(
         #    continue
 
         elif local_min(minor_rmndr, i):
-            minor_ticks.append(minor_fmt_fn(self.depths[i - 1]))
+            minor_ticks.append(minor_fmt_fn(depths[i - 1]))
             minor_locs.append(i)
 
     # get last tick if needed, doesn't work above for some reason
-    last_depth = np.round(self.depths[-1], decimals=1)
+    """
+    last_depth = np.round(depths[-1], decimals=1)
     if (last_depth % 1.0) == 0.0:
         major_ticks.append(major_fmt_fn(last_depth))
         major_locs.append(self.height - 1)
+    """
 
     return major_ticks, major_locs, minor_ticks, minor_locs
