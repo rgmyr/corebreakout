@@ -2,18 +2,21 @@
 
 ### docs
 
-- Training notebook
+- Short demo of training
+- Short demo of inference
 - `scripts/README.md`
 
 ### modeling
 
-- retrain model with original RPN params
+- inspect old model (in `core_data/saved_models/mrcnn`)
 
 ### source
 
-- fix up `scripts`
-- fix up `notebooks`
-- run `tests/notebooks/test_inference.ipynb`
+- make train + inference script more general via `args`
+
+### test
+
+- run `notebooks/test_inference.ipynb`
 
 ### SUBMISSION
 
