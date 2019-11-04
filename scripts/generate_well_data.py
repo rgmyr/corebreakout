@@ -19,6 +19,12 @@ from corebreakout import CoreColumn
 from corebreakout.config import model_dir, weights_path
 
 
+
+
+layout_params = defaults.LAYOUT_PARAMS
+
+
+
 default_base_path = '/home/'+os.environ['USER']+'/Dropbox/core_data/well_core_data/wos_data/schiehallion-complex/'
 
 default_save_dir = '/home/'+os.environ['USER']+'/Dropbox/core_data/facies/train_data/'
