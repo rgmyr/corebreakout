@@ -2,8 +2,7 @@
 *__pycache__*
 *pytest_cache*
 
-# exclude models
-assets/models/
-!assets/models/.gitkeep
+# exclude assets
+assets/
 
 *.h5

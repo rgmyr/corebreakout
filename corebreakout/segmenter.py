@@ -236,7 +236,7 @@ class CoreSegmenter:
         return reduce(add, cols)
 
 
-    def segment_all(imgs, depth_ranges, **kwargs):
+    def segment_all(self, imgs, depth_ranges, **kwargs):
         """Segment a set of `imgs` with known `depth_ranges`, return concatenated `CoreColumn`
 
         Parameters

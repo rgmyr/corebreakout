@@ -42,7 +42,7 @@ parser.add_argument(
 model_config = defaults.DefaultConfig()
 
 # Set model training directory
-model_dir = defaults.TRAIN_DIR / 'modified_rpn'
+model_dir = defaults.TRAIN_DIR
 
 # Set up and load train/test datasets
 data_root = defaults.DATASET_DIR

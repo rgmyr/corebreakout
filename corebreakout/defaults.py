@@ -14,20 +14,19 @@ from corebreakout import __file__ as PKG_FILE
 ####+++++++++++++++####
 
 ASSETS_DIR = Path(PKG_FILE).parent.parent / "assets"
+
+# Where to find train/test subdirectories
 DATASET_DIR = ASSETS_DIR / "data"
 
-# Before release: change this to 'assets/models'
-MODEL_DIR = Path("/home/" + os.environ["USER"] + "/Dropbox/models/corebreakout")
-# CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_corebreakout.h5'
-COCO_MODEL_PATH = MODEL_DIR / "mask_rcnn_coco.h5"
+# Where to find saved model weights
+MODEL_DIR = ASSETS_DIR / "models"
+# Default "core" model weights
+CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_cb_default.h5'
+# Pretrained COCO model weights
+COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 
-# Current Mask RCNN experiments
-TRAIN_DIR = MODEL_DIR / "pretrain"
-
-
-# weights_path = model_dir / 'core20180920T1528/mask_rcnn_core_0024.h5'
-# Original:
-# mrcnn_weights_path = os.path.join(mrcnn_model_dir, 'core20180801T1515/mask_rcnn_core_0066.h5')
+# Where to save Mask RCNN training checkpoints, etc.
+TRAIN_DIR = MODEL_DIR / "retrain"
 
 
 ####++++++++++++++++++++++++####
@@ -81,7 +80,7 @@ class DefaultConfig(Config):
 
     # Maximum number of detections and minimum confidence
     DETECTION_MAX_INSTANCES = 6
-    DETECTION_MIN_CONFIDENCE = 0.95
+    DETECTION_MIN_CONFIDENCE = 0.98
 
     # Set to default number of train/test images, respectively
     # (Can increase former to validate less often though)

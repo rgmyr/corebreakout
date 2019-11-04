@@ -16,7 +16,7 @@ We are currently using this package to enable research on [Lithology Prediction 
 
 This package was developed on Linux (Ubuntu, PopOS), and has also been tested on OS X. It may work on other platforms, but we can make no guarantees.
 
-### Requirements
+### Notes on Requirements
 
 In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notable exceptions to the list are:
 
@@ -25,7 +25,7 @@ In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirem
 
 Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests.
 
-The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. The latter is almost certainly required for building new models, although it may be possible to perform inference with saved models on CPU.
+The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. The latter is almost certainly required for building new models, although it may be possible to perform inference with saved models on CPU, and use of the `CoreColumn` data structure does not require a GPU.
 
 Note that TensorFlow GPU capabilities are implemented with [CUDA](https://developer.nvidia.com/cuda-zone), which requires a [supported NVIDIA GPU](https://developer.nvidia.com/cuda-gpus).
 
@@ -38,9 +38,9 @@ $ cd corebreakout
 
 ### Download data (optional)
 
-To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [releases page].
+To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [v0.2 Release](https://github.com/rgmyr/corebreakout/releases).
 
-Unzip and place this folder in the root directory of the repository. If you would like to place it elsewhere, you should modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
+Unzip and place this folder in the root directory of the repository (its contents will be ignored by `git` -- see the `.gitignore`). If you would like to place it elsewhere, you should modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 
 
 ### Installation
@@ -91,7 +91,7 @@ For details about `mrcnn` model configuration and training, see: [docs/model_bui
 
 ### Processing images
 
-Trained models can be used to instantiate and use a `CoreSegmenter` instance, with its `segment` and `segment_all` methods.
+Trained models can be used to instantiate and use a `CoreSegmenter` instance, with its `segment` and `segment_all` methods (see `tests/notebooks/test_inference.ipynb` for usage examples).
 
 For details about image layout specification, see: [docs/layout_parameters.md](https://github.com/rgmyr/corebreakout/blob/master/docs/layout_parameters.md)
 
