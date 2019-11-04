@@ -44,7 +44,7 @@ parser.add_argument(
     '--save_name'
     type=str,
     default='auto_depths',
-    help="Name of csv file(s) saved in image subdirectory (or subdirectories)."
+    help="Name of depths csv file(s) to be saved in matching subdirs."
 )
 parser.add_argument(
     '--force',
@@ -56,7 +56,7 @@ parser.add_argument(
     '--inspect',
     dest='inspect',
     action='store_true',
-    help="Flag to inspect images and OCR output whenever there is an issue."
+    help="Flag to inspect images and print OCR output whenever there is an issue."
 )
 
 
@@ -75,7 +75,7 @@ def truncate(f, n):
 def depth_range_from_img(img, inspect):
     """Take an image or string path to one, return (top, base) depths.
 
-    If `inspect`, will show any text bboxes where < 2 floats found.
+    If `inspect`, will `plt.show` any text bboxes where < 2 floats found.
     """
     x0, y0, x1, y1 = TEXT_BBOX
     crop_fn = lambda x: x[x0:x1,y0:y1]

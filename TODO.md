@@ -2,7 +2,6 @@
 
 ### docs
 
-- Finish README (installation in particular)
 - Short demo of training
 - Short demo of inference
 - `scripts/README.md`
@@ -11,17 +10,15 @@
 
 ### modeling
 
-- make plots of different RPN_ANCHOR_RATIOS
-- retrain if it looks like improvement possible
+- inspect old model (in `core_data/saved_models/mrcnn`)
 
 ### source
 
-- fix handling of plot `kwargs`
 - make train + inference script more general via `args`
 
 ### test
 
-- use `pytest-cov` and add coverage badge
+- run `notebooks/test_inference.ipynb`
 
 ### SUBMISSION
 
