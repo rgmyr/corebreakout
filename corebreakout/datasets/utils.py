@@ -5,7 +5,7 @@ from itertools import combinations
 
 
 def morphology_op(remove_holes=False, closing_selem=None, erosion_selem=None):
-    '''Create a function chaining multiple binary morphology operations.
+    """Create a function chaining multiple binary morphology operations.
 
     Parameters
     ----------
@@ -20,7 +20,8 @@ def morphology_op(remove_holes=False, closing_selem=None, erosion_selem=None):
     -------
     op : function
         Chain of specified morphological operations, taking and returning a binary mask
-    '''
+    """
+
     def _op(mask):
         if remove_holes:
             mask = morphology.remove_small_holes(mask)
@@ -34,7 +35,7 @@ def morphology_op(remove_holes=False, closing_selem=None, erosion_selem=None):
 
 
 def generate_mask(img, masking_color, tolerance=0, morph_op=None):
-    '''Generate a mask from a manually painted RGB image.
+    """Generate a mask from a manually painted RGB image.
 
     Parameters
     ----------
@@ -50,20 +51,21 @@ def generate_mask(img, masking_color, tolerance=0, morph_op=None):
     -------
     mask : np.array, ndim=2
         Binary mask, equivalent to where img == color
-    '''
+    """
 
     R, G, B = masking_color
     reds, greens, blues = tuple(img[:, :, i] for i in range(3))
-    mask = np.logical_and.reduce((
-        np.abs(reds-R) <= tolerance,
-        np.abs(greens-G) <= tolerance,
-        np.abs(blues-B) <= tolerance
-    ))
+    mask = np.logical_and.reduce(
+        (
+            np.abs(reds - R) <= tolerance,
+            np.abs(greens - G) <= tolerance,
+            np.abs(blues - B) <= tolerance,
+        )
+    )
     if morph_op:
         mask = morph_op(mask)
 
     return mask.astype(np.uint8)
-
 
 
 def clean_blue(image):
@@ -72,26 +74,29 @@ def clean_blue(image):
     return image
 
 
-def make_labels(blue_img, masking_color=(2,0,251), show=False):
-    '''Should call this collapse_labels or something?'''
-    mask = measure.label(generate_mask(blue_img, masking_color, morph_op=clean_blue), background=0)
+def make_labels(blue_img, masking_color=(2, 0, 251), show=False):
+    """Should call this collapse_labels or something?"""
+    mask = measure.label(
+        generate_mask(blue_img, masking_color, morph_op=clean_blue), background=0
+    )
     init_regions = measure.regionprops(mask)
 
     for r0, r1 in combinations(init_regions, 2):
         if overlapping(r0, r1):
-            mask[mask==r1.label] = r0.label
+            mask[mask == r1.label] = r0.label
 
     # TABLET: draw_box(box_img, [30,1700,800,2850], (0,255,0), 30)
     if show:
         box_img = cimg
         for r in measure.regionprops(mask):
-            box_img = draw_box(box_img, r.bbox, (255,0,0), 30)
-        plt.figure(figsize=(25,25))
+            box_img = draw_box(box_img, r.bbox, (255, 0, 0), 30)
+        plt.figure(figsize=(25, 25))
         plt.imshow(box_img)
-        plt.imshow(mask, cmap='jet', alpha=0.2)
+        plt.imshow(mask, cmap="jet", alpha=0.2)
         plt.show()
 
     return mask
+
 
 '''
 def squeeze_labels(mask):
