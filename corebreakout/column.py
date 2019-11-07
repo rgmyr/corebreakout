@@ -199,6 +199,22 @@ class CoreColumn:
 
         return True
 
+
+    def iter_chunks(self, chunk_size, depths=True, step_size=None):
+        """Iterate over data in `chunk_size` pieces, starting `step_size` apart.
+
+        TODO: make this able to fill last (possibly partial) last chunks.
+        """
+        step_size = step_size or chunk_size
+
+        i = 0
+        while i  < self.height:
+            if depths:
+                yield self.img[i:i+chunk_size], self.depths[i:i+chunk_size]
+            else:
+                yield self.img[i:i+chunk_size]
+            i += step_size
+
     ###++++++++++++++++++++###
     ### Column Combination ###
     ###++++++++++++++++++++###
@@ -343,6 +359,7 @@ class CoreColumn:
         fig, ax
             Matplotlib figure and axis with image + ticks plotted.
         """
+        # Update any new tick kwargs
         tick_kwargs = utils.strict_update(defaults.DEPTH_TICK_ARGS, tick_kwargs)
         major_kwargs = utils.strict_update(defaults.MAJOR_TICK_PARAMS, major_kwargs)
         minor_kwargs = utils.strict_update(defaults.MINOR_TICK_PARAMS, minor_kwargs)

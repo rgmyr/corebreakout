@@ -5,7 +5,7 @@ from setuptools import find_packages
 try:
     from setuptools import setup
 except ImportError:
-    raise UserWarning('`distutils` is not supported. You must use Python>=3.6')
+    raise UserWarning('`distutils` is not supported since you must use Python>=3.6')
 
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
