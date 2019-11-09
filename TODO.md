@@ -1,16 +1,13 @@
 # To Do List
 
-### docs
-
-- Short demo of training
-- Short demo of inference
-- `scripts/README.md`
-
 ### source
 
-- make train + inference script more general via `args`
+- Get rid of extra notebooks. Keep:
+  - `select_model`
+  - `inspect_dataset`
+  - `inspect_rpn` (maybe? maybe not?)
 
 ### SUBMISSION
 
-- Do paper edits
-- Should there be copyright stuff at the top of each file?
+- Finish paper edits (any left?)
+  - Doesn't seem to compile anymore on `whedon`?
