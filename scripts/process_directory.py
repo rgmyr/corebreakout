@@ -38,7 +38,7 @@ class_names = defaults.CLASSES
 layout_params = defaults.LAYOUT_PARAMS
 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description='Convert image directories to saved CoreColumns.')
 parser.add_argument('path',
     type=str,
     help="Path to directory of images (and depth information csv) to process."

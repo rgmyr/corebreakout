@@ -23,8 +23,24 @@ You can either modify `DefaultConfig`, or create your own `Config` subclass.
 
 The simplest way to train a model is by running [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py). This script loads pretrained `COCO` weights, and executes a three step training + tuning run.
 
+It also serves as a demonstration of `Dataset` collection, and instantiating and training a `mrcnn.modellib.MaskRCNN`.
+
 While training, `mrcnn` logs `tensorboard` files to the specified `model_dir`. You can view the files by running:
 
 ```
 $ tensorboard --logdir <model_dir>
 ```
+
+## Model Selection
+
+We recommend viewing the `tensorboard` files (and particularly the `val_loss` scalar) to select candidate models.
+
+`notebooks/select_model.ipynb` provides a template for viewing the output of candidate models on the test dataset.
+
+**Note**: `mrcnn` saves Checkpoints each epoch starting at `0001`, while `tensorboard` logs epochs starting from `0`. So, if epoch `X` looks good on `tensorboard`, you will want to reference epoch `X+1` in your list of candidates to load the corresponding weights.
+
+## Using a Model
+
+Once you have trained and selected a new model, you may want to change the `*PATH` variables in `defaults` to reference a new model location (these are what get referenced by default in `scripts/process_directory.py`, etc.).
+
+You can also pass whatever `model_dir` and `weights_path` (and `model_config`) you like when constructing a `CoreSegmenter`.
