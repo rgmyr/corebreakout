@@ -2,12 +2,13 @@
 
 Instructions for users:
     - Modify `TEXT_BBOX` to match the location of informative text in your images
-    - The BBOX should be set such that the depths are the last two numbers in the text.
+    - The BBOX should ideally be set such that the depths are the last two numbers in the text.
 
 Notes:
     - Will walk <root_dir> and separately process any subdirectories containing <subdir> in their name.
     - Images in <subdir> should have '.jpeg' extension.
-    - csv's with filenames, tops, and bases will be saved as <save_name>.csv in each <subdir>
+    - csv's with filenames, tops, and bottoms will be saved as <save_name>.csv in each <subdir> found
+    - Whenever <2 float candidates are found in img[BBOX], 0.0 is used as the fill value
 """
 import os
 import re
@@ -22,38 +23,33 @@ import matplotlib.pyplot as plt
 
 # Set Tesseract arguments. See docs for options:
 #    https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#options
-TESSERACT_CONFIG = '-psm 6'
+TESSERACT_CONFIG = '--psm 6'
 
 # Set bounding box (x0, y0, x1, y1) of text
 TEXT_BBOX = 200, 2200, 400, 2800
 
 
 parser = argparse.ArgumentParser(description="Extract OCR top and base depths from images with `pytesseract`")
-parser.add_argument(
-    'root_dir',
+parser.add_argument('--root_dir',
     type=str,
     help="A common parent directory of all target <subdir> directories."
 )
-parser.add_argument(
-    '--subdir',
+parser.add_argument('--subdir',
     type=str,
     default='converted',
     help="A string contained in the name of all target subdirectories."
 )
-parser.add_argument(
-    '--save_name'
+parser.add_argument('--save_name',
     type=str,
     default='auto_depths',
     help="Name of depths csv file(s) to be saved in matching subdirs."
 )
-parser.add_argument(
-    '--force',
+parser.add_argument('--force',
     dest='force',
     action='store_true',
     help="Flag to force overwrite of any existing <save_name>.csv files."
 )
-parser.add_argument(
-    '--inspect',
+parser.add_argument('--inspect',
     dest='inspect',
     action='store_true',
     help="Flag to inspect images and print OCR output whenever there is an issue."
@@ -99,17 +95,21 @@ def depth_range_from_img(img, inspect):
         return (float(numbers[-2]), float(numbers[-1]))
 
 
-def is_good_dir(d, force_overwrite):
-    is_converted_dir = d.split('/')[-1] == 'converted'
+def is_good_dir(d, subdir, save_name, force_overwrite):
+    name_matches = (subdir in d.split('/')[-1])
     if force_overwrite:
-        return is_converted_dir
+        return name_matches
     else:
-        no_depth_file = len(glob.glob(d+'/*auto_depths.csv')) == 0
-        return is_converted_dir and no_depth_file
+        no_depth_file = len(glob.glob(d+f'/*{save_name}.csv')) == 0
+        return name_matches and no_depth_file
 
 
-def find_subdirs(path, subdir, force_overwrite):
-    return [d[0] for d in os.walk(path) if is_good_dir(d[0], force_overwrite)]]
+def find_subdirs(path, subdir, save_name, force_overwrite):
+    subdirs = []
+    for d in os.walk(path):
+        if is_good_dir(d[0], subdir, save_name, force_overwrite):
+            subdirs.append(d[0])
+    return subdirs
 
 
 def process_subdir(subdir_path, save_name, inspect):
@@ -123,16 +123,16 @@ def process_subdir(subdir_path, save_name, inspect):
         df.at[img_file,'top'] = top
         df.at[img_file,'bottom'] = bottom
 
-        save_path = d+f'/{save_name}.csv'
-        df.to_csv(save_path)
-        print('Wrote file: ', save_path)
+    save_path = d+f'/{save_name}.csv'
+    df.to_csv(save_path)
+    print('Wrote file: ', save_path)
 
 
 if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    img_dirs = find_subdirs(args.root_dir, args.subdir, args.force_overwrite)
+    img_dirs = find_subdirs(args.root_dir, args.subdir, args.save_name, args.force)
 
     print(f'Processing {len(img_dirs)} directories...')
 

@@ -85,7 +85,7 @@ For details about `Dataset` usage and subclassing, see: [docs/creating_datasets.
 
 ### Training models
 
-Training a model requires a `Dataset`. You may run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py) (after modifying, if necessary), or [notebooks/train_mrcnn_model.ipynb]().
+Training a model requires a `Dataset`. You may run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py) (after modifying, if desired), or [notebooks/train_mrcnn_model.ipynb]().
 
 For details about `mrcnn` model configuration and training, see: [docs/model_building.md](https://github.com/rgmyr/corebreakout/blob/master/docs/model_building.md)
 
@@ -93,14 +93,41 @@ For details about `mrcnn` model configuration and training, see: [docs/model_bui
 
 Trained models can be used to instantiate and use a `CoreSegmenter` instance, with its `segment` and `segment_all` methods (see `tests/notebooks/test_inference.ipynb` for usage examples).
 
+You can also use [scripts/process_directory.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/process_directory.py). This requires a directory containing `jpeg` images, and a `csv` file with filenames + corresponding top and bottom depths. See the docstring for details, or run the script with `--help` to see all the options.
+
+Assuming you've downloaded and unzipped `assets` in the default location, you can test the script with default parameters by running:
+
+```
+$ cd scripts
+$ python process_directory.py ../tests/data/two_image_dataset --depth_csv dummy_depths.csv
+```
+
+This should save the aggregated `CoreColumn` to `tests/data/two_image_dataset/CoreColumn_1.00_5.00.pkl`.
+
 For details about image layout specification, see: [docs/layout_parameters.md](https://github.com/rgmyr/corebreakout/blob/master/docs/layout_parameters.md)
 
 ### Extracting depth ranges with OCR
 
 We provide a script for extracting `top` and `base` depths from image text using `pytesseract`. This can help with aggregating the information required to process a large number of images.
 
-You can install `pytesseract` via `conda` or `pip`, and then follow the instructions in the docstring of [scripts/get_ocr_depths.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py)
+After installing the [Tesseract OCR Engine](https://github.com/tesseract-ocr/tesseract) on your machine, you can install `pytesseract` via `conda` or `pip`. Then follow the instructions in the docstring of [scripts/get_ocr_depths.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py).
 
+As an example, you can test the script by running:
+
+```
+$ cd scripts
+$ python get_ocr_depths.py --root_dir ../tests/data --subdir two_image_dataset --save_name auto_depths_test
+```
+
+This should save a new file at `tests/data/two_image_dataset/auto_depths_test.csv`, with contents like:
+
+```
+,top,bottom
+S00101409.jpeg,2348.0,2350.0
+S00111582.jpeg,7716.0,2220.0
+```
+
+Note that `7716.0` should be `2218.0`. With the BGS images, some manual corrections are usually required (depths are also filled with `0.0`'s when no floats are found), but this provides a template for the depths `--depth_csv` file required to run `process_directory.py`.
 
 ## Development and Community Guidelines
 

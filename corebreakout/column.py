@@ -201,9 +201,11 @@ class CoreColumn:
 
 
     def iter_chunks(self, chunk_size, depths=True, step_size=None):
-        """Iterate over data in `chunk_size` pieces, starting `step_size` apart.
+        """Generate data in `chunk_size` pieces, starting `step_size` apart.
 
-        TODO: make this able to fill last (possibly partial) last chunks.
+        If `depths`, yields `(img, depths)` of each chunk, else just `img`
+
+        TODO: make this able to fill partial last chunks.
         """
         step_size = step_size or chunk_size
 
