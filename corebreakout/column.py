@@ -254,6 +254,9 @@ class CoreColumn:
                     (fill_rows, self.width, self.channels), dtype=self.img.dtype
                 )
 
+                # NOTE: could use temp var here to avoid modifying `self`
+                # Doesn't seem too important + obvious ways of doing that
+                # result in writing these funcs multiple (3?) times
                 self.img = utils.vstack_images(self.img, fill_img)
                 self.depths = np.concatenate([self.depths, fill_depths])
 

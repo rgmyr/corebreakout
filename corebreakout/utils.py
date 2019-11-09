@@ -22,6 +22,37 @@ def strict_update(d1, d2):
     return d1
 
 
+def vstack_images(imgA, imgB, *args):
+    """Vstack `imgA` and `imgB`, after RHS zero-padding the narrower if necessary.
+
+    Will recursively add any additional images passed as *args.
+    """
+    dimA, dimB = imgA.ndim, imgB.ndim
+    assert dimA == dimB, f"Cannot vstack images of different dimensions: {(dimA, dimB)}"
+    assert dimA in [2, 3], f"Images must be 2D or 3D, not {dimA}D"
+
+    dw = imgA.shape[1] - imgB.shape[1]
+
+    if dw == 0:
+        return np.concatenate([imgA, imgB])
+    elif dimA == 2:
+        pads = ((0, 0), (0, abs(dw)))
+    else:
+        pads = ((0, 0), (0, abs(dw)), (0, 0))
+
+    if dw < 0:
+        paddedA = np.pad(imgA, pads, "constant")
+        result = np.concatenate([paddedA, imgB])
+    else:
+        paddedB = np.pad(imgB, pads, "constant")
+        result = np.concatenate([imgA, paddedB])
+
+    if len(args):
+        return vstack_images(result, *args)
+    else:
+        return result
+
+
 ###++++++++++++++++++++++++++++++###
 ### Region + Layout Manipulation ###
 ###++++++++++++++++++++++++++++++###
@@ -121,26 +152,3 @@ def squeeze_labels(labels):
         labels[labels == label_id] == new_label
 
     return labels
-
-
-def vstack_images(imgA, imgB):
-    """Vstack `imgA` and `imgB`, after RHS zero-padding the narrower if necessary."""
-    dimA, dimB = imgA.ndim, imgB.ndim
-    assert dimA == dimB, f"Cannot vstack images of different dimensions: {(dimA, dimB)}"
-    assert dimA in [2, 3], f"Images must be 2D or 3D, not {dimA}D"
-
-    dw = imgA.shape[1] - imgB.shape[1]
-
-    if dw == 0:
-        return np.concatenate([imgA, imgB])
-    elif dimA == 2:
-        pads = ((0, 0), (0, abs(dw)))
-    else:
-        pads = ((0, 0), (0, abs(dw)), (0, 0))
-
-    if dw < 0:
-        paddedA = np.pad(imgA, pads, "constant")
-        return np.concatenate([paddedA, imgB])
-    else:
-        paddedB = np.pad(imgB, pads, "constant")
-        return np.concatenate([imgA, paddedB])
