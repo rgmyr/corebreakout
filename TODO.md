@@ -2,8 +2,7 @@
 
 ### source
 
-- Get rid of extra notebooks. Keep:
-  - `select_model`
+- Notebooks to clean/keep:
   - `inspect_dataset`
   - `inspect_rpn` (maybe? maybe not?)
 

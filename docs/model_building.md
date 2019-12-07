@@ -41,6 +41,6 @@ We recommend viewing the `tensorboard` files (and particularly the `val_loss` sc
 
 ## Using a Model
 
-Once you have trained and selected a new model, you may want to change the `*PATH` variables in `defaults` to reference a new model location (these are what get referenced by default in `scripts/process_directory.py`, etc.).
+Once you have trained and selected a new model, you may want to change the `*PATH` variables in `defaults` to point to the location of the new model weights (these paths are what get referenced by default in `scripts/process_directory.py`, etc.).
 
-You can also pass whatever `model_dir` and `weights_path` (and `model_config`) you like when constructing a `CoreSegmenter`.
+You can also pass whatever `model_dir` and `weights_path` (and `model_config` instance) you like when constructing a `CoreSegmenter`.

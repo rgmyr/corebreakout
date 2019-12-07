@@ -127,7 +127,7 @@ S00101409.jpeg,2348.0,2350.0
 S00111582.jpeg,7716.0,2220.0
 ```
 
-Note that `7716.0` should be `2218.0`. At least with the BGS images, some manual corrections are usually required, but this provides a template for the depths `--depth_csv` file required to run `process_directory.py`.
+Note that `7716.0` is a misread, and should have been `2218.0`. At least with the BGS images, some manual corrections are usually required, but this provides a template for the `--depth_csv` file required to run `process_directory.py`.
 
 ## Development and Community Guidelines
 
