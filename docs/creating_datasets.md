@@ -4,11 +4,11 @@ The recommended way to add a new set of labeled training images is to annotate t
 
 Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, follow these guidelines:
 
-- Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files (this is `labelme`'s default)
+- Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files (this is `labelme`'s default behavior)
 - You may label any number of classes. You will have to supply a list of these classes to the `PolygonDataset` constructor, or modify `defaults.DEFAULT_CLASSES`.
 - Different instances of the same class should begin with the class name and be differentiated afterward (*e.g.*, `col1, col2, col3`)
   - The corollary is that no class name can be a substring of any other class name (*e.g.*, `col, col_tray` would not be allowed)
-  - Multiple polygons may belong to a single instance, though we recommend keeping masks on the coarser side when possible
+  - Multiple polygons may belong to a single instance, though we recommend keeping masks on the coarser side
 - After annotating images, split into sibling `'train'` and `'test'` directories
 
 After compiling the annotations, you may wish to modify `defaults.DATASET_DIR` to avoid need to explicitly specify the data location.
@@ -30,7 +30,7 @@ dataset = PolygonDataset(classes=defaults.DEFAULT_CLASSES)
 # Collect all of the requied ID + path information
 dataset.collect_annotated_images(data_dir, subset)
 
-# Set all the attrs required for use
+# Set all of the attrs required for use
 dataset.prepare()
 
 print(dataset)
@@ -50,4 +50,4 @@ And then override at least these two methods:
 - `load_mask(image_id)`
   - Given an `image_id`, load (and compute, if necessary) the corresponding mask. For a mask with `N` object instances (not including the background), the return value from this function should be `(mask, class_ids)`, where `mask` is boolean array of shape `(H,W,N)` and `class_ids` is an 1D integer array of size `N` with one `class_id` for each of the channels in `mask`.
 - `image_reference(image_id)`
-  - Return the path of an image, a link to it, or some unique property to help in looking it up or debugging it.
+  - Return the path of an image, a link to it, or some other unique property to help in looking it up or debugging it.

@@ -29,8 +29,10 @@ parser.add_argument('--data_dir',
     help="Directory in which to find `train` and `test` subdirectories."
 )
 
+
 args = parser.parse_args()
 assert args.steps in [1,2,3], 'steps must be one of 1, 2, or 3'
+
 
 # Select model configuration to use
 model_config = defaults.DefaultConfig()

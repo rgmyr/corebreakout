@@ -14,7 +14,7 @@ We are currently using this package to enable research on [Lithology Prediction 
 
 ### Target Platform
 
-This package was developed on Linux (Ubuntu, PopOS), and has also been tested on OS X. It may work on other platforms, but we can make no guarantees.
+This package was developed on Linux (Ubuntu, PopOS), and has also been tested on OS X. It may work on other platforms, but we make no guarantees.
 
 ### Notes on Requirements
 
@@ -91,11 +91,11 @@ For details about `mrcnn` model configuration and training, see: [docs/model_bui
 
 ### Processing images
 
-Trained models can be used to instantiate and use a `CoreSegmenter` instance, with its `segment` and `segment_all` methods (see `tests/notebooks/test_inference.ipynb` for usage examples).
+Trained models can be used to instantiate a `CoreSegmenter` instance and use its `segment` and `segment_all` methods (see [tests/notebooks/test_inference.ipynb](https://github.com/rgmyr/corebreakout/blob/master/tests/notebooks/test_inference.ipynb) for usage examples).
 
 You can also use [scripts/process_directory.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/process_directory.py). This requires a directory containing `jpeg` images, and a `csv` file with filenames + corresponding top and bottom depths. See the docstring for details, or run the script with `--help` to see all the options.
 
-Assuming you've downloaded and unzipped `assets` in the default location, you can test the script with default parameters by running:
+Assuming you've downloaded and unzipped the `assets` folder in the default location, you can test the script with default parameters by running:
 
 ```
 $ cd scripts
