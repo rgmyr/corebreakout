@@ -20,7 +20,7 @@ authors:
 affiliations:
  - name: Department of Geology and Geological Engineering, Colorado School of Mines
    index: 1
-date: 31 October 2019
+date: 9 December 2019
 bibliography: paper.bib
 ---
 
