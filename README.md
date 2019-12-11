@@ -110,7 +110,7 @@ For details about image layout specification, see: [docs/layout_parameters.md](h
 
 We provide a script for extracting `top` and `base` depths from image text using `pytesseract`. This can help with aggregating the information required to process a large number of images.
 
-After installing the [Tesseract OCR Engine](https://github.com/tesseract-ocr/tesseract) on your machine, you can install `pytesseract` via `conda` or `pip`. Then follow the instructions in the docstring of [scripts/get_ocr_depths.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py).
+After installing the [Tesseract OCR Engine](https://github.com/tesseract-ocr/tesseract) on your machine, you can install `pytesseract` via `conda` or `pip`. Then follow the instructions in the docstring of [scripts/get_ocr_depths.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/get_ocr_depths.py).
 
 As an example, you can test the script by running:
 
