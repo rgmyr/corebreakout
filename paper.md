@@ -35,9 +35,9 @@ A geologist will often describe core by visual inspection and hand-draw a graphi
 
 ## Workflow
 
-The primary user workflow enabled by ``corebreakout`` is depicted in Figure 1. We make it straightforward for geologists to add their own labeled training images using ``Labelme`` [@Wada:2016, @Russell:2007], configure and train new Mask R-CNN models on the labeled images, and subsequently use the trained models to process their own unlabeled images and compile depth-aligned datasets.
+The primary user workflow enabled by ``corebreakout`` is depicted in Figure 1. We make it straightforward for geologists to add their own labeled training images using ``Labelme`` [@Wada:2016; @Russell:2007], configure and train new Mask R-CNN models on the labeled images, and subsequently use the trained models to process their own unlabeled images and compile depth-aligned datasets.
 
-![Figure 1](JOSS_figure_workflow.png)
+![Primary User Workflow](JOSS_figure_workflow.png)
 
 
 ## Functionality
