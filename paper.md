@@ -11,7 +11,7 @@ authors:
   - name: Ross G. Meyer
     orcid: 0000-0003-2344-554X
     affiliation: 1
-  - name: Thomas Martin
+  - name: Thomas P. Martin
     orcid: 0000-0002-4171-0004
     affiliation: 1
   - name: Zane R. Jobe
