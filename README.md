@@ -1,5 +1,7 @@
 # CoreBreakout
 
+[![status](https://joss.theoj.org/papers/add2021f95268fd4cd2850b105f3d570/status.svg)](https://joss.theoj.org/papers/add2021f95268fd4cd2850b105f3d570)
+
 ### Overview
 
 `corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images.
