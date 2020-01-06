@@ -87,7 +87,7 @@ For details about `Dataset` usage and subclassing, see: [docs/creating_datasets.
 
 ### Training models
 
-Training a model requires a `Dataset`. You may run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py) (after modifying, if desired), or [notebooks/train_mrcnn_model.ipynb]().
+Training a model requires a `Dataset`. You may run [scripts/train_mrcnn_model.py](https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py) (after modifying, if desired), or [notebooks/train_mrcnn_model.ipynb](https://github.com/rgmyr/corebreakout/blob/master/notebooks/train_mrcnn_model.ipynb).
 
 For details about `mrcnn` model configuration and training, see: [docs/model_building.md](https://github.com/rgmyr/corebreakout/blob/master/docs/model_building.md)
 
