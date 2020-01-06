@@ -35,7 +35,7 @@ $ tensorboard --logdir <model_dir>
 
 We recommend viewing the `tensorboard` files (and particularly the `val_loss` scalar) to select candidate models.
 
-`notebooks/select_model.ipynb` provides a template for viewing the output of candidate models on the test dataset.
+[notebooks/select_model.ipynb](https://github.com/rgmyr/corebreakout/blob/master/notebooks/select_model.ipynb) provides a template for viewing the output of candidate models on the test dataset.
 
 **Note**: `mrcnn` saves Checkpoints each epoch starting at `0001`, while `tensorboard` logs epochs starting from `0`. So, if epoch `X` looks good on `tensorboard`, you will want to reference epoch `X+1` in your list of candidates to load the corresponding weights.
 
