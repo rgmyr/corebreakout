@@ -22,7 +22,7 @@ install_requires = [
     'matplotlib',
     'scikit-image',
     'keras>=2.0.8,<=2.2.5',
-    'opencv',
+    'opencv-python',
     'h5py',
     'imgaug',
     'IPython[all]'
