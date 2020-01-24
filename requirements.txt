@@ -9,4 +9,5 @@ scikit-image
 keras>=2.0.8,<=2.2.5
 opencv
 h5py
+jupyter
 IPython[all]

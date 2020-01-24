@@ -14,6 +14,10 @@ parser.add_argument('--dst', type=str, help='Path to write joined row labels arr
                     default='/home/'+os.environ['USER']+'/Dropbox/core_data/facies/train_data/')
 
 
+XML_NAME = 'FaciesII'
+SAVE_NAME = '_labelsII'
+
+
 class XMLSection():
     """
     Utility class to represent labeled XML sections.
@@ -55,11 +59,11 @@ def join_xml_labels(well, src_path, dst_path):
     """
     Get all the XML files, snap them, saved concatted array to `dst_path`.
     """
-    xml_files = list((src_path / pathlib.Path(well)).glob('*.xml'))
+    xml_files = list((src_path / pathlib.Path(well) / XML_NAME).glob('*.xml'))
     assert len(xml_files) > 0, 'At least one XML file must be present.'
 
     label_arrays = [snap_xml_sections(xml_path) for xml_path in sorted(xml_files)]
-    np.save(dst_path / (well + '_labels.npy'), np.concatenate(label_arrays))
+    np.save(dst_path / (well + SAVE_NAME + '.npy'), np.concatenate(label_arrays))
 
 
 if __name__ == '__main__':

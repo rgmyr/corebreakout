@@ -2,7 +2,9 @@
 
 The recommended way to add a new set of labeled training images is to annotate them using [wkentaro/labelme](https://github.com/wkentaro/labelme). The `labelme` GUI allows the user to draw any number of labeled polygons on an image, and saves their labels and coordinates in a JSON annotation file.
 
-Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, follow these guidelines:
+Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. (**Note:** We've found that the point of diminishing returns happens somewhere in the 20-30 training images range, which probably corresponds to 30-50 column instances for this dataset. But of course, YMMV.)
+
+To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, follow these guidelines:
 
 - Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files (this is `labelme`'s default behavior)
 - You may label any number of classes. You will have to supply a list of these classes to the `PolygonDataset` constructor, or modify `defaults.DEFAULT_CLASSES`.
