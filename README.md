@@ -4,11 +4,9 @@
 
 ### Overview
 
-`corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images.
+`corebreakout` is a Python package built around [matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN) for the segmentation and depth-alignment of geological core sample images. It provides utilities and an API to enable the workflow depicted in the figure below, as well as a `CoreColumn` data structure to manage and manipulate the resulting depth-registered image data:
 
 ![](JOSS_figure_workflow.png)
-
-It also provides a `CoreColumn` data structure, which can be sliced and added, and which facilitates saving, loading, manipulating, and visualizing depth-aligned core image data.
 
 We are currently using this package to enable research on [Lithology Prediction of Slabbed Core Photos Using Machine Learning Models](https://figshare.com/articles/Lithology_Prediction_of_Slabbed_Core_Photos_Using_Machine_Learning_Models/8023835/2), and are working on getting a DOI for the project through the [Journal of Open Source Software](https://joss.theoj.org/).
 
@@ -18,18 +16,22 @@ We are currently using this package to enable research on [Lithology Prediction 
 
 This package was developed on Linux (Ubuntu, PopOS), and has also been tested on OS X. It may work on other platforms, but we make no guarantees.
 
-### Notes on Requirements
+### Requirements
 
 In addition to Python`>=3.6`, the packages listed in [requirements.txt](requirements.txt) are required. Notable exceptions to the list are:
 
 - `1.3<=tensorflow-gpu<=1.14` (or possibly just `tensorflow`)
 - `mrcnn` via [submodule: matterport/Mask\_RCNN](https://github.com/matterport/Mask_RCNN/tree/3deaec5d902d16e1daf56b62d5971d428dc920bc)
 
-Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests.
-
-The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. The latter is almost certainly required for building new models, although it may be possible to perform inference with saved models on CPU, and use of the `CoreColumn` data structure does not require a GPU.
+The TensorFlow requirement is not explicitly listed in `requirements.txt` due to the ambiguity between `tensorflow` and `tensorflow-gpu` in versions `<=1.14`. The latter is almost certainly required for training new models, although it may be possible to perform inference with saved models on CPU, and use of the `CoreColumn` data structure does not require a GPU.
 
 Note that TensorFlow GPU capabilities are implemented with [CUDA](https://developer.nvidia.com/cuda-zone), which requires a [supported NVIDIA GPU](https://developer.nvidia.com/cuda-gpus).
+
+#### Additional (Optional) Requirements
+
+Optionally, `jupyter` is required to run demo and test notebooks, and `pytest` is required to run unit tests. Both of these should be manually installed if you plan to modify or contribute to the package source code.
+
+We also provide a script for extraction of top/base depths from core image text using `pytesseract`. After installing the [Tesseract OCR Engine](https://github.com/tesseract-ocr/tesseract) on your machine, you can install the `pytesseract` package via standard `conda` or `pip` commands.
 
 ### Download code
 

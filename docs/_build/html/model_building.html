@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Model Building &#8212; CoreBreakout 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Layout Parameters" href="layout_parameters.html" />
+    <link rel="prev" title="Creating Datasets" href="creating_datasets.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layout_parameters.html" title="Layout Parameters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="creating_datasets.html" title="Creating Datasets"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="model-building">
+<h1>Model Building<a class="headerlink" href="#model-building" title="Permalink to this headline">¶</a></h1>
+<p>For the best results, most users will want to train models on some of
+their own data. See
+<a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/docs/creating_datasets.md">creating_datasets.md</a>.</p>
+<p>We may release a more general pretrained model in the future, pending
+demand and the availability of open source datasets.</p>
+<div class="section" id="mrcnn-model-configuration">
+<h2><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration<a class="headerlink" href="#mrcnn-model-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Models are created with a subclass of <code class="docutils literal notranslate"><span class="pre">mrcnn.config.Config</span></code>. See
+<code class="docutils literal notranslate"><span class="pre">corebreakout.defaults.DefaultConfig</span></code> for our latest model
+configuration.</p>
+<p>To see all available configuration parameters, see
+<a class="reference external" href="https://github.com/matterport/Mask_RCNN/blob/3deaec5d902d16e1daf56b62d5971d428dc920bc/mrcnn/config.py">mrcnn/config.py</a></p>
+<dl class="simple">
+<dt>The obvious parameters that a user might want to change include:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NAME</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RPN_ANCHOR_RATIOS</span></code> : defaults are set up for horizontal columns. Something like <code class="docutils literal notranslate"><span class="pre">[1.0,</span> <span class="pre">3.0,</span> <span class="pre">7.0]</span></code> would make more sense for vertical columns.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">STEPS_PER_EPOCH</span></code>, <code class="docutils literal notranslate"><span class="pre">VALIDATION_STEPS</span></code> : batches per training epoch and validation step. Does not necessarily need to match dataset sizes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IMAGES_PER_GPU</span></code> : you can try to increase if you have a large GPU.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GPU_COUNT</span></code> : you can increase if you multiple GPUs.</p></li>
+</ul>
+</dd>
+</dl>
+<p>You can either modify <code class="docutils literal notranslate"><span class="pre">DefaultConfig</span></code> directly, or instantiate your own <code class="docutils literal notranslate"><span class="pre">Config</span></code> subclass.</p>
+</div>
+<div class="section" id="model-training">
+<h2>Model Training<a class="headerlink" href="#model-training" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to train a model is by running
+<a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py">scripts/train_mrcnn_model.py</a>.
+This script loads pretrained <code class="docutils literal notranslate"><span class="pre">COCO</span></code> weights, and executes a three step
+training + tuning run.</p>
+<p>It also serves as a demonstration of <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> collection, and
+instantiating and training a <code class="docutils literal notranslate"><span class="pre">mrcnn.modellib.MaskRCNN</span></code>.</p>
+<p>While training, <code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> logs <code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> files to the specified
+<code class="docutils literal notranslate"><span class="pre">model_dir</span></code>. You can view the files by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tensorboard --logdir &lt;model_dir&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="model-selection">
+<h2>Model Selection<a class="headerlink" href="#model-selection" title="Permalink to this headline">¶</a></h2>
+<p>We recommend viewing the <code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> files (and particularly the
+<code class="docutils literal notranslate"><span class="pre">val_loss</span></code> scalar) to select candidate models.</p>
+<p><a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/notebooks/select_model.ipynb">notebooks/select_model.ipynb</a>
+provides a template for viewing the output of candidate models on the
+test dataset.</p>
+<p><strong>Note</strong>: <code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> saves Checkpoints each epoch starting at <code class="docutils literal notranslate"><span class="pre">0001</span></code>,
+while <code class="docutils literal notranslate"><span class="pre">tensorboard</span></code> logs epochs starting from <code class="docutils literal notranslate"><span class="pre">0</span></code>. So, if epoch
+<code class="docutils literal notranslate"><span class="pre">X</span></code> looks good on <code class="docutils literal notranslate"><span class="pre">tensorboard</span></code>, you will want to reference epoch
+<code class="docutils literal notranslate"><span class="pre">X+1</span></code> in your list of candidates to load the corresponding weights.</p>
+</div>
+<div class="section" id="using-a-model">
+<h2>Using a Model<a class="headerlink" href="#using-a-model" title="Permalink to this headline">¶</a></h2>
+<p>Once you have trained and selected a new model, you may want to change
+the <code class="docutils literal notranslate"><span class="pre">*PATH</span></code> variables in <code class="docutils literal notranslate"><span class="pre">corebreakout/defaults.py</span></code> to point to the location of the
+new model weights (these paths are what get referenced by default in
+<code class="docutils literal notranslate"><span class="pre">scripts/process_directory.py</span></code>, etc.).</p>
+<p>You can also pass whatever <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">weights_path</span></code> (and
+<code class="docutils literal notranslate"><span class="pre">model_config</span></code> instance) you like when constructing a
+<code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Model Building</a><ul>
+<li><a class="reference internal" href="#mrcnn-model-configuration"><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration</a></li>
+<li><a class="reference internal" href="#model-training">Model Training</a></li>
+<li><a class="reference internal" href="#model-selection">Model Selection</a></li>
+<li><a class="reference internal" href="#using-a-model">Using a Model</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="creating_datasets.html"
+                        title="previous chapter">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="layout_parameters.html"
+                        title="next chapter">Layout Parameters</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model_building.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="layout_parameters.html" title="Layout Parameters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="creating_datasets.html" title="Creating Datasets"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

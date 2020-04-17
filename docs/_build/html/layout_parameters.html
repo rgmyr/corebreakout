@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Layout Parameters &#8212; CoreBreakout 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Model Building" href="model_building.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model_building.html" title="Model Building"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="layout-parameters">
+<h1>Layout Parameters<a class="headerlink" href="#layout-parameters" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">corebreakout</span></code> allows for processing images with different standard
+layouts, and the use of several different methods for finding and
+cropping the bounding boxes of individual columns within an image.</p>
+<p>Layout parameters are used within the <code class="docutils literal notranslate"><span class="pre">CoreSegmenter.segment()</span></code>
+method.</p>
+<p>Any and all default parameters can be overridden and updated in the
+<code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code> constructor, or in any single call to the
+<code class="docutils literal notranslate"><span class="pre">segment()</span></code> method. In either case, pass any new parameters in a dict
+as the <code class="docutils literal notranslate"><span class="pre">layout_params</span></code> keyword argument.</p>
+<p>The default parameters reflect the characteristics of the BGS dataset on
+which the example model is trained:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># corebreakout/defaults.py</span>
+
+<span class="n">LAYOUT_PARAMS</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;order&#39;</span> <span class="p">:</span> <span class="s1">&#39;t2b&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;orientation&#39;</span> <span class="p">:</span> <span class="s1">&#39;l2r&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;col_height&#39;</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+  <span class="s1">&#39;col_class&#39;</span> <span class="p">:</span> <span class="s1">&#39;col&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;endpts&#39;</span> <span class="p">:</span> <span class="s1">&#39;tray&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>DEVELOPMENT NOTE:</strong> The only allowed values for <code class="docutils literal notranslate"><span class="pre">order</span></code> and
+<code class="docutils literal notranslate"><span class="pre">orientation</span></code> are <code class="docutils literal notranslate"><span class="pre">'t2b'</span></code> and <code class="docutils literal notranslate"><span class="pre">'l2r'</span></code>. This covers all
+conventional core image layouts that we are aware of, but we would
+consider adding <code class="docutils literal notranslate"><span class="pre">'b2t'</span></code> and <code class="docutils literal notranslate"><span class="pre">'r2l'</span></code> if provided with use-cases. If
+you have one, please open an issue (or submit a pull request :-).</p>
+<div class="section" id="order-and-orientation">
+<h2><code class="docutils literal notranslate"><span class="pre">order</span></code> and <code class="docutils literal notranslate"><span class="pre">orientation</span></code><a class="headerlink" href="#order-and-orientation" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">'order'</span></code> parameter specifies the depth order by which to sort the
+set of columns detected in an image:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'t2b'</span></code> implies that columns are laid out horizontally, with the uppermost column coming first in order of depth.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'l2r'</span></code> implies that columns are laid out vertically, with the leftmost column coming first in order of depth.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">'orientation'</span></code> parameter specifies the depth orientation of
+columns. This should be the converse of <code class="docutils literal notranslate"><span class="pre">'order'</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'t2b'</span></code> implies that the top of a (vertical) column is toward the top of the image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'l2r'</span></code> implies that the top of a (horizontal) column is toward the left side of the image.</p></li>
+</ul>
+<p>Since it is required that <code class="docutils literal notranslate"><span class="pre">order</span></code> be one of these options and
+<code class="docutils literal notranslate"><span class="pre">orientation</span></code> be the other, requiring both <em>is</em> redundant. However,
+making both of them explicit improves code readability, and will make it
+easier to add other options should we choose to do so in future
+releases.</p>
+</div>
+<div class="section" id="col-height">
+<h2><code class="docutils literal notranslate"><span class="pre">col_height</span></code><a class="headerlink" href="#col-height" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">'col_height'</span></code> parameter specifies the height in depth units
+(usually meters or feet) of individual (and complete) columns.</p>
+<p>This value is used in conjunction with the <code class="docutils literal notranslate"><span class="pre">depth_range</span></code> positional
+argument to find the number of expected columns in an image when calling
+<code class="docutils literal notranslate"><span class="pre">CoreSegmenter.segment(img,</span> <span class="pre">depth_range,</span> <span class="pre">...)</span></code>.</p>
+</div>
+<div class="section" id="col-class">
+<h2><code class="docutils literal notranslate"><span class="pre">col_class</span></code><a class="headerlink" href="#col-class" title="Permalink to this headline">¶</a></h2>
+<p>The name of the class representing core sample columns in the M-RCNN
+model used by <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code> instance.</p>
+</div>
+<div class="section" id="endpts">
+<h2><code class="docutils literal notranslate"><span class="pre">endpts</span></code><a class="headerlink" href="#endpts" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">'endpts'</span></code> parameter determines the method for making sure that
+before cropping, the <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code> of partial columns are
+extended to locations that are approximately <code class="docutils literal notranslate"><span class="pre">'col_height'</span></code> apart.
+Different options may work better or worse depending on how clean the
+samples are and how consistent the layout is.</p>
+<p>Predicted masks tend to be subsets of the ‘true’ masks, so <strong>short
+columns are extended</strong>, but <strong>longer columns are NOT shortened</strong>. You
+can see this in the example images below, where the computed minimal
+endpoint locations are shown as solid yellow lines, and the resulting
+column bounding boxes are shown as green dashed lines.</p>
+<p>Allowed values of <code class="docutils literal notranslate"><span class="pre">'endpts'</span></code> include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>The name of a class (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">'tray'</span></code>):</dt><dd><ul>
+<li><p>Results in columns being extended to the <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code> of the strongest detection of this class</p></li>
+<li><p>Must be found in the <code class="docutils literal notranslate"><span class="pre">class_names</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code> instance</p></li>
+<li><p>Typical choices would be empty trays, or the measuring sticks commonly placed next to boxes of core</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><img alt="image0" src="_images/endpts_tray.png" /></p>
+<ul class="simple">
+<li><p>One of the keywords <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> or <code class="docutils literal notranslate"><span class="pre">'auto_all'</span></code></p>
+<ul>
+<li><p>Results in columns being extended to the min/max coordinates of a
+set of detected objects</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'auto'</span></code> will use only objects of <code class="docutils literal notranslate"><span class="pre">'col_class'</span></code> as the
+relevant set (<em>e.g.</em>, all <code class="docutils literal notranslate"><span class="pre">'col'</span></code> detections – first example
+below)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'auto_all'</span></code> will use all objects in the image (<em>e.g.</em>, all
+<code class="docutils literal notranslate"><span class="pre">'col'</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">'tray'</span></code> detections – second example below)</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="image1" src="_images/endpts_auto.png" /></p>
+<p><img alt="image2" src="_images/endpts_auto_all.png" /></p>
+<ul class="simple">
+<li><p>A 2-tuple of explicit integer endpoint coordinates (<em>e.g.</em>,
+<code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">6900)</span></code>)</p>
+<ul>
+<li><p>Results in columns being extended to at least these min/max
+coordinates</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="image3" src="_images/endpts_explicit.png" /></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Layout Parameters</a><ul>
+<li><a class="reference internal" href="#order-and-orientation"><code class="docutils literal notranslate"><span class="pre">order</span></code> and <code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li><a class="reference internal" href="#col-height"><code class="docutils literal notranslate"><span class="pre">col_height</span></code></a></li>
+<li><a class="reference internal" href="#col-class"><code class="docutils literal notranslate"><span class="pre">col_class</span></code></a></li>
+<li><a class="reference internal" href="#endpts"><code class="docutils literal notranslate"><span class="pre">endpts</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model_building.html"
+                        title="previous chapter">Model Building</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/layout_parameters.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model_building.html" title="Model Building"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

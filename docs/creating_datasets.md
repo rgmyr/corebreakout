@@ -2,16 +2,16 @@
 
 The recommended way to add a new set of labeled training images is to annotate them using [wkentaro/labelme](https://github.com/wkentaro/labelme). The `labelme` GUI allows the user to draw any number of labeled polygons on an image, and saves their labels and coordinates in a JSON annotation file.
 
-Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. (**Note:** We've found that the point of diminishing returns happens somewhere in the 20-30 training images range, which probably corresponds to 30-50 column instances for this dataset. But of course, YMMV.)
+Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, you will want to follow these labeling guidelines:
 
-To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, follow these guidelines:
-
-- Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files (this is `labelme`'s default behavior)
-- You may label any number of classes. You will have to supply a list of these classes to the `PolygonDataset` constructor, or modify `defaults.DEFAULT_CLASSES`.
+- Save `<fname>.json` annotations in a flat directory with corresponding `<fname>.jpeg` files. This is `labelme`'s default behavior, so you shouldn't have to change anything.
+- You may label any number of classes. You will have to supply a list of these classes to the `PolygonDataset` constructor, or modify `defaults.DEFAULT_CLASSES`. At a minimum, you will want some kind of "core column" class.
 - Different instances of the same class should begin with the class name and be differentiated afterward (*e.g.*, `col1, col2, col3`)
   - The corollary is that no class name can be a substring of any other class name (*e.g.*, `col, col_tray` would not be allowed)
-  - Multiple polygons may belong to a single instance, though we recommend keeping masks on the coarser side
-- After annotating images, split into sibling `'train'` and `'test'` directories
+  - Multiple polygons may belong to a single instance, although we recommend keeping masks on the coarser side
+- After annotating images, split `.jpeg` and `.json` pairs into sibling `'train'` and `'test'` directories
+
+**Note:** We've found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. Of course, YMMV.
 
 After compiling the annotations, you may wish to modify `defaults.DATASET_DIR` to avoid need to explicitly specify the data location.
 
@@ -38,7 +38,7 @@ dataset.prepare()
 print(dataset)
 ```
 
-Two `dataset` objects (train, test) are required in calls to `model.train()`.
+Two `dataset` objects (train, test) are required in calls to `model.train()`, which is why we split them into separate directories.
 
 ## Subclassing `mrcnn.utils.Dataset`
 

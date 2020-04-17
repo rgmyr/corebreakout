@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>corebreakout package &#8212; CoreBreakout 0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="corebreakout-package">
+<h1>corebreakout package<a class="headerlink" href="#corebreakout-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="corebreakout.datasets.html">corebreakout.datasets package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="corebreakout.datasets.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="corebreakout.datasets.html#module-corebreakout.datasets.polygondataset">corebreakout.datasets.polygondataset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="corebreakout.datasets.html#module-corebreakout.datasets">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-corebreakout.column">
+<span id="corebreakout-column-module"></span><h2>corebreakout.column module<a class="headerlink" href="#module-corebreakout.column" title="Permalink to this headline">¶</a></h2>
+<p>CoreColumn abstraction representing depth-registered single-column images of core material.</p>
+<dl class="class">
+<dt id="corebreakout.column.CoreColumn">
+<em class="property">class </em><code class="sig-prename descclassname">corebreakout.column.</code><code class="sig-name descname">CoreColumn</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">depths=None</em>, <em class="sig-param">top=None</em>, <em class="sig-param">base=None</em>, <em class="sig-param">add_tol=None</em>, <em class="sig-param">add_mode='fill'</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container for depth-registered, single-column images of core material.</p>
+<p><cite>CoreColumn`s can be stacked via the `__add__</cite> operator, using <cite>add_mode</cite> from LHS instance,
+and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.</p>
+<p>Either <cite>depths</cite> array or scalar <cite>top</cite> and <cite>base</cite> values must be provided to constructor.</p>
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.add_mode">
+<em class="property">property </em><code class="sig-name descname">add_mode</code><a class="headerlink" href="#corebreakout.column.CoreColumn.add_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.add_tol">
+<em class="property">property </em><code class="sig-name descname">add_tol</code><a class="headerlink" href="#corebreakout.column.CoreColumn.add_tol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.dd">
+<em class="property">property </em><code class="sig-name descname">dd</code><a class="headerlink" href="#corebreakout.column.CoreColumn.dd" title="Permalink to this definition">¶</a></dt>
+<dd><p>An approximate value for the size of each row in depth units.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.depth_range">
+<em class="property">property </em><code class="sig-name descname">depth_range</code><a class="headerlink" href="#corebreakout.column.CoreColumn.depth_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.depths">
+<em class="property">property </em><code class="sig-name descname">depths</code><a class="headerlink" href="#corebreakout.column.CoreColumn.depths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.img">
+<em class="property">property </em><code class="sig-name descname">img</code><a class="headerlink" href="#corebreakout.column.CoreColumn.img" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.iter_chunks">
+<code class="sig-name descname">iter_chunks</code><span class="sig-paren">(</span><em class="sig-param">chunk_size</em>, <em class="sig-param">depths=True</em>, <em class="sig-param">step_size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn.iter_chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate data in <cite>chunk_size</cite> pieces, starting <cite>step_size</cite> apart.</p>
+<p>If <cite>depths</cite>, yields <cite>(img, depths)</cite> of each chunk, else just <cite>img</cite></p>
+<p>TODO: make this able to fill partial last chunks.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.load">
+<em class="property">classmethod </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">name</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a CoreColumn instance from directory <cite>path</cite>.</p>
+<p>If ‘&lt;name&gt;.pkl’ exists, will just load from that file.</p>
+<p>Otherwise, at least ‘&lt;name&gt;_image.npy’ must exist. If ‘&lt;name&gt;_depths.npy’
+also exists, those will be read as <cite>depths</cite>. If not, the user must pass
+either <cite>depths</cite> or <cite>top</cite> &amp; <cite>base</cite> as <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">figsize=(15</em>, <em class="sig-param">50)</em>, <em class="sig-param">tick_kwargs={}</em>, <em class="sig-param">major_kwargs={}</em>, <em class="sig-param">minor_kwargs={}</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an image figure with major and minor depth ticks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>tuple(int)</em>) – Size of matplotlib figure to plot on.  Note: at default DPI of 100, 650 is
+about as large as common image formats will support saving (~2^16 pixels).</p></li>
+<li><p><strong>tick_kwargs</strong> – Parameters for tick creation: ‘major’ and ‘minor’ options for
+<cite>*_precision</cite> and <cite>*_format_str</cite>. See <cite>viz.make_depth_ticks()</cite>.</p></li>
+<li><p><strong>major/minor_kwargs</strong> – Parameters for tick size and appearance. Passed to <cite>ax.tick_params</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matplotlib figure and axis with image + ticks plotted.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>fig, ax</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">name=None</em>, <em class="sig-param">pickle=True</em>, <em class="sig-param">image=False</em>, <em class="sig-param">depths=False</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the CoreColumn (or parts of it) to directory <cite>path</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str or Path</em>) – Location to save to (must exist and be a directory).</p></li>
+<li><p><strong>name</strong> (<em>str, optional</em>) – Stem to save files as, default=`CoreColumn_&lt;top&gt;_&lt;base&gt;`.</p></li>
+<li><p><strong>pickle</strong> (<em>bool, optional</em>) – Whether to pickle the entire object with <cite>dill</cite>, default=True.</p></li>
+<li><p><strong>image</strong> (<em>bool, optional</em>) – Whether to save the image as ‘.npy’ file, default=False.</p></li>
+<li><p><strong>depths</strong> (<em>bool, optional</em>) – Whether to save the depths as a ‘.npy’ file, default=False</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.column.CoreColumn.slice_depth">
+<code class="sig-name descname">slice_depth</code><span class="sig-paren">(</span><em class="sig-param">top=None</em>, <em class="sig-param">base=None</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn.slice_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a sliced CoreColumn between <cite>top</cite> and <cite>base</cite>,
+if it would have an effect and it is possible to do so.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-corebreakout.defaults">
+<span id="corebreakout-defaults-module"></span><h2>corebreakout.defaults module<a class="headerlink" href="#module-corebreakout.defaults" title="Permalink to this headline">¶</a></h2>
+<p>Default paths, dataset and Mask_RCNN model config, <cite>CoreColumn</cite> viz settings.</p>
+<dl class="class">
+<dt id="corebreakout.defaults.DefaultConfig">
+<em class="property">class </em><code class="sig-prename descclassname">corebreakout.defaults.</code><code class="sig-name descname">DefaultConfig</code><a class="headerlink" href="#corebreakout.defaults.DefaultConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mrcnn.config.Config</span></code></p>
+<p>M-RCNN model configuration.</p>
+<p>Override some default Mask_RCNN <cite>Config</cite> values.</p>
+<dl class="simple">
+<dt>For all available parameters and explanations, see:</dt><dd><p><a class="reference external" href="https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py">https://github.com/matterport/Mask_RCNN/blob/master/mrcnn/config.py</a></p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.BACKBONE">
+<code class="sig-name descname">BACKBONE</code><em class="property"> = 'resnet101'</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.BACKBONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.DETECTION_MAX_INSTANCES">
+<code class="sig-name descname">DETECTION_MAX_INSTANCES</code><em class="property"> = 6</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.DETECTION_MAX_INSTANCES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.DETECTION_MIN_CONFIDENCE">
+<code class="sig-name descname">DETECTION_MIN_CONFIDENCE</code><em class="property"> = 0.98</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.DETECTION_MIN_CONFIDENCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.GPU_COUNT">
+<code class="sig-name descname">GPU_COUNT</code><em class="property"> = 1</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.GPU_COUNT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.IMAGES_PER_GPU">
+<code class="sig-name descname">IMAGES_PER_GPU</code><em class="property"> = 1</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.IMAGES_PER_GPU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.LOSS_WEIGHTS">
+<code class="sig-name descname">LOSS_WEIGHTS</code><em class="property"> = {'mrcnn_bbox_loss': 1.0, 'mrcnn_class_loss': 0.5, 'mrcnn_mask_loss': 1.0, 'rpn_bbox_loss': 1.0, 'rpn_class_loss': 0.5}</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.LOSS_WEIGHTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.NAME">
+<code class="sig-name descname">NAME</code><em class="property"> = 'cb_default'</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.NUM_CLASSES">
+<code class="sig-name descname">NUM_CLASSES</code><em class="property"> = 3</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.NUM_CLASSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.RPN_ANCHOR_RATIOS">
+<code class="sig-name descname">RPN_ANCHOR_RATIOS</code><em class="property"> = [0.2, 0.5, 1]</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.RPN_ANCHOR_RATIOS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.RPN_ANCHOR_SCALES">
+<code class="sig-name descname">RPN_ANCHOR_SCALES</code><em class="property"> = (64, 128, 192, 256, 320)</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.RPN_ANCHOR_SCALES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.RPN_NMS_THRESHOLD">
+<code class="sig-name descname">RPN_NMS_THRESHOLD</code><em class="property"> = 0.9</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.RPN_NMS_THRESHOLD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.STEPS_PER_EPOCH">
+<code class="sig-name descname">STEPS_PER_EPOCH</code><em class="property"> = 25</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.STEPS_PER_EPOCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="corebreakout.defaults.DefaultConfig.VALIDATION_STEPS">
+<code class="sig-name descname">VALIDATION_STEPS</code><em class="property"> = 5</em><a class="headerlink" href="#corebreakout.defaults.DefaultConfig.VALIDATION_STEPS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-corebreakout.segmenter">
+<span id="corebreakout-segmenter-module"></span><h2>corebreakout.segmenter module<a class="headerlink" href="#module-corebreakout.segmenter" title="Permalink to this headline">¶</a></h2>
+<p>Raw core image processing using Mask-RCNN model(s).</p>
+<p>Mask-RCNN implementation from <cite>mrcnn</cite> package &#64; matterport/Mask_RCNN</p>
+<dl class="class">
+<dt id="corebreakout.segmenter.CoreSegmenter">
+<em class="property">class </em><code class="sig-prename descclassname">corebreakout.segmenter.</code><code class="sig-name descname">CoreSegmenter</code><span class="sig-paren">(</span><em class="sig-param">model_dir, weights_path, model_config=&lt;corebreakout.defaults.DefaultConfig object&gt;, class_names=['col', 'tray'], layout_params={}</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mask-RCNN model container for extracting <a href="#id3"><span class="problematic" id="id4">`</span></a>CoreColumn`s from core images.</p>
+<p><cite>model_dir</cite> and <cite>weights_path</cite> must be passed to constructor.</p>
+<dl class="method">
+<dt id="corebreakout.segmenter.CoreSegmenter.expected_tops_bases">
+<em class="property">static </em><code class="sig-name descname">expected_tops_bases</code><span class="sig-paren">(</span><em class="sig-param">depth_range</em>, <em class="sig-param">col_height</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.expected_tops_bases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute tops/bases of <cite>col_height</cite> columns spanning <cite>depth_range</cite>.</p>
+<p>Note: col_bases[-1] does not necessarily == depth_range[-1]. The columns
+are meant to cover the range starting from <cite>top</cite>, not match it exactly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>col_tops, col_bases</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.segmenter.CoreSegmenter.layout_params">
+<em class="property">property </em><code class="sig-name descname">layout_params</code><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.layout_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.segmenter.CoreSegmenter.segment">
+<code class="sig-name descname">segment</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">depth_range</em>, <em class="sig-param">add_tol=None</em>, <em class="sig-param">add_mode='fill'</em>, <em class="sig-param">layout_params={}</em>, <em class="sig-param">show=False</em>, <em class="sig-param">colors=None</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect and segment core columns in <cite>img</cite>, return single aggregated <cite>CoreColumn</cite> instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>str or array</em>) – Filename or RGB image array to segment.</p></li>
+<li><p><strong>depth_range</strong> (<em>list(float)</em>) – Top and bottom depths of set of columns in image.</p></li>
+<li><p><strong>add_tol</strong> (<em>float, optional</em>) – Tolerance for adding discontinuous <a href="#id5"><span class="problematic" id="id6">`</span></a>CoreColumn`s.
+Default=None results in tolerance ~ image resolution.</p></li>
+<li><p><strong>add_mode</strong> (<em>one of {‘fill’, ‘collapse’}, optional</em>) – Add mode for generated <cite>CoreColumn</cite> instances (see <cite>CoreColumn</cite> docs)</p></li>
+<li><p><strong>layout_params</strong> (<em>dict, optional</em>) – Any layout parameters to override.</p></li>
+<li><p><strong>show</strong> (<em>boolean, optional</em>) – Set to True to show image with predictions overlayed.</p></li>
+<li><p><strong>colors</strong> (<em>list, optional</em>) – A list of RGBA tuples, one for each in <cite>class_names</cite> (excluding ‘BG’).
+Values should be in range [0.0, 1.0], If None, uses random colors.
+Has no effect unless <cite>show=True</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img_col</strong> – Single aggregated <cite>CoreColumn</cite> instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#corebreakout.column.CoreColumn" title="corebreakout.column.CoreColumn">CoreColumn</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="corebreakout.segmenter.CoreSegmenter.segment_all">
+<code class="sig-name descname">segment_all</code><span class="sig-paren">(</span><em class="sig-param">imgs</em>, <em class="sig-param">depth_ranges</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.segment_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segment a set of <cite>imgs</cite> with known <cite>depth_ranges</cite>, return concatenated <cite>CoreColumn</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>imgs</strong> (<em>Iterable of either filepaths or image arrays.</em>)</p></li>
+<li><p><strong>depth_ranges</strong> (<em>Iterable of (top, base) pairs for each image.</em>)</p></li>
+<li><p><strong>**kwargs</strong> – See <cite>segment()</cite> docstring for options.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-corebreakout.utils">
+<span id="corebreakout-utils-module"></span><h2>corebreakout.utils module<a class="headerlink" href="#module-corebreakout.utils" title="Permalink to this headline">¶</a></h2>
+<p>Assorted image / mask / label / region manipulation functions.</p>
+<dl class="function">
+<dt id="corebreakout.utils.crop_region">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">crop_region</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">labels</em>, <em class="sig-param">region</em>, <em class="sig-param">axis=0</em>, <em class="sig-param">endpts=(815</em>, <em class="sig-param">6775)</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.crop_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust region bbox and return cropped region * mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>array</em>) – The image to crop</p></li>
+<li><p><strong>labels</strong> (<em>array</em>) – Mask of integer labels, same height and width as <cite>img</cite></p></li>
+<li><p><strong>region</strong> (<em>skimage.RegionProperties instance</em>) – Region object corresponding to column to crop around</p></li>
+<li><p><strong>axis</strong> (<em>int, optional</em>) – Which axis to change <cite>endpts</cite> along, default=0 (y-coordinates)</p></li>
+<li><p><strong>endpts</strong> (<em>tuple(int)</em>) – Least extreme endpoint coordinates allowed along <cite>axis</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>region</strong> – Masked image region, cropped in (adjusted) bounding box</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.masks_to_labels">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">masks_to_labels</code><span class="sig-paren">(</span><em class="sig-param">masks</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.masks_to_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert boolean (H,W,N) <cite>masks</cite> array to integer (H,W) in range(0,N+1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.maximum_extent">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">maximum_extent</code><span class="sig-paren">(</span><em class="sig-param">regions</em>, <em class="sig-param">crop_axis</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.maximum_extent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find min/max of combined skimage <cite>regions</cite>, along <cite>crop_axis</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.rotate_vertical">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">rotate_vertical</code><span class="sig-paren">(</span><em class="sig-param">region_img</em>, <em class="sig-param">orientation</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.rotate_vertical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotated (cropped) <cite>region_img</cite> array to vertical, given the depth <cite>orientation</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.sort_regions">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">sort_regions</code><span class="sig-paren">(</span><em class="sig-param">regions</em>, <em class="sig-param">order</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.sort_regions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort skimage <cite>regions</cite> (core columns), given the column <cite>order</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.squeeze_labels">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">squeeze_labels</code><span class="sig-paren">(</span><em class="sig-param">labels</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.squeeze_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set labels to range(0, objects+1)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.strict_update">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">strict_update</code><span class="sig-paren">(</span><em class="sig-param">d1</em>, <em class="sig-param">d2</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.strict_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>For two dicts <cite>d1</cite> and <cite>d2</cite>, works like <cite>d1.update(d2)</cite>, except without
+adding any new keys to <cite>d1</cite> (only values of existing keys updated).</p>
+<p>Dictonaries are copied, so that this does not have an ‘inplace’ effect.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.utils.vstack_images">
+<code class="sig-prename descclassname">corebreakout.utils.</code><code class="sig-name descname">vstack_images</code><span class="sig-paren">(</span><em class="sig-param">imgA</em>, <em class="sig-param">imgB</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.utils.vstack_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vstack <cite>imgA</cite> and <cite>imgB</cite>, after RHS zero-padding the narrower if necessary.</p>
+<p>Will recursively add any additional images passed as <a href="#id7"><span class="problematic" id="id8">*</span></a>args.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-corebreakout.viz">
+<span id="corebreakout-viz-module"></span><h2>corebreakout.viz module<a class="headerlink" href="#module-corebreakout.viz" title="Permalink to this headline">¶</a></h2>
+<p>Assorted visualization functions.</p>
+<dl class="function">
+<dt id="corebreakout.viz.draw_box">
+<code class="sig-prename descclassname">corebreakout.viz.</code><code class="sig-name descname">draw_box</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">box</em>, <em class="sig-param">color</em>, <em class="sig-param">lw</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.viz.draw_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw 3-pixel width bounding boxes on the given image array.
+color: list of 3 int values for RGB.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.viz.draw_lines">
+<code class="sig-prename descclassname">corebreakout.viz.</code><code class="sig-name descname">draw_lines</code><span class="sig-paren">(</span><em class="sig-param">img, coords, axis, color=[255, 0, 0], lw=10</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.viz.draw_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw <cite>color</cite> lines on <cite>img</cite> at <cite>coords</cite> along <cite>axis</cite>.</p>
+<p>axis == 0 –&gt; horizonal lines
+axis == 1 –&gt; vertical lines
+line width (<cite>lw</cite>) will round down to even numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>IndexError</strong> – If any (coord +/- (lw // 2)) falls outside of <cite>img</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.viz.local_min">
+<code class="sig-prename descclassname">corebreakout.viz.</code><code class="sig-name descname">local_min</code><span class="sig-paren">(</span><em class="sig-param">arr</em>, <em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.viz.local_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.viz.make_depth_ticks">
+<code class="sig-prename descclassname">corebreakout.viz.</code><code class="sig-name descname">make_depth_ticks</code><span class="sig-paren">(</span><em class="sig-param">depths</em>, <em class="sig-param">major_precision=0.1</em>, <em class="sig-param">major_format_str='{:.1f}'</em>, <em class="sig-param">minor_precision=0.01</em>, <em class="sig-param">minor_format_str='{:.2f}'</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.viz.make_depth_ticks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate major &amp; minor (ticks, locs) for depth array axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>depths</strong> (<em>array</em>) – An array of (ordered) depth values from which to generate ticks/locs.</p></li>
+<li><p><strong>*_precision</strong> (<em>float, optional</em>) – Major, minor tick spacing (in depth units), defaults=0.1, 0.01.</p></li>
+<li><p><strong>*_format_str</strong> (<em>str, optional</em>) – Format strings to coerce depths -&gt; tick strings, defaults=’{:.1f}’, ‘{:.2f}’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>major_ticks, major_locs, minor_ticks, minor_locs</em></p></li>
+<li><p><strong>*_ticks</strong> (<em>lists of tick label strings</em>)</p></li>
+<li><p><strong>*_locs</strong> (<em>lists of tick locations in array coordinates (fractional indices)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="corebreakout.viz.show_preds">
+<code class="sig-prename descclassname">corebreakout.viz.</code><code class="sig-name descname">show_preds</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">preds</em>, <em class="sig-param">class_names</em>, <em class="sig-param">colors=None</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">figsize=(16</em>, <em class="sig-param">16)</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.viz.show_preds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Less verbose wrapper for <cite>mrcnn.visualize.display_instances</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>colors</strong> (<em>list or array, optional</em>) – Colors to use for each object in <cite>preds</cite>, default is random color for each.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib axis, optional</em>) – An axis to plot onto. If None, will create one with size <cite>figsize</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-corebreakout">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-corebreakout" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">corebreakout package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-corebreakout.column">corebreakout.column module</a></li>
+<li><a class="reference internal" href="#module-corebreakout.defaults">corebreakout.defaults module</a></li>
+<li><a class="reference internal" href="#module-corebreakout.segmenter">corebreakout.segmenter module</a></li>
+<li><a class="reference internal" href="#module-corebreakout.utils">corebreakout.utils module</a></li>
+<li><a class="reference internal" href="#module-corebreakout.viz">corebreakout.viz module</a></li>
+<li><a class="reference internal" href="#module-corebreakout">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/source/corebreakout.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
