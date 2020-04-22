@@ -1,6 +1,8 @@
-"""Raw core image processing using Mask-RCNN model(s).
+"""API for applying Mask R-CNN models to core sample images.
 
-Mask-RCNN implementation from `mrcnn` package @ matterport/Mask_RCNN
+Mask R-CNN implementation from ``mrcnn`` package @ matterport/Mask_RCNN
+
+A ``model_dir`` and ``weights_path`` are required to instantiate a ``CoreSegmenter``
 """
 from pathlib import Path
 from operator import add
@@ -17,9 +19,22 @@ from corebreakout import defaults, utils, viz
 
 
 class CoreSegmenter:
-    """Mask-RCNN model container for extracting `CoreColumn`s from core images.
+    """Mask R-CNN model container for extracting ``CoreColumn``s from core images.
 
-    `model_dir` and `weights_path` must be passed to constructor.
+    Parameters
+    ----------
+    model_dir : str or Path
+        Path to directory containing saved ``mrcnn`` model(s)
+    weights_path : str or Path
+        Path to saved weights file of the model
+    model_config : ``mrcnn.config.Config``, optional
+        Model configuration, default=``defaults.DefaultConfig()``.
+    class_names : list(str), optional
+        A list of the class names for model output. Should be in same order as in
+        the `Dataset` object that model was trained on. Default=`defaults.CLASSES`
+    layout_params : dict, optional
+        Any layout parameters to override from default=`defaults.LAYOUT_PARAMS`.
+        See `docs/layout_parameters.md` for explanations and options for each parameter.
     """
 
     def __init__(
@@ -30,22 +45,6 @@ class CoreSegmenter:
         class_names=defaults.CLASSES,
         layout_params={},
     ):
-        """
-        Parameters
-        ----------
-        model_dir : str or Path
-            Path to saved MRCNN model directory
-        weights_path : str or Path
-            Path to saved weights file of corresponding model
-        model_config : `mrcnn.Config`, optional
-            Instance of MRCNN configuration object, default=`defaults.DefaultConfig()`.
-        class_names : list(str), optional
-            A list of the class names for model output. Should be in same order as in
-            the `Dataset` object that model was trained on. Default=`defaults.CLASSES`
-        layout_params : dict, optional
-            Any layout parameters to override from default=`defaults.LAYOUT_PARAMS`.
-            See `docs/layout_parameters.md` for explanations and options for each parameter.
-        """
         self.model_config = model_config
 
         # Check that `class_names` make sense
@@ -125,7 +124,7 @@ class CoreSegmenter:
         Returns
         -------
         img_col : CoreColumn
-            Single aggregated `CoreColumn` instance
+            Single aggregated ``CoreColumn`` instance
         """
         # Note: assignment calls setter to update, checks validity
         self.layout_params = layout_params
@@ -237,14 +236,21 @@ class CoreSegmenter:
 
 
     def segment_all(self, imgs, depth_ranges, **kwargs):
-        """Segment a set of `imgs` with known `depth_ranges`, return concatenated `CoreColumn`
+        """Segment a set of ``imgs`` with known ``depth_ranges``
 
         Parameters
         ----------
-        imgs : Iterable of either filepaths or image arrays.
-        depth_ranges: Iterable of (top, base) pairs for each image.
+        imgs : Iterable
+            Of either filepaths or image arrays.
+        depth_ranges: Iterable
+            Of (top, base) depth pairs for each image.
         **kwargs :
-            See `segment()` docstring for options.
+            See ``segment()`` docstring for options.
+
+        Returns
+        -------
+        img_col : CoreColumn
+            Single aggregated ``CoreColumn`` instance
         """
         assert len(imgs) == len(
             depth_ranges

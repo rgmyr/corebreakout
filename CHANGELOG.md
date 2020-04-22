@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- flexibility of included scripts
+- Increased flexibility of included scripts
+- Converted `docs/*.md` files to `*.rst`
 
 ### Added
 
-- `CoreColumn.iter_chunks()`
+- Built `sphinx`-generated html docs
+- Implemented `CoreColumn.iter_chunks()`
 
 
 ## 0.2

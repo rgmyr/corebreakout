@@ -16,10 +16,10 @@ from corebreakout.viz import make_depth_ticks
 class CoreColumn:
     """Container for depth-registered, single-column images of core material.
 
-    `CoreColumn`s can be stacked via the `__add__` operator, using `add_mode` from LHS instance,
-    and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.
+    These can be stacked with the ``__add__`` operator, using ``add_mode`` from LHS instance,
+    and padding the width of the narrower of ``(LHS.img, RHS.img)`` with zeros if necessary.
 
-    Either `depths` array or scalar `top` and `base` values must be provided to constructor.
+    Either ``depths`` array or scalar ``top`` and ``base`` values must be provided to constructor.
     """
 
     def __init__(
@@ -108,15 +108,17 @@ class CoreColumn:
 
     @property
     def depth_range(self):
+        """``(self.top, self.base)``"""
         return (self.top, self.base)
 
     @property
     def dd(self):
-        """An approximate value for the size of each row in depth units."""
+        """Median gap between adjacent ``depths``."""
         return np.median(np.diff(self.depths))
 
     @property
     def add_tol(self):
+        """Maximum allowed depth gap between columns when adding. Default is ``2*dd``."""
         return self._add_tol
 
     @add_tol.setter

@@ -1,4 +1,4 @@
-Model Building
+Building Mask R-CNN Models
 ==============
 
 For the best results, most users will want to train models on some of
@@ -68,6 +68,5 @@ the ``*PATH`` variables in ``corebreakout/defaults.py`` to point to the location
 new model weights (these paths are what get referenced by default in
 ``scripts/process_directory.py``, etc.).
 
-You can also pass whatever ``model_dir`` and ``weights_path`` (and
-``model_config`` instance) you like when constructing a
-``CoreSegmenter``.
+Alternatively, you can always pass whatever ``model_dir`` and ``weights_path`` (and
+``model_config`` instance) you like when constructing a ``CoreSegmenter``.

@@ -1,50 +1,176 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>Model Building &#8212; CoreBreakout 0.3 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building Mask R-CNN Models &mdash; CoreBreakout 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Layout Parameters" href="layout_parameters.html" />
     <link rel="prev" title="Creating Datasets" href="creating_datasets.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="layout_parameters.html" title="Layout Parameters"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="creating_datasets.html" title="Creating Datasets"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CoreBreakout
+          
+
+          
+          </a>
+
+          
             
-  <div class="section" id="model-building">
-<h1>Model Building<a class="headerlink" href="#model-building" title="Permalink to this headline">¶</a></h1>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="creating_datasets.html">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#image-labeling-guidelines">Image Labeling Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="creating_datasets.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#subclassing-mrcnn-utils-dataset">Subclassing <code class="docutils literal notranslate"><span class="pre">mrcnn.utils.Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building Mask R-CNN Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mrcnn-model-configuration"><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-selection">Model Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-a-model">Using a Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="layout_parameters.html">Layout Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#order-and-orientation"><code class="docutils literal notranslate"><span class="pre">order</span></code> and <code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-height"><code class="docutils literal notranslate"><span class="pre">col_height</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-class"><code class="docutils literal notranslate"><span class="pre">col_class</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#endpts"><code class="docutils literal notranslate"><span class="pre">endpts</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoreBreakout</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Building Mask R-CNN Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/model_building.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-mask-r-cnn-models">
+<h1>Building Mask R-CNN Models<a class="headerlink" href="#building-mask-r-cnn-models" title="Permalink to this headline">¶</a></h1>
 <p>For the best results, most users will want to train models on some of
 their own data. See
 <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/docs/creating_datasets.md">creating_datasets.md</a>.</p>
@@ -101,77 +227,58 @@ while <code class="docutils literal notranslate"><span class="pre">tensorboard</
 the <code class="docutils literal notranslate"><span class="pre">*PATH</span></code> variables in <code class="docutils literal notranslate"><span class="pre">corebreakout/defaults.py</span></code> to point to the location of the
 new model weights (these paths are what get referenced by default in
 <code class="docutils literal notranslate"><span class="pre">scripts/process_directory.py</span></code>, etc.).</p>
-<p>You can also pass whatever <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">weights_path</span></code> (and
-<code class="docutils literal notranslate"><span class="pre">model_config</span></code> instance) you like when constructing a
-<code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code>.</p>
+<p>Alternatively, you can always pass whatever <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">weights_path</span></code> (and
+<code class="docutils literal notranslate"><span class="pre">model_config</span></code> instance) you like when constructing a <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code>.</p>
 </div>
 </div>
 
 
+           </div>
+           
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Model Building</a><ul>
-<li><a class="reference internal" href="#mrcnn-model-configuration"><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration</a></li>
-<li><a class="reference internal" href="#model-training">Model Training</a></li>
-<li><a class="reference internal" href="#model-selection">Model Selection</a></li>
-<li><a class="reference internal" href="#using-a-model">Using a Model</a></li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="layout_parameters.html" class="btn btn-neutral float-right" title="Layout Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="creating_datasets.html" class="btn btn-neutral float-left" title="Creating Datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="creating_datasets.html"
-                        title="previous chapter">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="layout_parameters.html"
-                        title="next chapter">Layout Parameters</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/model_building.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="layout_parameters.html" title="Layout Parameters"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="creating_datasets.html" title="Creating Datasets"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

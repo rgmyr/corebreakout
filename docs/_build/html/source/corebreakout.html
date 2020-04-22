@@ -1,39 +1,171 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>corebreakout package &#8212; CoreBreakout 0.3 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>corebreakout package &mdash; CoreBreakout 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CoreBreakout
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../creating_datasets.html">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../creating_datasets.html#image-labeling-guidelines">Image Labeling Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../creating_datasets.html#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../creating_datasets.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../creating_datasets.html#subclassing-mrcnn-utils-dataset">Subclassing <code class="docutils literal notranslate"><span class="pre">mrcnn.utils.Dataset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../model_building.html">Building Mask R-CNN Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../model_building.html#mrcnn-model-configuration"><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_building.html#model-training">Model Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_building.html#model-selection">Model Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_building.html#using-a-model">Using a Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../layout_parameters.html">Layout Parameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../layout_parameters.html#order-and-orientation"><code class="docutils literal notranslate"><span class="pre">order</span></code> and <code class="docutils literal notranslate"><span class="pre">orientation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../layout_parameters.html#col-height"><code class="docutils literal notranslate"><span class="pre">col_height</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../layout_parameters.html#col-class"><code class="docutils literal notranslate"><span class="pre">col_class</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../layout_parameters.html#endpts"><code class="docutils literal notranslate"><span class="pre">endpts</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CoreBreakout</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>corebreakout package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/corebreakout.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="corebreakout-package">
 <h1>corebreakout package<a class="headerlink" href="#corebreakout-package" title="Permalink to this headline">¶</a></h1>
@@ -61,9 +193,9 @@
 <em class="property">class </em><code class="sig-prename descclassname">corebreakout.column.</code><code class="sig-name descname">CoreColumn</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">depths=None</em>, <em class="sig-param">top=None</em>, <em class="sig-param">base=None</em>, <em class="sig-param">add_tol=None</em>, <em class="sig-param">add_mode='fill'</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.column.CoreColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Container for depth-registered, single-column images of core material.</p>
-<p><cite>CoreColumn`s can be stacked via the `__add__</cite> operator, using <cite>add_mode</cite> from LHS instance,
-and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necessary.</p>
-<p>Either <cite>depths</cite> array or scalar <cite>top</cite> and <cite>base</cite> values must be provided to constructor.</p>
+<p>These can be stacked with the <code class="docutils literal notranslate"><span class="pre">__add__</span></code> operator, using <code class="docutils literal notranslate"><span class="pre">add_mode</span></code> from LHS instance,
+and padding the width of the narrower of <code class="docutils literal notranslate"><span class="pre">(LHS.img,</span> <span class="pre">RHS.img)</span></code> with zeros if necessary.</p>
+<p>Either <code class="docutils literal notranslate"><span class="pre">depths</span></code> array or scalar <code class="docutils literal notranslate"><span class="pre">top</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code> values must be provided to constructor.</p>
 <dl class="method">
 <dt id="corebreakout.column.CoreColumn.add_mode">
 <em class="property">property </em><code class="sig-name descname">add_mode</code><a class="headerlink" href="#corebreakout.column.CoreColumn.add_mode" title="Permalink to this definition">¶</a></dt>
@@ -72,18 +204,20 @@ and padding the width of the narrower of (LHS.img, RHS.img) with zeros if necess
 <dl class="method">
 <dt id="corebreakout.column.CoreColumn.add_tol">
 <em class="property">property </em><code class="sig-name descname">add_tol</code><a class="headerlink" href="#corebreakout.column.CoreColumn.add_tol" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Maximum allowed depth gap between columns when adding. Default is <code class="docutils literal notranslate"><span class="pre">2*dd</span></code>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="corebreakout.column.CoreColumn.dd">
 <em class="property">property </em><code class="sig-name descname">dd</code><a class="headerlink" href="#corebreakout.column.CoreColumn.dd" title="Permalink to this definition">¶</a></dt>
-<dd><p>An approximate value for the size of each row in depth units.</p>
+<dd><p>Median gap between adjacent <code class="docutils literal notranslate"><span class="pre">depths</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="corebreakout.column.CoreColumn.depth_range">
 <em class="property">property </em><code class="sig-name descname">depth_range</code><a class="headerlink" href="#corebreakout.column.CoreColumn.depth_range" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(self.top,</span> <span class="pre">self.base)</span></code></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="corebreakout.column.CoreColumn.depths">
@@ -246,14 +380,27 @@ if it would have an effect and it is possible to do so.</p>
 </div>
 <div class="section" id="module-corebreakout.segmenter">
 <span id="corebreakout-segmenter-module"></span><h2>corebreakout.segmenter module<a class="headerlink" href="#module-corebreakout.segmenter" title="Permalink to this headline">¶</a></h2>
-<p>Raw core image processing using Mask-RCNN model(s).</p>
-<p>Mask-RCNN implementation from <cite>mrcnn</cite> package &#64; matterport/Mask_RCNN</p>
+<p>API for applying Mask R-CNN models to core sample images.</p>
+<p>Mask R-CNN implementation from <code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> package &#64; matterport/Mask_RCNN</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">weights_path</span></code> are required to instantiate a <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code></p>
 <dl class="class">
 <dt id="corebreakout.segmenter.CoreSegmenter">
 <em class="property">class </em><code class="sig-prename descclassname">corebreakout.segmenter.</code><code class="sig-name descname">CoreSegmenter</code><span class="sig-paren">(</span><em class="sig-param">model_dir, weights_path, model_config=&lt;corebreakout.defaults.DefaultConfig object&gt;, class_names=['col', 'tray'], layout_params={}</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Mask-RCNN model container for extracting <a href="#id3"><span class="problematic" id="id4">`</span></a>CoreColumn`s from core images.</p>
-<p><cite>model_dir</cite> and <cite>weights_path</cite> must be passed to constructor.</p>
+<p>Mask R-CNN model container for extracting <a href="#id3"><span class="problematic" id="id4">``</span></a>CoreColumn``s from core images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_dir</strong> (<em>str or Path</em>) – Path to directory containing saved <code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> model(s)</p></li>
+<li><p><strong>weights_path</strong> (<em>str or Path</em>) – Path to saved weights file of the model</p></li>
+<li><p><strong>model_config</strong> (<code class="docutils literal notranslate"><span class="pre">mrcnn.config.Config</span></code>, optional) – Model configuration, default=``defaults.DefaultConfig()``.</p></li>
+<li><p><strong>class_names</strong> (<em>list(str), optional</em>) – A list of the class names for model output. Should be in same order as in
+the <cite>Dataset</cite> object that model was trained on. Default=`defaults.CLASSES`</p></li>
+<li><p><strong>layout_params</strong> (<em>dict, optional</em>) – Any layout parameters to override from default=`defaults.LAYOUT_PARAMS`.
+See <cite>docs/layout_parameters.md</cite> for explanations and options for each parameter.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="corebreakout.segmenter.CoreSegmenter.expected_tops_bases">
 <em class="property">static </em><code class="sig-name descname">expected_tops_bases</code><span class="sig-paren">(</span><em class="sig-param">depth_range</em>, <em class="sig-param">col_height</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.expected_tops_bases" title="Permalink to this definition">¶</a></dt>
@@ -295,7 +442,7 @@ Has no effect unless <cite>show=True</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>img_col</strong> – Single aggregated <cite>CoreColumn</cite> instance</p>
+<dd class="field-even"><p><strong>img_col</strong> – Single aggregated <code class="docutils literal notranslate"><span class="pre">CoreColumn</span></code> instance</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#corebreakout.column.CoreColumn" title="corebreakout.column.CoreColumn">CoreColumn</a></p>
@@ -306,14 +453,20 @@ Has no effect unless <cite>show=True</cite>.</p></li>
 <dl class="method">
 <dt id="corebreakout.segmenter.CoreSegmenter.segment_all">
 <code class="sig-name descname">segment_all</code><span class="sig-paren">(</span><em class="sig-param">imgs</em>, <em class="sig-param">depth_ranges</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#corebreakout.segmenter.CoreSegmenter.segment_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Segment a set of <cite>imgs</cite> with known <cite>depth_ranges</cite>, return concatenated <cite>CoreColumn</cite></p>
+<dd><p>Segment a set of <code class="docutils literal notranslate"><span class="pre">imgs</span></code> with known <code class="docutils literal notranslate"><span class="pre">depth_ranges</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>imgs</strong> (<em>Iterable of either filepaths or image arrays.</em>)</p></li>
-<li><p><strong>depth_ranges</strong> (<em>Iterable of (top, base) pairs for each image.</em>)</p></li>
-<li><p><strong>**kwargs</strong> – See <cite>segment()</cite> docstring for options.</p></li>
+<li><p><strong>imgs</strong> (<em>Iterable</em>) – Of either filepaths or image arrays.</p></li>
+<li><p><strong>depth_ranges</strong> (<em>Iterable</em>) – Of (top, base) depth pairs for each image.</p></li>
+<li><p><strong>**kwargs</strong> – See <code class="docutils literal notranslate"><span class="pre">segment()</span></code> docstring for options.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>img_col</strong> – Single aggregated <code class="docutils literal notranslate"><span class="pre">CoreColumn</span></code> instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#corebreakout.column.CoreColumn" title="corebreakout.column.CoreColumn">CoreColumn</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -466,62 +619,43 @@ line width (<cite>lw</cite>) will round down to even numbers.</p>
 </div>
 
 
+           </div>
+           
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">corebreakout package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-corebreakout.column">corebreakout.column module</a></li>
-<li><a class="reference internal" href="#module-corebreakout.defaults">corebreakout.defaults module</a></li>
-<li><a class="reference internal" href="#module-corebreakout.segmenter">corebreakout.segmenter module</a></li>
-<li><a class="reference internal" href="#module-corebreakout.utils">corebreakout.utils module</a></li>
-<li><a class="reference internal" href="#module-corebreakout.viz">corebreakout.viz module</a></li>
-<li><a class="reference internal" href="#module-corebreakout">Module contents</a></li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
 
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/source/corebreakout.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">CoreBreakout 0.3 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ross Meyer, Thomas Martin, Zane Jobe.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

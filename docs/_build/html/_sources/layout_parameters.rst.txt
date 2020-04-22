@@ -1,8 +1,8 @@
 Layout Parameters
 =================
 
-``corebreakout`` allows for processing images with different standard
-layouts, and the use of several different methods for finding and
+``corebreakout`` allows for processing core images with different
+layouts, and provides several different methods for finding and
 cropping the bounding boxes of individual columns within an image.
 
 Layout parameters are used within the ``CoreSegmenter.segment()``
@@ -63,7 +63,7 @@ The ``'col_height'`` parameter specifies the height in depth units
 
 This value is used in conjunction with the ``depth_range`` positional
 argument to find the number of expected columns in an image when calling
-``CoreSegmenter.segment(img, depth_range, ...)``.
+``CoreSegmenter.segment(img, depth_range, **kwargs)``.
 
 ``col_class``
 -------------
@@ -88,7 +88,7 @@ column bounding boxes are shown as green dashed lines.
 
 Allowed values of ``'endpts'`` include:
 
-- The name of a class (*e.g.*, ``'tray'``):
+- The name of a class (*e.g.*, ``'tray'``)
     - Results in columns being extended to the ``top`` and ``base`` of the strongest detection of this class
     - Must be found in the ``class_names`` attribute of the ``CoreSegmenter`` instance
     - Typical choices would be empty trays, or the measuring sticks commonly placed next to boxes of core

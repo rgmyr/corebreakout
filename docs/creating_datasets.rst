@@ -8,7 +8,7 @@ The recommended way to add a new set of labeled training images is to
 annotate them using
 `wkentaro/labelme <https://github.com/wkentaro/labelme>`__. The
 ``labelme`` GUI allows the user to draw any number of labeled polygons
-on an image, and saves their labels and coordinates in a JSON annotation
+on an image, and saves the labels and coordinates in a JSON annotation
 file.
 
 Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, you will want to follow these labeling guidelines:
@@ -72,17 +72,11 @@ If you want to use a different annotation format, you can inherit from
 the base ``mrcnn.utils.Dataset`` class.
 
 You will need to write some user-called method to collect file
-information: - *e.g.*: ``collect_annotated_images(data_dir, subset)`` -
-Register ``image_id``, ``path``, and ``ann_path`` for each image +
-annotation pair in ``<data_dir>/<subset>`` directory.
+information:
 
-And then override at least these two methods: - ``load_mask(image_id)``
-- Given an ``image_id``, load (and compute, if necessary) the
-corresponding mask. For a mask with ``N`` object instances (not
-including the background), the return value from this function should be
-``(mask, class_ids)``, where ``mask`` is boolean array of shape
-``(H,W,N)`` and ``class_ids`` is an 1D integer array of size ``N`` with
-one ``class_id`` for each of the channels in ``mask``. -
-``image_reference(image_id)`` - Return the path of an image, a link to
-it, or some other unique property to help in looking it up or debugging
-it.
+- *e.g.*, ``collect_annotated_images(data_dir, subset)``: Register ``image_id``, ``path``, and ``ann_path`` for each (image, annotation) file pair in ``<data_dir>/<subset>`` directory.
+
+And then override at least these two methods:
+
+- ``load_mask(image_id)``: Given an ``image_id``, load (and compute, if necessary) the corresponding mask. For an with ``N`` objects (not including the background), the return value from this function should be ``(mask, class_ids)``, where ``mask`` is boolean array of shape ``(H,W,N)`` and ``class_ids`` is a 1D integer array of size ``N`` with one ``class_id`` for each channel in ``mask``.
+- ``image_reference(image_id)``: Return the path of an image, a link to it, or some other unique property to help in looking it up or debugging it.

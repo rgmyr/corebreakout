@@ -6,20 +6,25 @@
 Welcome to CoreBreakout's documentation!
 ========================================
 
+Project Repository: `rgmyr/corebreakout <https://github.com/rgmyr/corebreakout>`_
 
+Documentation
+=============
 
 .. toctree::
    :maxdepth: 2
-   :caption: Documentation Contents:
+   :caption: Usage:
 
    creating_datasets
    model_building
    layout_parameters
 
+
+Scripts Reference
+=================
+
 Indices and tables
 ==================
-
-
 
 * :ref:`genindex`
 * :ref:`modindex`
