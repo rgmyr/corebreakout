@@ -28,6 +28,9 @@ release = '0.3'
 
 # -- General configuration ---------------------------------------------------
 
+# Have to add this to get RTD to stop looking for `contents.rst`
+master_doc = 'index'
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
