@@ -1,0 +1,14 @@
+numpy<=1.16.4
+scipy
+pandas
+dill
+Pillow
+cython
+matplotlib
+scikit-image
+tensorflow<=1.14
+keras>=2.0.8,<=2.2.5
+opencv-python
+h5py
+jupyter
+IPython[all]
