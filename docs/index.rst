@@ -8,6 +8,11 @@ Welcome to CoreBreakout's documentation!
 
 Project Repository: `rgmyr/corebreakout <https://github.com/rgmyr/corebreakout>`_
 
+Overview
+========
+
+Coming soon: Overview
+
 Documentation
 =============
 
@@ -22,6 +27,8 @@ Documentation
 
 Scripts Reference
 =================
+
+Coming soon: Script documentation
 
 Indices and tables
 ==================
