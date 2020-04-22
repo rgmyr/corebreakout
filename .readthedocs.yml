@@ -26,3 +26,5 @@ python:
     - requirements: requirements.txt
     - method: pip
       path: Mask_RCNN
+      extra_requirements:
+        - tensorflow
