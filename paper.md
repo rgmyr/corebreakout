@@ -26,7 +26,7 @@ bibliography: paper.bib
 
 # Summary
 
-Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to study geologic history and processes. Core is usually cut into one-meter segments, slabbed lengthwise to expose a flat surface, and stored in cardboard or wooden boxes which are then photographed to enable remote inspection. Unlike other common sources of borehole data (*e.g.*, well logs), core is the only data that preserves true geologic scale and heterogeneity.
+Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to study geologic history and processes. Core is usually cut into one-meter segments, slabbed lengthwise to expose a flat surface, and stored in cardboard or wooden boxes which are then photographed to enable remote inspection. Unlike other common sources of borehole data (*e.g.*, well logs @Rider and Kennedy:2011), core is the only data that preserves true geologic scale and heterogeneity.
 
 A geologist will often describe core by visual inspection and hand-draw a graphic log of the vertical changes in grain size and other rock properties (*e.g.*, @Jobe:2017). This description process is time consuming and subjective, and the resulting data is analog. The digitization and structuring of core image data allows for the development of automated and semi-automated workflows, which can in turn facilitate quantitative analysis of the millions of meters of core stored in public and private repositories around the world.
 
