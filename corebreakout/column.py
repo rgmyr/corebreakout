@@ -34,9 +34,9 @@ class CoreColumn:
             1D array of depths with `size=img.shape[0]` (one value for each row).
             If not provided, depths will be evenly spaced between `top` and `base`.
         top : array, optional
-            The top depth. If not given, assumed to be just above first row of `depths`.
+            The top depth. If not given, assumed to be first row of `depths`.
         base : float, optional
-            The base depth. If not given, assumed to be just below last row of `depths`.
+            The base depth. If not given, assumed to be last row of `depths`.
         add_tol : float, optional
             Maximum allowed depth gap between columns when adding. Default is to use `2*dd`,
             where `@property dd` is the median difference in depth between adjacent `img` rows.
@@ -60,14 +60,13 @@ class CoreColumn:
 
         if not depths_given:
             self.top, self.base = top, base
-            eps = (base - top) / (2 * self.height)
-            self.depths = np.linspace(top + eps, base - eps, num=self.height)
+            #eps = (base - top) / (2 * self.height)
+            self.depths = np.linspace(top, base, num=self.height)
 
         elif not (top_given and base_given):
             self.depths = depths
-            eps = (depths[-1] - depths[0]) / (2 * self.height)
-            self.top = depths[0] - eps
-            self.base = depths[-1] + eps
+            #eps = (depths[-1] - depths[0]) / (2 * self.height)
+            self.top, self.base = depths[0], depths[-1]
 
         else:
             self.top, self.base, self.depths = top, base, depths
@@ -103,7 +102,7 @@ class CoreColumn:
     def depths(self, arr):
         assert type(arr) is np.ndarray and arr.ndim == 1, "`depths` must be 1D array"
         assert arr.size == self.height, "length of `depths` must match image height"
-        assert np.all(np.diff(arr) > 0), "`depths` must be strictly increasing"
+        assert np.all(np.diff(arr) >= 0), "`depths` must be monotonic"
         self._depths = arr
 
     @property
@@ -171,7 +170,7 @@ class CoreColumn:
         return (
             f"CoreColumn instance with:\n"
             f"\t img.shape: {self.img.shape}\n"
-            f"\t (top, base): ({self.top}, {self.base})\n"
+            f"\t (top, base): ({self.top:.3f}, {self.base:.3f})\n"
             f"\t add_tol & add_mode: {self.add_tol:.4f} , {self.add_mode}\n"
         )
 

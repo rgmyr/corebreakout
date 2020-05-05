@@ -1,3 +1,5 @@
+.. _creating-datasets:
+
 Creating ``Datasets``
 =============================
 
@@ -11,7 +13,7 @@ annotate them using
 on an image, and saves the labels and coordinates in a JSON annotation
 file.
 
-Simply copy all the images you want to label into a flat directory, open the directory in `labelme`, and begin saving your annotations. To be able to use the built-in `corebreakout.datasets.PolygonDataset` class with your training data, you will want to follow these labeling guidelines:
+Simply copy all the images you want to label into a flat directory, open the directory in ``labelme``, and begin saving your annotations. To be able to use the built-in ``corebreakout.datasets.PolygonDataset`` class with your training data, you will want to follow these labeling guidelines:
 
 -  Save ``<fname>.json`` annotations in a flat directory with
    corresponding ``<fname>.jpeg`` files (this is ``labelme``\ ’s default
@@ -19,6 +21,7 @@ Simply copy all the images you want to label into a flat directory, open the dir
 -  You may label any number of classes. You will have to supply a list
    of these classes to the ``PolygonDataset`` constructor, or modify
    ``defaults.DEFAULT_CLASSES``.
+   - At a minimum, you will want some class to represent columns. You may also create a class (*e.g.*, ``'tray'``) for any objects that consistently demarcate the top and base of core trays better than the columns themselves.
 -  Different instances of the same class should begin with the class
    name and be differentiated afterward (*e.g.*, ``col1, col2, col3``)
 
@@ -28,9 +31,9 @@ Simply copy all the images you want to label into a flat directory, open the dir
       recommend keeping masks on the coarser side
 
 -  After annotating images, split into sibling ``'train'`` and
-   ``'test'`` directories
+   ``'test'`` subdirectories
 
-**Note:** We've found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. Of course, YMMV.
+**Note:** We've found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. YMMV.
 
 After compiling the annotations, you may wish to modify
 ``defaults.DATASET_DIR`` to avoid need to explicitly specify the data
@@ -63,7 +66,7 @@ Usage
 
    print(dataset)
 
-Two `dataset` objects (train, test) are required in calls to `model.train()`, which is why we split them into separate directories.
+Two ``Dataset`` objects (train, test) are required in calls to ``model.train(...)``, which is why we split them into separate directories.
 
 Subclassing ``mrcnn.utils.Dataset``
 -----------------------------------

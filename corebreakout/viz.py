@@ -125,8 +125,6 @@ def make_depth_ticks(
     major_rmndr = np.insert(depths % major_precision, (0, depths.size), np.inf)
     minor_rmndr = np.insert(depths % minor_precision, (0, depths.size), np.inf)
 
-    print(major_rmndr[-5:])
-
     for i in np.arange(1, major_rmndr.size):
 
         if local_min(major_rmndr, i):
@@ -141,6 +139,6 @@ def make_depth_ticks(
     last_depth = np.round(depths[-1], decimals=1)
     if (last_depth % 1.0) == 0.0:
         major_ticks.append(major_fmt_fn(last_depth))
-        major_locs.append(self.height - 1)
+        major_locs.append(depths.size - 1)
 
     return major_ticks, major_locs, minor_ticks, minor_locs

@@ -1,3 +1,5 @@
+.. _layout-parameters:
+
 Layout Parameters
 =================
 

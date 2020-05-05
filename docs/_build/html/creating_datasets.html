@@ -80,7 +80,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation Contents:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#image-labeling-guidelines">Image Labeling Guidelines</a></li>
@@ -103,6 +103,12 @@
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-height"><code class="docutils literal notranslate"><span class="pre">col_height</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-class"><code class="docutils literal notranslate"><span class="pre">col_class</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#endpts"><code class="docutils literal notranslate"><span class="pre">endpts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts_reference.html">Scripts Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -170,7 +176,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="creating-datasets">
-<h1>Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code><a class="headerlink" href="#creating-datasets" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code><a class="headerlink" href="#creating-datasets" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="image-labeling-guidelines">
 <h2>Image Labeling Guidelines<a class="headerlink" href="#image-labeling-guidelines" title="Permalink to this headline">¶</a></h2>
 <p>The recommended way to add a new set of labeled training images is to
@@ -179,14 +185,15 @@ annotate them using
 <code class="docutils literal notranslate"><span class="pre">labelme</span></code> GUI allows the user to draw any number of labeled polygons
 on an image, and saves the labels and coordinates in a JSON annotation
 file.</p>
-<p>Simply copy all the images you want to label into a flat directory, open the directory in <cite>labelme</cite>, and begin saving your annotations. To be able to use the built-in <cite>corebreakout.datasets.PolygonDataset</cite> class with your training data, you will want to follow these labeling guidelines:</p>
+<p>Simply copy all the images you want to label into a flat directory, open the directory in <code class="docutils literal notranslate"><span class="pre">labelme</span></code>, and begin saving your annotations. To be able to use the built-in <code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code> class with your training data, you will want to follow these labeling guidelines:</p>
 <ul class="simple">
 <li><p>Save <code class="docutils literal notranslate"><span class="pre">&lt;fname&gt;.json</span></code> annotations in a flat directory with
 corresponding <code class="docutils literal notranslate"><span class="pre">&lt;fname&gt;.jpeg</span></code> files (this is <code class="docutils literal notranslate"><span class="pre">labelme</span></code>’s default
 behavior)</p></li>
 <li><p>You may label any number of classes. You will have to supply a list
 of these classes to the <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> constructor, or modify
-<code class="docutils literal notranslate"><span class="pre">defaults.DEFAULT_CLASSES</span></code>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">defaults.DEFAULT_CLASSES</span></code>.
+- At a minimum, you will want some class to represent columns. You may also create a class (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">'tray'</span></code>) for any objects that consistently demarcate the top and base of core trays better than the columns themselves.</p></li>
 <li><p>Different instances of the same class should begin with the class
 name and be differentiated afterward (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">col1,</span> <span class="pre">col2,</span> <span class="pre">col3</span></code>)</p>
 <ul>
@@ -197,9 +204,9 @@ recommend keeping masks on the coarser side</p></li>
 </ul>
 </li>
 <li><p>After annotating images, split into sibling <code class="docutils literal notranslate"><span class="pre">'train'</span></code> and
-<code class="docutils literal notranslate"><span class="pre">'test'</span></code> directories</p></li>
+<code class="docutils literal notranslate"><span class="pre">'test'</span></code> subdirectories</p></li>
 </ul>
-<p><strong>Note:</strong> We’ve found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. Of course, YMMV.</p>
+<p><strong>Note:</strong> We’ve found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. YMMV.</p>
 <p>After compiling the annotations, you may wish to modify
 <code class="docutils literal notranslate"><span class="pre">defaults.DATASET_DIR</span></code> to avoid need to explicitly specify the data
 location.</p>
@@ -227,7 +234,7 @@ annotations in the default JSON format of
 <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Two <cite>dataset</cite> objects (train, test) are required in calls to <cite>model.train()</cite>, which is why we split them into separate directories.</p>
+<p>Two <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> objects (train, test) are required in calls to <code class="docutils literal notranslate"><span class="pre">model.train(...)</span></code>, which is why we split them into separate directories.</p>
 </div>
 </div>
 <div class="section" id="subclassing-mrcnn-utils-dataset">

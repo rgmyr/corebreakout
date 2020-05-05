@@ -11,7 +11,7 @@ The `path` given should contain images as jpeg files, and a `depth_csv`.csv file
 ```
 
 NOTE: model `Config`, `class_names`, and segmentation `layout_params` can only be
-changed manually at the top of script.
+changed manually at the top of script, and default to those configured in `corebreakout/defaults.py`
 
 Run with --help argument to see full options.
 """
@@ -38,7 +38,7 @@ class_names = defaults.CLASSES
 layout_params = defaults.LAYOUT_PARAMS
 
 
-parser = argparse.ArgumentParser(description='Convert image directories to saved CoreColumns.')
+parser = argparse.ArgumentParser(description='Convert image directories with Mask R-CNN and save results as `CoreColumn`s.')
 parser.add_argument('path',
     type=str,
     help="Path to directory of images (and depth information csv) to process."
@@ -62,13 +62,13 @@ parser.add_argument('--add_tol',
 parser.add_argument('--add_mode',
     dest='add_mode',
     default='fill',
-    help="CoreColumn.add_mode. One of {\'fill\', \'collapse\'}."
+    help="CoreColumn.add_mode. One of {\'fill\', \'collapse\'}. Default=\'fill\'"
 )
 parser.add_argument('--depth_csv',
     dest='depth_csv',
     type=str,
     default='auto_depths.csv',
-    help="Name of filename + (top, bottom) csv to read from `path`, default=\'auto_depths.csv\'"
+    help="Name of filename + (top, bottom) csv to read from `path`. Default=\'auto_depths.csv\'"
 )
 parser.add_argument('--save_dir',
     dest='save_dir',

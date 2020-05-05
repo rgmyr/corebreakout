@@ -80,7 +80,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Usage:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="creating_datasets.html">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#image-labeling-guidelines">Image Labeling Guidelines</a></li>
@@ -103,6 +103,12 @@
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-height"><code class="docutils literal notranslate"><span class="pre">col_height</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#col-class"><code class="docutils literal notranslate"><span class="pre">col_class</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout_parameters.html#endpts"><code class="docutils literal notranslate"><span class="pre">endpts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts_reference.html">Scripts Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -170,12 +176,25 @@
            <div itemprop="articleBody">
             
   <div class="section" id="building-mask-r-cnn-models">
-<h1>Building Mask R-CNN Models<a class="headerlink" href="#building-mask-r-cnn-models" title="Permalink to this headline">¶</a></h1>
-<p>For the best results, most users will want to train models on some of
-their own data. See
-<a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/docs/creating_datasets.md">creating_datasets.md</a>.</p>
-<p>We may release a more general pretrained model in the future, pending
-demand and the availability of open source datasets.</p>
+<span id="model-building"></span><h1>Building Mask R-CNN Models<a class="headerlink" href="#building-mask-r-cnn-models" title="Permalink to this headline">¶</a></h1>
+<p>For best results, most users will want to train models on some of
+their own data. See <a class="reference internal" href="creating_datasets.html#creating-datasets"><span class="std std-ref">Creating Datasets</span></a> for guidelines.</p>
+<p>We may release a more general pretrained model in the future, pending demand and the availability of open source datasets. Feel free to contact us if you would like to contribute your data for that purpose.</p>
+<p>The rough outline of model construction and training looks like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mrcnn.model</span> <span class="kn">as</span> <span class="nn">modellib</span>
+<span class="kn">from</span> <span class="nn">corebreakout</span> <span class="kn">import</span> <span class="n">defaults</span><span class="p">,</span> <span class="n">datasets</span>
+
+<span class="n">model_config</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">DefaultConfig</span><span class="p">()</span>
+
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">PolygonDataset</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">PolygonDataset</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">modellib</span><span class="o">.</span><span class="n">MaskRCNN</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the finer details see <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/scripts/train_mrcnn_model.py">scripts/train_mrcnn_model.py</a></p>
 <div class="section" id="mrcnn-model-configuration">
 <h2><code class="docutils literal notranslate"><span class="pre">mrcnn</span></code> Model Configuration<a class="headerlink" href="#mrcnn-model-configuration" title="Permalink to this headline">¶</a></h2>
 <p>Models are created with a subclass of <code class="docutils literal notranslate"><span class="pre">mrcnn.config.Config</span></code>. See
@@ -183,16 +202,16 @@ demand and the availability of open source datasets.</p>
 configuration.</p>
 <p>To see all available configuration parameters, see
 <a class="reference external" href="https://github.com/matterport/Mask_RCNN/blob/3deaec5d902d16e1daf56b62d5971d428dc920bc/mrcnn/config.py">mrcnn/config.py</a></p>
-<dl class="simple">
-<dt>The obvious parameters that a user might want to change include:</dt><dd><ul class="simple">
+<p>The obvious parameters that a user might want to change include:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">NAME</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">RPN_ANCHOR_RATIOS</span></code> : defaults are set up for horizontal columns. Something like <code class="docutils literal notranslate"><span class="pre">[1.0,</span> <span class="pre">3.0,</span> <span class="pre">7.0]</span></code> would make more sense for vertical columns.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">STEPS_PER_EPOCH</span></code>, <code class="docutils literal notranslate"><span class="pre">VALIDATION_STEPS</span></code> : batches per training epoch and validation step. Does not necessarily need to match dataset sizes.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">IMAGES_PER_GPU</span></code> : you can try to increase if you have a large GPU.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GPU_COUNT</span></code> : you can increase if you multiple GPUs.</p></li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <p>You can either modify <code class="docutils literal notranslate"><span class="pre">DefaultConfig</span></code> directly, or instantiate your own <code class="docutils literal notranslate"><span class="pre">Config</span></code> subclass.</p>
 </div>
 <div class="section" id="model-training">
