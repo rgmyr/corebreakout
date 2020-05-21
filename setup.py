@@ -7,6 +7,11 @@ try:
 except ImportError:
     raise UserWarning('`distutils` is not supported since you must use Python>=3.6')
 
+try:
+    import tensorflow
+except ImportError:
+    raise UserWarning('tensorflow or tensorflow-gpu must be installed manually!')
+
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
