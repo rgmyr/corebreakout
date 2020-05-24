@@ -19,7 +19,7 @@ This should open a window that looks like this:
 
 |image0|
 
-New polygons can be drawn by clicking ``Create Polygons`` and then clicking points on the image to add vertices. When get back around to the starting vertex to close the loop of points and create a polygon, ``labelme`` will ask you to assign it a text label.
+New polygons can be drawn by clicking ``Create Polygons`` and then clicking points on the image to add vertices. When you get back around to the starting vertex to close the loop of points and create a polygon, ``labelme`` will ask you to assign it a text label.
 
 Unique text labels are aggregated on the right side, and the individual polygons shown in the image are colored and listed with their assigned labels. They happen to be the same in this example, but there could be more labels in the ``Label List`` than polygons in the ``Polygon Labels`` list for any given image in the directory.
 
