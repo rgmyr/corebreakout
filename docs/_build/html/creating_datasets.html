@@ -80,10 +80,13 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Usage Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#image-labeling-guidelines">Image Labeling Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-labelme">Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inspect-our-annotations">Inspect Our Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-name-things">How to Name Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary-of-guidelines">Summary of Guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
 </ul>
@@ -177,23 +180,62 @@
             
   <div class="section" id="creating-datasets">
 <span id="id1"></span><h1>Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code><a class="headerlink" href="#creating-datasets" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="image-labeling-guidelines">
-<h2>Image Labeling Guidelines<a class="headerlink" href="#image-labeling-guidelines" title="Permalink to this headline">¶</a></h2>
-<p>The recommended way to add a new set of labeled training images is to
-annotate them using
-<a class="reference external" href="https://github.com/wkentaro/labelme">wkentaro/labelme</a>. The
-<code class="docutils literal notranslate"><span class="pre">labelme</span></code> GUI allows the user to draw any number of labeled polygons
-on an image, and saves the labels and coordinates in a JSON annotation
-file.</p>
-<p>Simply copy all the images you want to label into a flat directory, open the directory in <code class="docutils literal notranslate"><span class="pre">labelme</span></code>, and begin saving your annotations. To be able to use the built-in <code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code> class with your training data, you will want to follow these labeling guidelines:</p>
+<div class="section" id="using-labelme">
+<h2>Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code><a class="headerlink" href="#using-labelme" title="Permalink to this headline">¶</a></h2>
+<p>The recommended way to add a new set of labeled training images is to annotate them using <a class="reference external" href="https://github.com/wkentaro/labelme">wkentaro/labelme</a>. The <code class="docutils literal notranslate"><span class="pre">labelme</span></code> GUI allows the user to draw any number of labeled polygons on an image, and saves the labels and coordinates in a JSON annotation file.</p>
+<p>You can easily install <code class="docutils literal notranslate"><span class="pre">labelme</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>, and then open our small test dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install labelme
+$ labelme tests/data/two_image_dataset
+</pre></div>
+</div>
+<p>This should open a window that looks like this:</p>
+<p><img alt="image0" src="_images/labelme1.png" /></p>
+<p>New polygons can be drawn by clicking <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Polygons</span></code> and then clicking points on the image to add vertices. When get back around to the starting vertex to close the loop of points and create a polygon, <code class="docutils literal notranslate"><span class="pre">labelme</span></code> will ask you to assign it a text label.</p>
+<p>Unique text labels are aggregated on the right side, and the individual polygons shown in the image are colored and listed with their assigned labels. They happen to be the same in this example, but there could be more labels in the <code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">List</span></code> than polygons in the <code class="docutils literal notranslate"><span class="pre">Polygon</span> <span class="pre">Labels</span></code> list for any given image in the directory.</p>
+<p>When you finish adding polygons, click the <code class="docutils literal notranslate"><span class="pre">Save</span></code> button to export the annotations as a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file, which by default will save to the current directory.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">List</span></code> shows images in the currently directory, with the checkbox indicating whether an annotation has been saved for that file yet. You can use the <code class="docutils literal notranslate"><span class="pre">Next</span> <span class="pre">Image</span></code> and <code class="docutils literal notranslate"><span class="pre">Previous</span> <span class="pre">Image</span></code> buttons to traverse through the images (and corresponding annotations) in the directory.</p>
+</div>
+<div class="section" id="inspect-our-annotations">
+<h2>Inspect Our Annotations<a class="headerlink" href="#inspect-our-annotations" title="Permalink to this headline">¶</a></h2>
+<p>For a more hands-on exploration of annotation structure and the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> API, see <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/notebooks/inspect_dataset.ipynb">notebooks/inspect_dataset.py</a></p>
+</div>
+<div class="section" id="how-to-name-things">
+<h2>How to Name Things<a class="headerlink" href="#how-to-name-things" title="Permalink to this headline">¶</a></h2>
+<p>As you can see above, our text labels for individual objects have the form <code class="docutils literal notranslate"><span class="pre">&lt;class&gt;&lt;number&gt;</span></code>. The <code class="docutils literal notranslate"><span class="pre">class</span></code> refers to a general object type, the <code class="docutils literal notranslate"><span class="pre">number</span></code> differentiates between individual <cite>instances</cite> of that class. This isn’t the only possible naming scheme, but it’s the one you should use if you want your annotations to be compatible with our <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> implementation.</p>
+<p>In our data, we use two classes, <strong>col</strong> and <strong>tray</strong>, to label two different types of objects:</p>
+<ul class="simple">
+<li><p><strong>col</strong> is for <cite>columns</cite> of core material – the individual objects that we want to segment, crop, and stack on top of each other.</p></li>
+<li><p><strong>tray</strong> is for empty trays, which for our data are the most reliable “measuring stick” to use for defining the “top” and “base” positions of columns within an image</p></li>
+</ul>
+<p>The first type of object is required – the whole purpose of this workflow is to segment core columns, so you need to at least label those.</p>
+<p>The second type of object is optional – using another object (empty tray, measuring stick, etc.) to define top and base positions of columns is <cite>one</cite> option for the <code class="docutils literal notranslate"><span class="pre">endpts</span></code> setting in <a class="reference internal" href="layout_parameters.html#layout-parameters"><span class="std std-ref">Layout Parameters</span></a>, but there are others which do not require the existence of any objects other than core columns.</p>
+<p>If you’re making your own dataset, your class names can be whatever you want them to be. You just need at least some name for core columns, and to keep general consistency between:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> (s) you train your model with, which use the labels you created.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> you provide when instantiating a <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code>. Namely:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">classes</span></code> argument (it should be the same as for <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">col_class</span></code> (and possibly <code class="docutils literal notranslate"><span class="pre">endpts</span></code>) fields of the <code class="docutils literal notranslate"><span class="pre">layout_params</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>If you decide to use different class names (or layout parameters), we’d recommend changing the <code class="docutils literal notranslate"><span class="pre">CLASSES</span></code> and <code class="docutils literal notranslate"><span class="pre">LAYOUT_PARAMS</span></code> in <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py">defaults.py</a> so that you don’t have to specify them as often.</p>
+</div>
+<div class="section" id="summary-of-guidelines">
+<h2>Summary of Guidelines<a class="headerlink" href="#summary-of-guidelines" title="Permalink to this headline">¶</a></h2>
+<p>To be able to use the built-in <code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code> class with your training data, you want to adhere to these guidelines:</p>
 <ul class="simple">
 <li><p>Save <code class="docutils literal notranslate"><span class="pre">&lt;fname&gt;.json</span></code> annotations in a flat directory with
 corresponding <code class="docutils literal notranslate"><span class="pre">&lt;fname&gt;.jpeg</span></code> files (this is <code class="docutils literal notranslate"><span class="pre">labelme</span></code>’s default
 behavior)</p></li>
 <li><p>You may label any number of classes. You will have to supply a list
-of these classes to the <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> constructor, or modify
-<code class="docutils literal notranslate"><span class="pre">defaults.DEFAULT_CLASSES</span></code>.
-- At a minimum, you will want some class to represent columns. You may also create a class (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">'tray'</span></code>) for any objects that consistently demarcate the top and base of core trays better than the columns themselves.</p></li>
+of these classes to the <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code> constructors, or modify
+<code class="docutils literal notranslate"><span class="pre">defaults.DEFAULT_CLASSES</span></code>.</p>
+<ul>
+<li><p>At a minimum, you will want some class name to represent columns of core. We call ours <code class="docutils literal notranslate"><span class="pre">'col'</span></code>, but it doesn’t matter what you want to call it if you’re using your own data.</p></li>
+<li><p>You may also create a class (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">'tray'</span></code>) for any objects that consistently demarcate the top and base positions of core columns better than the columns themselves.</p></li>
+</ul>
+</li>
 <li><p>Different instances of the same class should begin with the class
 name and be differentiated afterward (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">col1,</span> <span class="pre">col2,</span> <span class="pre">col3</span></code>)</p>
 <ul>
@@ -207,9 +249,7 @@ recommend keeping masks on the coarser side</p></li>
 <code class="docutils literal notranslate"><span class="pre">'test'</span></code> subdirectories</p></li>
 </ul>
 <p><strong>Note:</strong> We’ve found that the point of diminishing returns happens somewhere in the range of 20-30 training images, which probably corresponds to 30-50 column instances for this dataset. YMMV.</p>
-<p>After compiling the annotations, you may wish to modify
-<code class="docutils literal notranslate"><span class="pre">defaults.DATASET_DIR</span></code> to avoid need to explicitly specify the data
-location.</p>
+<p>After compiling the annotations, you may wish to modify <code class="docutils literal notranslate"><span class="pre">defaults.DATASET_DIR</span></code> to avoid need to explicitly specify the data location.</p>
 </div>
 <div class="section" id="corebreakout-datasets-polygondataset">
 <h2><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code><a class="headerlink" href="#corebreakout-datasets-polygondataset" title="Permalink to this headline">¶</a></h2>

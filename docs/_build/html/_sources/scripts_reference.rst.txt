@@ -39,7 +39,7 @@ As an example, you can test the script by running:
 
 This should save a new file at ``tests/data/two_image_dataset/auto_depths_test.csv``, with contents like:
 
-.. code:: none
+.. code::
 
   ,top,bottom
   S00101409.jpeg,2348.0,2350.0
@@ -54,7 +54,7 @@ Process directory of raw images with Mask R-CNN and save results as a ``CoreColu
 
 The ``path`` given should contain images as jpeg files, and a ``depth_csv`` file in the format:
 
-.. code:: none
+.. code::
 
            ,    top,    bottom
   <filename1>, <top1>, <bottom1>
@@ -92,7 +92,7 @@ optional arguments:
 
 Assuming you've downloaded and unzipped the `assets` folder in the default location, you can test the script with default parameters by running:
 
-.. code:: none
+.. code::
 
   $ cd scripts
   $ python process_directory.py ../tests/data/two_image_dataset --depth_csv dummy_depths.csv

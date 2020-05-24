@@ -26,7 +26,7 @@ CB_MODEL_PATH = MODEL_DIR / 'mask_rcnn_cb_default.h5'
 COCO_MODEL_PATH = MODEL_DIR / 'mask_rcnn_coco.h5'
 
 # Where to save Mask RCNN training checkpoints, etc.
-TRAIN_DIR = MODEL_DIR / "retrain"
+TRAIN_DIR = MODEL_DIR
 
 
 ####++++++++++++++++++++++++####

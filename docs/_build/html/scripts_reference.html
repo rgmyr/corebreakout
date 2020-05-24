@@ -233,9 +233,9 @@ $ python get_ocr_depths.py --root_dir ../tests/data --subdir two_image_dataset -
 </pre></div>
 </div>
 <p>This should save a new file at <code class="docutils literal notranslate"><span class="pre">tests/data/two_image_dataset/auto_depths_test.csv</span></code>, with contents like:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>,top,bottom
-S00101409.jpeg,2348.0,2350.0
-S00111582.jpeg,7716.0,2220.0
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">,</span><span class="n">top</span><span class="p">,</span><span class="n">bottom</span>
+<span class="n">S00101409</span><span class="o">.</span><span class="n">jpeg</span><span class="p">,</span><span class="mf">2348.0</span><span class="p">,</span><span class="mf">2350.0</span>
+<span class="n">S00111582</span><span class="o">.</span><span class="n">jpeg</span><span class="p">,</span><span class="mf">7716.0</span><span class="p">,</span><span class="mf">2220.0</span>
 </pre></div>
 </div>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">7716.0</span></code> is a misread, and should have been <code class="docutils literal notranslate"><span class="pre">2218.0</span></code>. At least with our BGS images, some manual corrections are usually required, but this provides a template for the <code class="docutils literal notranslate"><span class="pre">--depth_csv</span></code> file required to run <code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code>.</p>
@@ -244,10 +244,10 @@ S00111582.jpeg,7716.0,2220.0
 <h2><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code><a class="headerlink" href="#process-directory-py" title="Permalink to this headline">¶</a></h2>
 <p>Process directory of raw images with Mask R-CNN and save results as a <code class="docutils literal notranslate"><span class="pre">CoreColumn</span></code>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">path</span></code> given should contain images as jpeg files, and a <code class="docutils literal notranslate"><span class="pre">depth_csv</span></code> file in the format:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>         ,    top,    bottom
-&lt;filename1&gt;, &lt;top1&gt;, &lt;bottom1&gt;
-...
-&lt;filenameN&gt;, &lt;topN&gt;, &lt;bottomN&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>         <span class="p">,</span>    <span class="n">top</span><span class="p">,</span>    <span class="n">bottom</span>
+<span class="o">&lt;</span><span class="n">filename1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">top1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">bottom1</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">filenameN</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">topN</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">bottomN</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p><strong>NOTE</strong>: model <code class="docutils literal notranslate"><span class="pre">Config</span></code>, <code class="docutils literal notranslate"><span class="pre">class_names</span></code>, and segmentation <code class="docutils literal notranslate"><span class="pre">layout_params</span></code> can only be
@@ -294,7 +294,7 @@ results in <code class="docutils literal notranslate"><span class="pre">CoreColu
 </dd>
 </dl>
 <p>Assuming you’ve downloaded and unzipped the <cite>assets</cite> folder in the default location, you can test the script with default parameters by running:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd scripts
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd scripts
 $ python process_directory.py ../tests/data/two_image_dataset --depth_csv dummy_depths.csv
 </pre></div>
 </div>
