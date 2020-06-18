@@ -44,7 +44,7 @@ $ cd corebreakout
 
 ### Download data (optional)
 
-To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [v0.2 Release](https://github.com/rgmyr/corebreakout/releases).
+To make use of the provided dataset and model, or to train new a model starting from the pretrained COCO weights, you will need to download the `assets.zip` folder from the [v0.2 Release](https://github.com/rgmyr/corebreakout/releases/tag/v0.2).
 
 Unzip and place this folder in the root directory of the repository (its contents will be ignored by `git` -- see the `.gitignore`). If you would like to place it elsewhere, you should modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 

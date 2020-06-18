@@ -5,18 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 0.3 [Unreleased]
+## 0.4 [Unreleased]
+
+No updates yet.
+
+## 0.3
 
 ### Changed
 
 - Increased flexibility of included scripts
 - Converted `docs/*.md` files to `*.rst`
+- Minor paper and bibliography corrections/fixes
 
 ### Added
 
-- Built `sphinx`-generated html docs
+- Built `sphinx`-generated html docs, hosted on `readthedocs`
 - Implemented `CoreColumn.iter_chunks()`
-- Added a `CoreColumn` demo notebook
+- Added demo/inspection notebooks:
+  - `column_demo.ipynb`
+  - `segmenter_demo.ipynb`
+  - `inspect_dataset.ipynb`
+- Added explanatory Markdown to `select_model.ipynb`
 - Added restriction in `setup.py` to require `tensorflow` before install
 
 ## 0.2
