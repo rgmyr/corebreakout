@@ -26,11 +26,11 @@ bibliography: paper.bib
 
 # Summary
 
-Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to study geologic history and processes. Core is usually cut into one-meter segments, slabbed lengthwise to expose a flat surface, and stored in cardboard or wooden boxes which are then photographed to enable remote inspection. Unlike other common sources of borehole data [*e.g.*, well logs @Rider:2011], core is the only data that preserves true geologic scale and heterogeneity.
+Core samples -- cylindrical rock samples taken from subsurface boreholes -- are commonly used by Earth scientists to study geologic history and processes. Core is usually cut into one-meter segments, slabbed lengthwise to expose a flat surface, and stored in cardboard or wooden boxes which are then photographed to enable remote inspection. Unlike other common sources of borehole data [e.g., well logs @Rider:2011], core is the only data that preserves true geologic scale and heterogeneity.
 
-A geologist will often describe core by visual inspection and hand-draw a graphic log of the vertical changes in grain size and other rock properties [*e.g.*, @Jobe:2017]. This description process is time consuming and subjective, and the resulting data is analog. The digitization and structuring of core image data allows for the development of automated and semi-automated workflows, which can in turn facilitate quantitative analysis of the millions of meters of core stored in public and private repositories around the world.
+A geologist will often describe core by visual inspection and hand-draw a graphic log of the vertical changes in grain size and other rock properties [e.g., @Jobe:2017]. This description process is time consuming and subjective, and the resulting data is analog. The digitization and structuring of core image data allows for the development of automated and semi-automated workflows, which can in turn facilitate quantitative analysis of the millions of meters of core stored in public and private repositories around the world.
 
-``corebreakout`` is a Python package which provides two main functionalities: (1) a deep learning workflow for transforming raw images of geological core sample boxes into depth-registered datasets, and (2) a `CoreColumn` data structure for storing and manipulating the depth-registered image data. The former uses the Mask R-CNN algorithm [@He:2017] for instance segmentation, and is built around the open source TensorFlow and Keras implementation released by Matterport, Inc. [@Abdulla:2017].
+``corebreakout`` is a Python package that provides two main functionalities: (1) a deep learning workflow for transforming raw images of geological core sample boxes into depth-registered datasets, and (2) a `CoreColumn` data structure for storing and manipulating the depth-registered image data. The former uses the Mask R-CNN algorithm [@He:2017] for instance segmentation, and is built around the open source TensorFlow and Keras implementation released by Matterport, Inc. [@Abdulla:2017].
 
 
 ## Mask R-CNN Workflow
@@ -49,11 +49,11 @@ The other main piece of functionality provided by `corebreakout` is the `CoreCol
 
 ## General Functionality
 
-``corebreakout`` supports standard vertical and horizontal core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects (*e.g.*, rulers, empty trays). We provide a labeled dataset courtesy of the British Geological Survey's OpenGeoscience project (https://www.bgs.ac.uk/data/bmd.html), as well as a Mask R-CNN model trained on this dataset for testing and demonstration.
+``corebreakout`` supports standard vertical and horizontal core image layouts, and provides several methods for measuring and assigning depths to core sample columns, including by labeling arbitrary "measuring stick" objects (e.g., rulers, empty trays). We provide a labeled dataset courtesy of the [British Geological Survey's OpenGeoscience project](https://www.bgs.ac.uk/data/bmd.html), as well as a Mask R-CNN model trained on this dataset for testing and demonstration.
 
 In addition to the core Python package, the source code includes scripts for training models, extracting text meta-data from images with optical character recognition [@Smith:2007], and processing directories of images with saved models.
 
-``corebreakout`` has been used to compile a large image dataset for ongoing work in image-based lithology classification [@Martin:2019]. We plan to release our modeling code as a separate project which uses the `CoreColumn` data structure to combine depth-registered image data, sampled well log data, and interval labels into multi-modal datasets for sequence prediction.
+``corebreakout`` has been used to compile a large image dataset for ongoing work in image-based lithology classification [@Martin:2019]. We plan to release our modeling code as a separate project that uses the `CoreColumn` data structure to combine depth-registered image data, sampled well log data, and interval labels into multi-modal datasets for sequence prediction.
 
 
 # Acknowledgements
