@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 0.4 [Unreleased]
 
-No updates yet.
+### To-Do
+
+- Refactor `PolygonDataset` to use `labelme`'s `imageData` field rather than require jpegs
 
 ## 0.3
 

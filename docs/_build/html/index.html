@@ -85,6 +85,7 @@
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#using-labelme">Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#inspect-our-annotations">Inspect Our Annotations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#how-to-name-things">How to Name Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#removing-imagedata">Removing <code class="docutils literal notranslate"><span class="pre">imageData</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#summary-of-guidelines">Summary of Guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="creating_datasets.html#usage">Usage</a></li>
@@ -111,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#prune-imagedata-py"><code class="docutils literal notranslate"><span class="pre">prune_imageData.py</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -189,6 +191,10 @@
 <h1>Provided Data<a class="headerlink" href="#provided-data" title="Permalink to this headline">¶</a></h1>
 <p>We provide labeled images from the British Geological Survey’s North Sea collection, as well as a saved Mask R-CNN model trained on this data, and a pretrained COCO model from which to start new training runs.</p>
 <p>To use the data or models, download the <code class="docutils literal notranslate"><span class="pre">assets.zip</span></code> folder from the <a class="reference external" href="https://github.com/rgmyr/corebreakout/releases">Releases Page</a>. Unzip it in the root directory of the project, or modify the paths in <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py">defaults.py</a> to point to the location.</p>
+<p>JSON annotations in this data currently contain a superfluous field called <code class="docutils literal notranslate"><span class="pre">imageData</span></code> which takes up most of the memory for these files. You can delete this field and reduce the file sizes with <code class="docutils literal notranslate"><span class="pre">scripts/prune_imageData.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python scripts/prune_imageData.py assets/
+</pre></div>
+</div>
 <p>If you want to use your own data, then label some images for Mask R-CNN training, following the guidelines in <a class="reference internal" href="creating_datasets.html#creating-datasets"><span class="std std-ref">Creating Datasets</span></a>. We recommend starting with 20-30 images.</p>
 </div>
 <div class="section" id="overview">
@@ -232,6 +238,7 @@
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#using-labelme">Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#inspect-our-annotations">Inspect Our Annotations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#how-to-name-things">How to Name Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#removing-imagedata">Removing <code class="docutils literal notranslate"><span class="pre">imageData</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#summary-of-guidelines">Summary of Guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#subclassing-mrcnn-utils-dataset">Subclassing <code class="docutils literal notranslate"><span class="pre">mrcnn.utils.Dataset</span></code></a></li>
@@ -255,6 +262,7 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#prune-imagedata-py"><code class="docutils literal notranslate"><span class="pre">prune_imageData.py</span></code></a></li>
 </ul>
 </li>
 </ul>

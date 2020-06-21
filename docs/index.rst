@@ -23,6 +23,12 @@ We provide labeled images from the British Geological Survey's North Sea collect
 
 To use the data or models, download the ``assets.zip`` folder from the `Releases Page <https://github.com/rgmyr/corebreakout/releases>`_. Unzip it in the root directory of the project, or modify the paths in `defaults.py <https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py>`_ to point to the location.
 
+JSON annotations in this data currently contain a superfluous field called ``imageData`` which takes up most of the memory for these files. You can delete this field and reduce the file sizes with ``scripts/prune_imageData.py``:
+
+.. code::
+
+  $ python scripts/prune_imageData.py assets/
+
 If you want to use your own data, then label some images for Mask R-CNN training, following the guidelines in :ref:`creating-datasets`. We recommend starting with 20-30 images.
 
 Overview

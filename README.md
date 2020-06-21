@@ -48,6 +48,11 @@ To make use of the provided dataset and model, or to train new a model starting 
 
 Unzip and place this folder in the root directory of the repository (its contents will be ignored by `git` -- see the `.gitignore`). If you would like to place it elsewhere, you should modify the paths in [corebreakout/defaults.py](https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py) to point to your preferred location.
 
+The current version of `assets/data` has JSON annotation files which include an `imageData` field representing the associated images as strings. For now you can delete this field and reduce the size of the data with `scripts/prune_imageData.py`:
+
+```
+$ python scripts/prune_imageData.py assets/
+```
 
 ### Installation
 

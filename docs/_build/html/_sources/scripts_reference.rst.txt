@@ -98,3 +98,13 @@ Assuming you've downloaded and unzipped the `assets` folder in the default locat
   $ python process_directory.py ../tests/data/two_image_dataset --depth_csv dummy_depths.csv
 
 This should save the aggregated ``CoreColumn`` to ``tests/data/two_image_dataset/CoreColumn_1.00_5.00.pkl``.
+
+``prune_imageData.py``
+----------------------
+Remove the ``imageData`` field from all JSON files in tree below ``path``:
+
+positional arguments:
+  path        Path to parent of all target JSON files.
+
+optional arguments:
+  -h, --help  show this help message and exit

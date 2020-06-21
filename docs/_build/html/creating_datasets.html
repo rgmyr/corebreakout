@@ -86,6 +86,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#using-labelme">Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inspect-our-annotations">Inspect Our Annotations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-name-things">How to Name Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removing-imagedata">Removing <code class="docutils literal notranslate"><span class="pre">imageData</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#summary-of-guidelines">Summary of Guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
@@ -112,6 +113,7 @@
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="scripts_reference.html#prune-imagedata-py"><code class="docutils literal notranslate"><span class="pre">prune_imageData.py</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -190,7 +192,7 @@ $ labelme tests/data/two_image_dataset
 </div>
 <p>This should open a window that looks like this:</p>
 <p><img alt="image0" src="_images/labelme1.png" /></p>
-<p>New polygons can be drawn by clicking <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Polygons</span></code> and then clicking points on the image to add vertices. When get back around to the starting vertex to close the loop of points and create a polygon, <code class="docutils literal notranslate"><span class="pre">labelme</span></code> will ask you to assign it a text label.</p>
+<p>New polygons can be drawn by clicking <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Polygons</span></code> and then clicking points on the image to add vertices. When you get back around to the starting vertex to close the loop of points and create a polygon, <code class="docutils literal notranslate"><span class="pre">labelme</span></code> will ask you to assign it a text label.</p>
 <p>Unique text labels are aggregated on the right side, and the individual polygons shown in the image are colored and listed with their assigned labels. They happen to be the same in this example, but there could be more labels in the <code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">List</span></code> than polygons in the <code class="docutils literal notranslate"><span class="pre">Polygon</span> <span class="pre">Labels</span></code> list for any given image in the directory.</p>
 <p>When you finish adding polygons, click the <code class="docutils literal notranslate"><span class="pre">Save</span></code> button to export the annotations as a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file, which by default will save to the current directory.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">List</span></code> shows images in the currently directory, with the checkbox indicating whether an annotation has been saved for that file yet. You can use the <code class="docutils literal notranslate"><span class="pre">Next</span> <span class="pre">Image</span></code> and <code class="docutils literal notranslate"><span class="pre">Previous</span> <span class="pre">Image</span></code> buttons to traverse through the images (and corresponding annotations) in the directory.</p>
@@ -201,17 +203,17 @@ $ labelme tests/data/two_image_dataset
 </div>
 <div class="section" id="how-to-name-things">
 <h2>How to Name Things<a class="headerlink" href="#how-to-name-things" title="Permalink to this headline">¶</a></h2>
-<p>As you can see above, our text labels for individual objects have the form <code class="docutils literal notranslate"><span class="pre">&lt;class&gt;&lt;number&gt;</span></code>. The <code class="docutils literal notranslate"><span class="pre">class</span></code> refers to a general object type, the <code class="docutils literal notranslate"><span class="pre">number</span></code> differentiates between individual <cite>instances</cite> of that class. This isn’t the only possible naming scheme, but it’s the one you should use if you want your annotations to be compatible with our <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> implementation.</p>
+<p>As you can see above, our text labels for individual objects have the form <code class="docutils literal notranslate"><span class="pre">&lt;class&gt;&lt;number&gt;</span></code>. The <code class="docutils literal notranslate"><span class="pre">class</span></code> refers to a general object type, the <code class="docutils literal notranslate"><span class="pre">number</span></code> differentiates between individual <cite>instances</cite> of that class within an image. This isn’t the only possible naming scheme, but it’s the one you should use if you want your annotations to be compatible with our <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> implementation.</p>
 <p>In our data, we use two classes, <strong>col</strong> and <strong>tray</strong>, to label two different types of objects:</p>
 <ul class="simple">
 <li><p><strong>col</strong> is for <cite>columns</cite> of core material – the individual objects that we want to segment, crop, and stack on top of each other.</p></li>
 <li><p><strong>tray</strong> is for empty trays, which for our data are the most reliable “measuring stick” to use for defining the “top” and “base” positions of columns within an image</p></li>
 </ul>
-<p>The first type of object is required – the whole purpose of this workflow is to segment core columns, so you need to at least label those.</p>
+<p>The first type of object is required – the whole purpose of this workflow is to segment core columns, so you will need to at least label those.</p>
 <p>The second type of object is optional – using another object (empty tray, measuring stick, etc.) to define top and base positions of columns is <cite>one</cite> option for the <code class="docutils literal notranslate"><span class="pre">endpts</span></code> setting in <a class="reference internal" href="layout_parameters.html#layout-parameters"><span class="std std-ref">Layout Parameters</span></a>, but there are others which do not require the existence of any objects other than core columns.</p>
 <p>If you’re making your own dataset, your class names can be whatever you want them to be. You just need at least some name for core columns, and to keep general consistency between:</p>
 <ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> (s) you train your model with, which use the labels you created.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> (s) you train your model with, which use the annotations you saved.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> you provide when instantiating a <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code>. Namely:</p>
 <ul>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">classes</span></code> argument (it should be the same as for <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code>)</p></li>
@@ -220,6 +222,13 @@ $ labelme tests/data/two_image_dataset
 </li>
 </ul>
 <p>If you decide to use different class names (or layout parameters), we’d recommend changing the <code class="docutils literal notranslate"><span class="pre">CLASSES</span></code> and <code class="docutils literal notranslate"><span class="pre">LAYOUT_PARAMS</span></code> in <a class="reference external" href="https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py">defaults.py</a> so that you don’t have to specify them as often.</p>
+</div>
+<div class="section" id="removing-imagedata">
+<h2>Removing <code class="docutils literal notranslate"><span class="pre">imageData</span></code><a class="headerlink" href="#removing-imagedata" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">labelme</span></code> saves a field called <code class="docutils literal notranslate"><span class="pre">imageData</span></code> which encodes the entire image as a string, consuming quite a bit of unnecessary memory. Our <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> class doesn’t make use of this field, and we’ve provided a script to delete it from all JSON files below a root <code class="docutils literal notranslate"><span class="pre">path</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python scripts/prune_imageData.py &lt;path&gt;
+</pre></div>
+</div>
 </div>
 <div class="section" id="summary-of-guidelines">
 <h2>Summary of Guidelines<a class="headerlink" href="#summary-of-guidelines" title="Permalink to this headline">¶</a></h2>
@@ -230,7 +239,7 @@ corresponding <code class="docutils literal notranslate"><span class="pre">&lt;f
 behavior)</p></li>
 <li><p>You may label any number of classes. You will have to supply a list
 of these classes to the <code class="docutils literal notranslate"><span class="pre">PolygonDataset</span></code> and <code class="docutils literal notranslate"><span class="pre">CoreSegmenter</span></code> constructors, or modify
-<code class="docutils literal notranslate"><span class="pre">defaults.DEFAULT_CLASSES</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">defaults.CLASSES</span></code>.</p>
 <ul>
 <li><p>At a minimum, you will want some class name to represent columns of core. We call ours <code class="docutils literal notranslate"><span class="pre">'col'</span></code>, but it doesn’t matter what you want to call it if you’re using your own data.</p></li>
 <li><p>You may also create a class (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">'tray'</span></code>) for any objects that consistently demarcate the top and base positions of core columns better than the columns themselves.</p></li>
@@ -241,8 +250,7 @@ name and be differentiated afterward (<em>e.g.</em>, <code class="docutils liter
 <ul>
 <li><p>The corollary is that no class name can be a substring of any
 other class name (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">col,</span> <span class="pre">col_tray</span></code> would not be allowed)</p></li>
-<li><p>Multiple polygons may belong to a single instance, though we
-recommend keeping masks on the coarser side</p></li>
+<li><p>Multiple polygons may belong to a single instance (for example, if there’s a large gap in the middle of a column)</p></li>
 </ul>
 </li>
 <li><p>After annotating images, split into sibling <code class="docutils literal notranslate"><span class="pre">'train'</span></code> and

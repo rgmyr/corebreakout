@@ -58,6 +58,15 @@ If you're making your own dataset, your class names can be whatever you want the
 
 If you decide to use different class names (or layout parameters), we'd recommend changing the ``CLASSES`` and ``LAYOUT_PARAMS`` in `defaults.py <https://github.com/rgmyr/corebreakout/blob/master/corebreakout/defaults.py>`__ so that you don't have to specify them as often.
 
+Removing ``imageData``
+----------------------
+
+``labelme`` saves a field called ``imageData`` which encodes the entire image as a string, consuming quite a bit of unnecessary memory. Our ``PolygonDataset`` class doesn't make use of this field, and we've provided a script to delete it from all JSON files below a root ``path``:
+
+.. code::
+
+  $ python scripts/prune_imageData.py <path>
+
 
 Summary of Guidelines
 ---------------------

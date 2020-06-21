@@ -82,7 +82,11 @@
               <p class="caption"><span class="caption-text">Usage Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="creating_datasets.html">Creating <code class="docutils literal notranslate"><span class="pre">Datasets</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#image-labeling-guidelines">Image Labeling Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#using-labelme">Using <code class="docutils literal notranslate"><span class="pre">labelme</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#inspect-our-annotations">Inspect Our Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#how-to-name-things">How to Name Things</a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#removing-imagedata">Removing <code class="docutils literal notranslate"><span class="pre">imageData</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#summary-of-guidelines">Summary of Guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="creating_datasets.html#corebreakout-datasets-polygondataset"><code class="docutils literal notranslate"><span class="pre">corebreakout.datasets.PolygonDataset</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="creating_datasets.html#usage">Usage</a></li>
 </ul>
@@ -108,6 +112,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#train-mrcnn-model-py"><code class="docutils literal notranslate"><span class="pre">train_mrcnn_model.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-ocr-depths-py"><code class="docutils literal notranslate"><span class="pre">get_ocr_depths.py</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#process-directory-py"><code class="docutils literal notranslate"><span class="pre">process_directory.py</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prune-imagedata-py"><code class="docutils literal notranslate"><span class="pre">prune_imageData.py</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -299,6 +304,20 @@ $ python process_directory.py ../tests/data/two_image_dataset --depth_csv dummy_
 </pre></div>
 </div>
 <p>This should save the aggregated <code class="docutils literal notranslate"><span class="pre">CoreColumn</span></code> to <code class="docutils literal notranslate"><span class="pre">tests/data/two_image_dataset/CoreColumn_1.00_5.00.pkl</span></code>.</p>
+</div>
+<div class="section" id="prune-imagedata-py">
+<h2><code class="docutils literal notranslate"><span class="pre">prune_imageData.py</span></code><a class="headerlink" href="#prune-imagedata-py" title="Permalink to this headline">¶</a></h2>
+<p>Remove the <code class="docutils literal notranslate"><span class="pre">imageData</span></code> field from all JSON files in tree below <code class="docutils literal notranslate"><span class="pre">path</span></code>:</p>
+<dl>
+<dt>positional arguments:</dt><dd><p>path        Path to parent of all target JSON files.</p>
+</dd>
+<dt>optional arguments:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>show this help message and exit</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </div>
 </div>
 
